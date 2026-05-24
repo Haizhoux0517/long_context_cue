@@ -1,0 +1,30 @@
+dataset_path: data/processed/controlled_cue.jsonl
+output_dir: outputs/controlled_mock_run
+model:
+  provider: mock
+  model_name: mock
+generation:
+  max_tokens: 512
+  temperature: 0.0
+methods:
+- no_evidence
+- oracle
+- direct
+- cot
+- retrieve_then_read
+- evidence_first
+- evidence_first_verify
+retrieval:
+  top_k: 3
+  chunk_size: 220
+  overlap: 40
+evaluation:
+  compute_cue: true
+  compute_failure_types: true
+logging:
+  save_full_prompts: false
+  save_intermediate: true
+  compress_outputs: false
+protocol:
+  version: diagnostic_v1_fixed
+  purpose: fixed diagnostic evaluation; no per-model prompt tuning
