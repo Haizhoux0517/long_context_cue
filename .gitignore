@@ -1,0 +1,16 @@
+
+# Runtime generated files
+data/
+outputs/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Temporary experiment archives
+*.tar.gz
+*.zip
+
+# Debug-only configs
+configs/*debug*_core.yaml
