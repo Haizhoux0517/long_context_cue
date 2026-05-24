@@ -1,0 +1,60 @@
+\begin{tabular}{llllrrr}
+\toprule
+Model & Dataset & Condition & Failure_Type & Count & Rate & N \\
+\midrule
+Qwen2.5-14B & Controlled-safe16K & direct & answer_conversion_failure & 43 & 0.430 & 100 \\
+Qwen2.5-14B & Controlled-safe16K & direct & evidence_integration_failure & 7 & 0.070 & 100 \\
+Qwen2.5-14B & Controlled-safe16K & direct & evidence_localization_failure & 33 & 0.330 & 100 \\
+Qwen2.5-14B & Controlled-safe16K & direct & evidence_selection_failure & 1 & 0.010 & 100 \\
+Qwen2.5-14B & Controlled-safe16K & direct & success & 16 & 0.160 & 100 \\
+Qwen2.5-14B & Controlled-safe16K & no_evidence & evidence_localization_failure & 100 & 1.000 & 100 \\
+Qwen2.5-14B & Controlled-safe16K & oracle & answer_conversion_failure & 48 & 0.480 & 100 \\
+Qwen2.5-14B & Controlled-safe16K & oracle & success & 52 & 0.520 & 100 \\
+Qwen2.5-14B & Controlled-safe16K & retrieve_then_read & answer_conversion_failure & 46 & 0.460 & 100 \\
+Qwen2.5-14B & Controlled-safe16K & retrieve_then_read & evidence_integration_failure & 2 & 0.020 & 100 \\
+Qwen2.5-14B & Controlled-safe16K & retrieve_then_read & evidence_selection_failure & 3 & 0.030 & 100 \\
+Qwen2.5-14B & Controlled-safe16K & retrieve_then_read & success & 49 & 0.490 & 100 \\
+Qwen2.5-14B & HotpotQA-ONCU-100 & direct & answer_conversion_failure & 12 & 0.120 & 100 \\
+Qwen2.5-14B & HotpotQA-ONCU-100 & direct & evidence_integration_failure & 23 & 0.230 & 100 \\
+Qwen2.5-14B & HotpotQA-ONCU-100 & direct & evidence_localization_failure & 1 & 0.010 & 100 \\
+Qwen2.5-14B & HotpotQA-ONCU-100 & direct & evidence_selection_failure & 4 & 0.040 & 100 \\
+Qwen2.5-14B & HotpotQA-ONCU-100 & direct & success & 60 & 0.600 & 100 \\
+Qwen2.5-14B & HotpotQA-ONCU-100 & no_evidence & evidence_localization_failure & 82 & 0.820 & 100 \\
+Qwen2.5-14B & HotpotQA-ONCU-100 & no_evidence & success & 18 & 0.180 & 100 \\
+Qwen2.5-14B & HotpotQA-ONCU-100 & oracle & answer_conversion_failure & 21 & 0.210 & 100 \\
+Qwen2.5-14B & HotpotQA-ONCU-100 & oracle & evidence_integration_failure & 15 & 0.150 & 100 \\
+Qwen2.5-14B & HotpotQA-ONCU-100 & oracle & success & 64 & 0.640 & 100 \\
+Qwen2.5-14B & HotpotQA-ONCU-100 & retrieve_then_read & answer_conversion_failure & 4 & 0.040 & 100 \\
+Qwen2.5-14B & HotpotQA-ONCU-100 & retrieve_then_read & evidence_integration_failure & 24 & 0.240 & 100 \\
+Qwen2.5-14B & HotpotQA-ONCU-100 & retrieve_then_read & evidence_localization_failure & 21 & 0.210 & 100 \\
+Qwen2.5-14B & HotpotQA-ONCU-100 & retrieve_then_read & evidence_selection_failure & 3 & 0.030 & 100 \\
+Qwen2.5-14B & HotpotQA-ONCU-100 & retrieve_then_read & success & 48 & 0.480 & 100 \\
+Qwen3-14B & Controlled-safe16K & direct & answer_conversion_failure & 26 & 0.260 & 100 \\
+Qwen3-14B & Controlled-safe16K & direct & evidence_integration_failure & 15 & 0.150 & 100 \\
+Qwen3-14B & Controlled-safe16K & direct & evidence_localization_failure & 23 & 0.230 & 100 \\
+Qwen3-14B & Controlled-safe16K & direct & evidence_selection_failure & 1 & 0.010 & 100 \\
+Qwen3-14B & Controlled-safe16K & direct & success & 35 & 0.350 & 100 \\
+Qwen3-14B & Controlled-safe16K & no_evidence & evidence_localization_failure & 100 & 1.000 & 100 \\
+Qwen3-14B & Controlled-safe16K & oracle & answer_conversion_failure & 38 & 0.380 & 100 \\
+Qwen3-14B & Controlled-safe16K & oracle & success & 62 & 0.620 & 100 \\
+Qwen3-14B & Controlled-safe16K & retrieve_then_read & answer_conversion_failure & 42 & 0.420 & 100 \\
+Qwen3-14B & Controlled-safe16K & retrieve_then_read & evidence_integration_failure & 6 & 0.060 & 100 \\
+Qwen3-14B & Controlled-safe16K & retrieve_then_read & success & 52 & 0.520 & 100 \\
+Qwen3-14B & HotpotQA-ONCU-100 & direct & answer_conversion_failure & 12 & 0.120 & 100 \\
+Qwen3-14B & HotpotQA-ONCU-100 & direct & evidence_integration_failure & 28 & 0.280 & 100 \\
+Qwen3-14B & HotpotQA-ONCU-100 & direct & evidence_localization_failure & 1 & 0.010 & 100 \\
+Qwen3-14B & HotpotQA-ONCU-100 & direct & evidence_selection_failure & 7 & 0.070 & 100 \\
+Qwen3-14B & HotpotQA-ONCU-100 & direct & success & 52 & 0.520 & 100 \\
+Qwen3-14B & HotpotQA-ONCU-100 & no_evidence & evidence_localization_failure & 80 & 0.800 & 100 \\
+Qwen3-14B & HotpotQA-ONCU-100 & no_evidence & success & 20 & 0.200 & 100 \\
+Qwen3-14B & HotpotQA-ONCU-100 & oracle & answer_conversion_failure & 15 & 0.150 & 100 \\
+Qwen3-14B & HotpotQA-ONCU-100 & oracle & evidence_integration_failure & 17 & 0.170 & 100 \\
+Qwen3-14B & HotpotQA-ONCU-100 & oracle & evidence_localization_failure & 1 & 0.010 & 100 \\
+Qwen3-14B & HotpotQA-ONCU-100 & oracle & success & 67 & 0.670 & 100 \\
+Qwen3-14B & HotpotQA-ONCU-100 & retrieve_then_read & answer_conversion_failure & 4 & 0.040 & 100 \\
+Qwen3-14B & HotpotQA-ONCU-100 & retrieve_then_read & evidence_integration_failure & 27 & 0.270 & 100 \\
+Qwen3-14B & HotpotQA-ONCU-100 & retrieve_then_read & evidence_localization_failure & 23 & 0.230 & 100 \\
+Qwen3-14B & HotpotQA-ONCU-100 & retrieve_then_read & evidence_selection_failure & 4 & 0.040 & 100 \\
+Qwen3-14B & HotpotQA-ONCU-100 & retrieve_then_read & success & 42 & 0.420 & 100 \\
+\bottomrule
+\end{tabular}
