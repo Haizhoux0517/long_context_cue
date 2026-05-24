@@ -1,0 +1,22 @@
+\begin{tabular}{lllrrrrrr}
+\toprule
+Model & Dataset & Condition & N & Parse Errors & Strict F1 & Relaxed F1 & Relaxed EM & Evidence F1 \\
+\midrule
+Qwen2.5-14B & Controlled-safe16K & no_evidence & 100 & 0 & 0.000 & 0.000 & 0.000 & 0.000 \\
+Qwen2.5-14B & Controlled-safe16K & direct & 100 & 0 & 0.370 & 0.568 & 0.490 & 0.633 \\
+Qwen2.5-14B & Controlled-safe16K & retrieve_then_read & 100 & 0 & 0.842 & 0.980 & 0.980 & 0.979 \\
+Qwen2.5-14B & Controlled-safe16K & oracle & 100 & 0 & 0.811 & 0.897 & 0.690 & 1.000 \\
+Qwen2.5-14B & HotpotQA-ONCU-100 & no_evidence & 100 & 0 & 0.240 & 0.245 & 0.180 & 0.000 \\
+Qwen2.5-14B & HotpotQA-ONCU-100 & direct & 100 & 0 & 0.740 & 0.699 & 0.560 & 0.705 \\
+Qwen2.5-14B & HotpotQA-ONCU-100 & retrieve_then_read & 100 & 0 & 0.558 & 0.548 & 0.470 & 0.475 \\
+Qwen2.5-14B & HotpotQA-ONCU-100 & oracle & 100 & 0 & 0.763 & 0.722 & 0.600 & 0.863 \\
+Qwen3-14B & Controlled-safe16K & no_evidence & 100 & 0 & 0.008 & 0.010 & 0.000 & 0.000 \\
+Qwen3-14B & Controlled-safe16K & direct & 100 & 0 & 0.477 & 0.535 & 0.500 & 0.703 \\
+Qwen3-14B & Controlled-safe16K & retrieve_then_read & 100 & 0 & 0.892 & 0.985 & 0.980 & 0.970 \\
+Qwen3-14B & Controlled-safe16K & oracle & 100 & 0 & 0.916 & 0.990 & 0.990 & 1.000 \\
+Qwen3-14B & HotpotQA-ONCU-100 & no_evidence & 100 & 0 & 0.289 & 0.289 & 0.200 & 0.000 \\
+Qwen3-14B & HotpotQA-ONCU-100 & direct & 100 & 0 & 0.657 & 0.627 & 0.490 & 0.676 \\
+Qwen3-14B & HotpotQA-ONCU-100 & retrieve_then_read & 100 & 0 & 0.542 & 0.531 & 0.410 & 0.452 \\
+Qwen3-14B & HotpotQA-ONCU-100 & oracle & 100 & 1 & 0.782 & 0.752 & 0.640 & 0.835 \\
+\bottomrule
+\end{tabular}

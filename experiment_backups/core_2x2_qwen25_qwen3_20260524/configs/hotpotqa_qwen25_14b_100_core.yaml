@@ -1,5 +1,5 @@
-dataset_path: data/processed/controlled_oncu_100_safe16k.jsonl
-output_dir: outputs/controlled_safe16k_qwen25_14b_100_core
+dataset_path: data/processed/hotpotqa_cue_100.jsonl
+output_dir: outputs/hotpotqa_qwen25_14b_100_core
 model:
   provider: ollama
   model_name: qwen2.5:14b

@@ -1,12 +1,12 @@
 dataset_path: data/processed/controlled_oncu_100_safe16k.jsonl
-output_dir: outputs/controlled_safe16k_qwen25_14b_100_core
+output_dir: outputs/controlled_safe16k_qwen3_14b_100_core
 model:
   provider: ollama
-  model_name: qwen2.5:14b
+  model_name: qwen3:14b
   num_ctx: 32768
   timeout: 600
 generation:
-  max_tokens: 512
+  max_tokens: 1024
   temperature: 0.0
 methods:
 - no_evidence
