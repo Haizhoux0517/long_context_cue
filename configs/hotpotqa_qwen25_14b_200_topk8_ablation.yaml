@@ -1,0 +1,28 @@
+dataset_path: data/processed/hotpotqa_cue_200.jsonl
+output_dir: outputs/hotpotqa_qwen25_14b_200_topk8_ablation
+model:
+  provider: ollama
+  model_name: qwen2.5:14b
+  num_ctx: 32768
+  timeout: 600
+generation:
+  max_tokens: 1024
+  temperature: 0.0
+methods:
+- no_evidence
+- direct
+- retrieve_then_read
+- oracle
+retrieval:
+  top_k: 8
+  chunk_size: 220
+  overlap: 40
+evaluation:
+  compute_cue: true
+  compute_failure_types: true
+logging:
+  save_full_prompts: false
+  save_intermediate: true
+  compress_outputs: false
+protocol:
+  version: diagnostic_v1_fixed
