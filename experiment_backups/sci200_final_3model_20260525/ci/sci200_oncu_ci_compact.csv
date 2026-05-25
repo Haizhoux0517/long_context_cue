@@ -1,0 +1,7 @@
+Model,Dataset,Full-context ONCU [95% CI],Retrieved-evidence ONCU [95% CI]
+Gemma3-12B,Controlled-safe16K-200,"0.515 [0.438, 0.591]","0.842 [0.782, 0.897]"
+Gemma3-12B,HotpotQA-ONCU-200,"0.719 [0.604, 0.819]","0.536 [0.428, 0.645]"
+Qwen2.5-14B,Controlled-safe16K-200,"0.583 [0.506, 0.663]","0.981 [0.955, 1.000]"
+Qwen2.5-14B,HotpotQA-ONCU-200,"0.906 [0.843, 0.958]","0.639 [0.511, 0.755]"
+Qwen3-14B,Controlled-safe16K-200,"0.535 [0.451, 0.619]","0.994 [0.985, 1.000]"
+Qwen3-14B,HotpotQA-ONCU-200,"0.787 [0.679, 0.881]","0.557 [0.441, 0.675]"
