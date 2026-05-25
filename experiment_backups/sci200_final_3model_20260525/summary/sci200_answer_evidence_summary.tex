@@ -1,0 +1,30 @@
+\begin{tabular}{lllrrrrrr}
+\toprule
+Model & Dataset & Condition & N & Parse_Errors & Strict_F1 & Relaxed_F1 & Relaxed_EM & Evidence_F1 \\
+\midrule
+Qwen2.5-14B & Controlled-safe16K-200 & no_evidence & 200 & 0 & 0.000 & 0.000 & 0.000 & 0.000 \\
+Qwen2.5-14B & Controlled-safe16K-200 & direct & 200 & 0 & 0.352 & 0.537 & 0.465 & 0.596 \\
+Qwen2.5-14B & Controlled-safe16K-200 & retrieve_then_read & 200 & 0 & 0.853 & 0.975 & 0.975 & 0.975 \\
+Qwen2.5-14B & Controlled-safe16K-200 & oracle & 200 & 0 & 0.827 & 0.903 & 0.710 & 1.000 \\
+Qwen2.5-14B & HotpotQA-ONCU-200 & no_evidence & 200 & 0 & 0.238 & 0.241 & 0.185 & 0.000 \\
+Qwen2.5-14B & HotpotQA-ONCU-200 & direct & 200 & 0 & 0.748 & 0.733 & 0.575 & 0.688 \\
+Qwen2.5-14B & HotpotQA-ONCU-200 & retrieve_then_read & 200 & 0 & 0.595 & 0.590 & 0.475 & 0.478 \\
+Qwen2.5-14B & HotpotQA-ONCU-200 & oracle & 200 & 0 & 0.788 & 0.767 & 0.625 & 0.867 \\
+Qwen3-14B & Controlled-safe16K-200 & no_evidence & 200 & 0 & 0.006 & 0.007 & 0.000 & 0.000 \\
+Qwen3-14B & Controlled-safe16K-200 & direct & 200 & 0 & 0.458 & 0.526 & 0.495 & 0.706 \\
+Qwen3-14B & Controlled-safe16K-200 & retrieve_then_read & 200 & 0 & 0.907 & 0.993 & 0.990 & 0.972 \\
+Qwen3-14B & Controlled-safe16K-200 & oracle & 200 & 0 & 0.918 & 0.995 & 0.995 & 1.000 \\
+Qwen3-14B & HotpotQA-ONCU-200 & no_evidence & 200 & 0 & 0.298 & 0.301 & 0.205 & 0.000 \\
+Qwen3-14B & HotpotQA-ONCU-200 & direct & 200 & 0 & 0.702 & 0.689 & 0.535 & 0.680 \\
+Qwen3-14B & HotpotQA-ONCU-200 & retrieve_then_read & 200 & 0 & 0.562 & 0.558 & 0.425 & 0.469 \\
+Qwen3-14B & HotpotQA-ONCU-200 & oracle & 200 & 1 & 0.809 & 0.795 & 0.660 & 0.827 \\
+Gemma3-12B & Controlled-safe16K-200 & no_evidence & 200 & 0 & 0.000 & 0.000 & 0.000 & 0.000 \\
+Gemma3-12B & Controlled-safe16K-200 & direct & 200 & 6 & 0.328 & 0.514 & 0.415 & 0.673 \\
+Gemma3-12B & Controlled-safe16K-200 & retrieve_then_read & 200 & 0 & 0.621 & 0.845 & 0.815 & 0.793 \\
+Gemma3-12B & Controlled-safe16K-200 & oracle & 200 & 0 & 0.720 & 0.990 & 0.990 & 0.913 \\
+Gemma3-12B & HotpotQA-ONCU-200 & no_evidence & 200 & 0 & 0.291 & 0.291 & 0.195 & 0.000 \\
+Gemma3-12B & HotpotQA-ONCU-200 & direct & 200 & 0 & 0.682 & 0.668 & 0.545 & 0.576 \\
+Gemma3-12B & HotpotQA-ONCU-200 & retrieve_then_read & 200 & 0 & 0.565 & 0.561 & 0.440 & 0.406 \\
+Gemma3-12B & HotpotQA-ONCU-200 & oracle & 200 & 0 & 0.811 & 0.791 & 0.660 & 0.753 \\
+\bottomrule
+\end{tabular}

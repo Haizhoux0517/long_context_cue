@@ -1,0 +1,18 @@
+\begin{tabular}{lllrrrrr}
+\toprule
+Model & Dataset & Condition & Valid_Groups & S_no & S_oracle & S_condition & ONCU_Relaxed_F1 \\
+\midrule
+Qwen2.5-14B & Controlled-safe16K-200 & retrieve_then_read & 134 & 0.000 & 0.909 & 0.981 & 0.981 \\
+Qwen2.5-14B & Controlled-safe16K-200 & direct & 134 & 0.000 & 0.909 & 0.546 & 0.583 \\
+Qwen2.5-14B & HotpotQA-ONCU-200 & direct & 29 & 0.212 & 0.793 & 0.763 & 0.906 \\
+Qwen2.5-14B & HotpotQA-ONCU-200 & retrieve_then_read & 29 & 0.212 & 0.793 & 0.593 & 0.639 \\
+Qwen3-14B & Controlled-safe16K-200 & retrieve_then_read & 133 & 0.008 & 1.000 & 0.994 & 0.994 \\
+Qwen3-14B & Controlled-safe16K-200 & direct & 133 & 0.008 & 1.000 & 0.535 & 0.535 \\
+Qwen3-14B & HotpotQA-ONCU-200 & direct & 28 & 0.236 & 0.804 & 0.702 & 0.787 \\
+Qwen3-14B & HotpotQA-ONCU-200 & retrieve_then_read & 28 & 0.236 & 0.804 & 0.557 & 0.557 \\
+Gemma3-12B & Controlled-safe16K-200 & retrieve_then_read & 133 & 0.000 & 0.996 & 0.842 & 0.842 \\
+Gemma3-12B & Controlled-safe16K-200 & direct & 133 & 0.000 & 0.996 & 0.515 & 0.515 \\
+Gemma3-12B & HotpotQA-ONCU-200 & direct & 28 & 0.215 & 0.787 & 0.652 & 0.719 \\
+Gemma3-12B & HotpotQA-ONCU-200 & retrieve_then_read & 28 & 0.215 & 0.787 & 0.550 & 0.536 \\
+\bottomrule
+\end{tabular}
