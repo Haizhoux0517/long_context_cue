@@ -1,0 +1,47 @@
+{
+  "protocol_version": "diagnostic_v1_fixed",
+  "purpose": "Diagnostic evaluation protocol. Templates are fixed across models and datasets; results should not be interpreted as prompt optimization.",
+  "methods": [
+    {
+      "name": "no_evidence",
+      "display_name": "No Evidence",
+      "family": "diagnostic_baseline",
+      "role": "question_only_lower_bound",
+      "core_diagnostic": true,
+      "description": "Question-only condition used to estimate answer priors and parametric knowledge."
+    },
+    {
+      "name": "direct",
+      "display_name": "Full Context",
+      "family": "diagnostic_condition",
+      "role": "full_context_condition",
+      "core_diagnostic": true,
+      "description": "Full long-context condition used to measure evidence utilization when all context is supplied."
+    },
+    {
+      "name": "retrieve_then_read",
+      "display_name": "Retrieved Evidence",
+      "family": "diagnostic_condition",
+      "role": "evidence_narrowed_condition",
+      "core_diagnostic": true,
+      "description": "Deterministic evidence-narrowing condition that tests whether performance recovers when the effective context is shortened."
+    },
+    {
+      "name": "oracle",
+      "display_name": "Oracle Evidence",
+      "family": "diagnostic_baseline",
+      "role": "oracle_evidence_upper_reference",
+      "core_diagnostic": true,
+      "description": "Gold-evidence condition used as an upper reference for ONCU normalization."
+    }
+  ],
+  "generation": {
+    "max_tokens": 1024,
+    "temperature": 0.0
+  },
+  "retrieval": {
+    "top_k": 3,
+    "chunk_size": 220,
+    "overlap": 40
+  }
+}
