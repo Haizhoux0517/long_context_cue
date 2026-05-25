@@ -1,0 +1,4 @@
+2026-05-25 03:28:51 | INFO | longcue | Loaded 200 samples from /workspace/long_context_cue/data/processed/hotpotqa_cue_200.jsonl
+2026-05-25 03:28:51 | INFO | longcue | Running methods: no_evidence, direct, retrieve_then_read, oracle
+2026-05-25 03:41:01 | WARNING | longcue | No JSON object found. Output prefix: '{\n  "answer": "third",\n  "evidence_ids": ["p0002", "p0004"],\n  "explanation": "Kuvira was introduced in the third season of the series, and she becomes the main antagonist in the fourth season. The animated television series was created by Bryan Konietzko and Michael Dante DiMartino as a sequel to "'
+2026-05-25 04:20:08 | INFO | longcue | Wrote 800 per-sample metric rows to /workspace/long_context_cue/outputs/hotpotqa_qwen3_14b_200_core_final/results

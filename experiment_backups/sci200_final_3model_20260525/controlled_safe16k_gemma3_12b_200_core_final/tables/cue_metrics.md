@@ -1,0 +1,270 @@
+| source | model_name | reasoning_type | context_length | evidence_position | evidence_density | distractor_similarity | long_method | score_field | score_no_evidence | score_oracle | score_long | n | cue_valid | cue_invalid_reason | cue_raw | cue_clipped |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| controlled | gemma3:12b | comparison | 16000 | front | medium | none | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 16000 | front | medium | none | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 4000 | middle | medium | low | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 4000 | middle | medium | low | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | multi_hop | 4000 | front | medium | low | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 4000 | front | medium | low | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 0.0000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | arithmetic | 16000 | middle | medium | low | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 16000 | middle | medium | low | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 1.0000 | 2 | True |  | 1.0000 | 1.0000 |
+| controlled | gemma3:12b | single_hop | 4000 | scattered | low | high | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 4000 | scattered | low | high | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 1.0000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | comparison | 4000 | scattered | medium | none | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 4000 | scattered | medium | none | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.5000 | 2 | True |  | 0.5000 | 0.5000 |
+| controlled | gemma3:12b | multi_hop | 4000 | end | medium | conflicting | direct | exact_match | 0.0000 | 0.0000 | 1.0000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 4000 | end | medium | conflicting | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 0.0000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 4000 | middle | low | conflicting | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 4000 | middle | low | conflicting | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 1.0000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | comparison | 16000 | middle | medium | low | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 16000 | middle | medium | low | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | single_hop | 4000 | middle | low | low | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 4000 | middle | low | low | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 1.0000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | comparison | 16000 | front | medium | high | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 16000 | front | medium | high | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 16000 | scattered | medium | low | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 16000 | scattered | medium | low | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 1.0000 | 2 | True |  | 1.0000 | 1.0000 |
+| controlled | gemma3:12b | arithmetic | 8000 | end | medium | conflicting | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 8000 | end | medium | conflicting | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 1.0000 | 1 | True |  | 1.0000 | 1.0000 |
+| controlled | gemma3:12b | multi_hop | 4000 | middle | medium | none | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 4000 | middle | medium | none | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 8000 | scattered | low | high | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 8000 | scattered | low | high | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 1.0000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | comparison | 8000 | middle | medium | low | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 8000 | middle | medium | low | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 4000 | front | medium | low | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 4000 | front | medium | low | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 4000 | middle | medium | none | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 4000 | middle | medium | none | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.5000 | 2 | True |  | 0.5000 | 0.5000 |
+| controlled | gemma3:12b | single_hop | 4000 | end | low | conflicting | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 3 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 4000 | end | low | conflicting | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 0.6667 | 3 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | arithmetic | 4000 | end | medium | conflicting | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | arithmetic | 4000 | end | medium | conflicting | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | arithmetic | 8000 | end | medium | low | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 8000 | end | medium | low | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 8000 | scattered | medium | high | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 8000 | scattered | medium | high | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 8000 | scattered | medium | none | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 8000 | scattered | medium | none | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | single_hop | 4000 | end | low | high | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 4000 | end | low | high | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | comparison | 16000 | middle | medium | none | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 16000 | middle | medium | none | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | multi_hop | 16000 | front | medium | low | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 16000 | front | medium | low | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | arithmetic | 16000 | front | medium | conflicting | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 16000 | front | medium | conflicting | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | multi_hop | 16000 | scattered | medium | conflicting | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 16000 | scattered | medium | conflicting | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 8000 | middle | medium | low | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 8000 | middle | medium | low | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | arithmetic | 8000 | middle | medium | high | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 8000 | middle | medium | high | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 1.0000 | 1 | True |  | 1.0000 | 1.0000 |
+| controlled | gemma3:12b | multi_hop | 16000 | end | medium | low | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 3 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 16000 | end | medium | low | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 0.0000 | 3 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | comparison | 16000 | scattered | medium | none | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 16000 | scattered | medium | none | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | multi_hop | 4000 | front | medium | none | direct | exact_match | 0.0000 | 0.0000 | 1.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 4000 | front | medium | none | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | arithmetic | 16000 | middle | medium | high | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 16000 | middle | medium | high | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 1.0000 | 1 | True |  | 1.0000 | 1.0000 |
+| controlled | gemma3:12b | single_hop | 4000 | end | low | none | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 4000 | end | low | none | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 1.0000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | comparison | 16000 | front | medium | conflicting | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 16000 | front | medium | conflicting | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | single_hop | 16000 | scattered | low | conflicting | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | single_hop | 16000 | scattered | low | conflicting | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 1.0000 | 2 | True |  | 1.0000 | 1.0000 |
+| controlled | gemma3:12b | multi_hop | 8000 | front | medium | low | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 8000 | front | medium | low | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 16000 | scattered | low | high | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | single_hop | 16000 | scattered | low | high | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 1.0000 | 1 | True |  | 1.0000 | 1.0000 |
+| controlled | gemma3:12b | arithmetic | 4000 | middle | medium | conflicting | direct | exact_match | 0.0000 | 0.5000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 4000 | middle | medium | conflicting | retrieve_then_read | exact_match | 0.0000 | 0.5000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | single_hop | 16000 | middle | low | conflicting | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | single_hop | 16000 | middle | low | conflicting | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 1.0000 | 1 | True |  | 1.0000 | 1.0000 |
+| controlled | gemma3:12b | single_hop | 8000 | front | low | low | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 8000 | front | low | low | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 1.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | comparison | 16000 | scattered | medium | conflicting | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 3 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 16000 | scattered | medium | conflicting | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 3 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 4000 | middle | medium | none | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 4000 | middle | medium | none | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | multi_hop | 8000 | front | medium | conflicting | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 3 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 8000 | front | medium | conflicting | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 0.6667 | 3 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 8000 | front | medium | high | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 8000 | front | medium | high | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 16000 | end | medium | conflicting | direct | exact_match | 0.0000 | 0.0000 | 0.5000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 16000 | end | medium | conflicting | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 1.0000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | comparison | 8000 | front | medium | low | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 8000 | front | medium | low | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 1.0000 | 1 | True |  | 1.0000 | 1.0000 |
+| controlled | gemma3:12b | comparison | 4000 | scattered | medium | low | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 4 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 4000 | scattered | medium | low | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 4 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | single_hop | 4000 | front | low | high | direct | exact_match | 0.0000 | 0.0000 | 1.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 4000 | front | low | high | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 1.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 16000 | middle | medium | low | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 16000 | middle | medium | low | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 0.0000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | comparison | 8000 | middle | medium | conflicting | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 8000 | middle | medium | conflicting | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | multi_hop | 8000 | end | medium | conflicting | direct | exact_match | 0.0000 | 0.0000 | 1.0000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 8000 | end | medium | conflicting | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 0.0000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 4000 | middle | medium | high | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 4000 | middle | medium | high | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 4000 | middle | low | none | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | single_hop | 4000 | middle | low | none | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 1.0000 | 2 | True |  | 1.0000 | 1.0000 |
+| controlled | gemma3:12b | multi_hop | 8000 | scattered | medium | none | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 8000 | scattered | medium | none | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 0.0000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 4000 | scattered | low | conflicting | direct | exact_match | 0.0000 | 0.0000 | 1.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 4000 | scattered | low | conflicting | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 1.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 16000 | end | medium | high | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 16000 | end | medium | high | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 16000 | front | low | none | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 3 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 16000 | front | low | none | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 1.0000 | 3 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | comparison | 8000 | scattered | medium | conflicting | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 8000 | scattered | medium | conflicting | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | single_hop | 16000 | scattered | low | none | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | single_hop | 16000 | scattered | low | none | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 1.0000 | 1 | True |  | 1.0000 | 1.0000 |
+| controlled | gemma3:12b | comparison | 8000 | front | medium | high | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 8000 | front | medium | high | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 8000 | scattered | medium | low | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 8000 | scattered | medium | low | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 4000 | end | medium | low | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 4000 | end | medium | low | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | single_hop | 16000 | middle | low | none | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 16000 | middle | low | none | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 1.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | comparison | 4000 | front | medium | conflicting | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 4000 | front | medium | conflicting | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | multi_hop | 4000 | front | medium | high | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 4000 | front | medium | high | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 0.0000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | arithmetic | 16000 | front | medium | low | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 16000 | front | medium | low | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 4000 | end | medium | conflicting | direct | exact_match | 0.0000 | 1.0000 | 1.0000 | 2 | True |  | 1.0000 | 1.0000 |
+| controlled | gemma3:12b | comparison | 4000 | end | medium | conflicting | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 16000 | middle | medium | conflicting | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 3 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 16000 | middle | medium | conflicting | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 3 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 4000 | scattered | medium | high | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 4000 | scattered | medium | high | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 16000 | end | medium | conflicting | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 16000 | end | medium | conflicting | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 16000 | scattered | medium | high | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 16000 | scattered | medium | high | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | multi_hop | 16000 | scattered | medium | low | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 16000 | scattered | medium | low | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 8000 | middle | low | conflicting | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 8000 | middle | low | conflicting | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 1.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | comparison | 16000 | end | medium | high | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 16000 | end | medium | high | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | multi_hop | 4000 | end | medium | none | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 4000 | end | medium | none | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 0.0000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | arithmetic | 8000 | front | medium | high | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 8000 | front | medium | high | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 1.0000 | 1 | True |  | 1.0000 | 1.0000 |
+| controlled | gemma3:12b | single_hop | 8000 | front | low | high | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 8000 | front | low | high | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 1.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | comparison | 4000 | end | medium | high | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 4000 | end | medium | high | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | multi_hop | 16000 | front | medium | high | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 16000 | front | medium | high | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | comparison | 16000 | scattered | medium | high | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 16000 | scattered | medium | high | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 16000 | front | medium | high | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 3 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 16000 | front | medium | high | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 1.0000 | 3 | True |  | 1.0000 | 1.0000 |
+| controlled | gemma3:12b | single_hop | 16000 | front | low | low | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 16000 | front | low | low | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 1.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 8000 | scattered | low | conflicting | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 8000 | scattered | low | conflicting | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 1.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | arithmetic | 4000 | end | medium | none | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 4000 | end | medium | none | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 1.0000 | 1 | True |  | 1.0000 | 1.0000 |
+| controlled | gemma3:12b | arithmetic | 4000 | scattered | medium | low | direct | exact_match | 0.0000 | 1.0000 | 1.0000 | 1 | True |  | 1.0000 | 1.0000 |
+| controlled | gemma3:12b | arithmetic | 4000 | scattered | medium | low | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 16000 | front | medium | none | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 3 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 16000 | front | medium | none | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 1.0000 | 3 | True |  | 1.0000 | 1.0000 |
+| controlled | gemma3:12b | single_hop | 16000 | front | low | conflicting | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 16000 | front | low | conflicting | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 1.0000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | comparison | 8000 | front | medium | none | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 8000 | front | medium | none | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | multi_hop | 16000 | middle | medium | conflicting | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 16000 | middle | medium | conflicting | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 1.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | arithmetic | 4000 | front | medium | high | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 4000 | front | medium | high | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | single_hop | 16000 | end | low | low | direct | exact_match | 0.0000 | 0.0000 | 1.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 16000 | end | low | low | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 1.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 8000 | front | low | none | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 8000 | front | low | none | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 1.0000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | comparison | 8000 | middle | medium | none | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 8000 | middle | medium | none | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | multi_hop | 4000 | front | medium | conflicting | direct | exact_match | 0.0000 | 0.0000 | 0.5000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 4000 | front | medium | conflicting | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 0.5000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | arithmetic | 4000 | end | medium | high | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 4000 | end | medium | high | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | single_hop | 8000 | scattered | low | low | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 8000 | scattered | low | low | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 1.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | arithmetic | 16000 | middle | medium | none | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 4 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 16000 | middle | medium | none | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.7500 | 4 | True |  | 0.7500 | 0.7500 |
+| controlled | gemma3:12b | comparison | 16000 | front | medium | low | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 16000 | front | medium | low | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 8000 | end | medium | low | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 8000 | end | medium | low | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | multi_hop | 8000 | middle | medium | none | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 8000 | middle | medium | none | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 0.0000 | 2 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 8000 | middle | medium | conflicting | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 8000 | middle | medium | conflicting | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 4000 | middle | medium | conflicting | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 4000 | middle | medium | conflicting | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 16000 | middle | low | high | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | single_hop | 16000 | middle | low | high | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 1.0000 | 2 | True |  | 1.0000 | 1.0000 |
+| controlled | gemma3:12b | comparison | 8000 | end | medium | conflicting | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 8000 | end | medium | conflicting | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | multi_hop | 4000 | scattered | medium | low | direct | exact_match | 0.0000 | 0.0000 | 1.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 4000 | scattered | medium | low | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 1.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | arithmetic | 8000 | scattered | medium | low | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 8000 | scattered | medium | low | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 8000 | middle | medium | low | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 8000 | middle | medium | low | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 1.0000 | 1 | True |  | 1.0000 | 1.0000 |
+| controlled | gemma3:12b | multi_hop | 16000 | scattered | medium | none | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 16000 | scattered | medium | none | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 1.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 16000 | end | low | high | direct | exact_match | 0.0000 | 1.0000 | 1.0000 | 1 | True |  | 1.0000 | 1.0000 |
+| controlled | gemma3:12b | single_hop | 16000 | end | low | high | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 1.0000 | 1 | True |  | 1.0000 | 1.0000 |
+| controlled | gemma3:12b | single_hop | 8000 | end | low | high | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 8000 | end | low | high | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 1.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 8000 | end | medium | low | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 8000 | end | medium | low | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | comparison | 16000 | middle | medium | high | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 16000 | middle | medium | high | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 16000 | scattered | medium | low | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 3 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 16000 | scattered | medium | low | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 1.0000 | 3 | True |  | 1.0000 | 1.0000 |
+| controlled | gemma3:12b | comparison | 8000 | scattered | medium | high | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 8000 | scattered | medium | high | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 1.0000 | 1 | True |  | 1.0000 | 1.0000 |
+| controlled | gemma3:12b | comparison | 8000 | front | medium | conflicting | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 8000 | front | medium | conflicting | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 2 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 8000 | middle | medium | conflicting | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 8000 | middle | medium | conflicting | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | single_hop | 8000 | end | low | conflicting | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 8000 | end | low | conflicting | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 1.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | arithmetic | 4000 | scattered | medium | none | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 4000 | scattered | medium | none | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 4000 | front | medium | none | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 4000 | front | medium | none | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 16000 | middle | medium | conflicting | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 16000 | middle | medium | conflicting | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 1.0000 | 1 | True |  | 1.0000 | 1.0000 |
+| controlled | gemma3:12b | arithmetic | 4000 | middle | medium | low | direct | exact_match | 0.0000 | 1.0000 | 1.0000 | 1 | True |  | 1.0000 | 1.0000 |
+| controlled | gemma3:12b | arithmetic | 4000 | middle | medium | low | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 16000 | scattered | medium | none | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 16000 | scattered | medium | none | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 1.0000 | 1 | True |  | 1.0000 | 1.0000 |
+| controlled | gemma3:12b | multi_hop | 16000 | middle | medium | high | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 16000 | middle | medium | high | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 16000 | end | low | conflicting | direct | exact_match | 0.0000 | 0.0000 | 1.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 16000 | end | low | conflicting | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | arithmetic | 16000 | scattered | medium | conflicting | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | arithmetic | 16000 | scattered | medium | conflicting | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 1.0000 | 1 | True |  | 1.0000 | 1.0000 |
+| controlled | gemma3:12b | multi_hop | 8000 | middle | medium | high | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 8000 | middle | medium | high | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | comparison | 16000 | end | medium | conflicting | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 16000 | end | medium | conflicting | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | single_hop | 4000 | front | low | none | direct | exact_match | 0.0000 | 1.0000 | 1.0000 | 1 | True |  | 1.0000 | 1.0000 |
+| controlled | gemma3:12b | single_hop | 4000 | front | low | none | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 1.0000 | 1 | True |  | 1.0000 | 1.0000 |
+| controlled | gemma3:12b | comparison | 16000 | end | medium | none | direct | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | comparison | 16000 | end | medium | none | retrieve_then_read | exact_match | 0.0000 | 1.0000 | 0.0000 | 1 | True |  | 0.0000 | 0.0000 |
+| controlled | gemma3:12b | single_hop | 4000 | end | low | low | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | single_hop | 4000 | end | low | low | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 1.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 4000 | middle | medium | low | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 4000 | middle | medium | low | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 1.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 4000 | scattered | medium | conflicting | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| controlled | gemma3:12b | multi_hop | 4000 | scattered | medium | conflicting | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 1.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
