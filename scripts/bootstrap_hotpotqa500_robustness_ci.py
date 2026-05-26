@@ -5,6 +5,7 @@ from pathlib import Path
 RUNS = {
     ("Qwen2.5-14B", "HotpotQA-500"): "hotpotqa_qwen25_14b_500_core_robust",
     ("Qwen3-14B", "HotpotQA-500"): "hotpotqa_qwen3_14b_500_core_robust",
+    ("Gemma3-12B", "HotpotQA-500"): "hotpotqa_gemma3_12b_500_core_robust",
 }
 
 METRICS = [
