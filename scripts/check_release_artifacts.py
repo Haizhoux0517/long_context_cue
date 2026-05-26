@@ -87,6 +87,11 @@ def main() -> int:
         help="Fail if stale root-level duplicate/revision documents are present.",
     )
     parser.add_argument("--json", action="store_true", help="Emit machine-readable JSON summary.")
+    parser.add_argument(
+        "--strict-jair-extension",
+        action="store_true",
+        help="Require JAIR-extension 2WikiMultiHopQA and LongBench generated inputs/results after those runs are completed.",
+    )
     args = parser.parse_args()
 
     root = Path(args.root).resolve()
@@ -115,9 +120,11 @@ def main() -> int:
         "dataset builders and adapters": [
             Artifact("scripts/build_controlled_cue.py"),
             Artifact("scripts/build_hotpotqa_cue.py"),
+            Artifact("scripts/build_2wiki_cue.py"),
             Artifact("scripts/build_babilong_cue.py"),
             Artifact("longcue/data/controlled_generator.py"),
             Artifact("longcue/data/hotpotqa_adapter.py"),
+            Artifact("longcue/data/twowiki_adapter.py"),
             Artifact("longcue/data/babilong_adapter.py"),
         ],
         "validation and summary scripts": [
@@ -145,6 +152,16 @@ def main() -> int:
             Artifact("configs/hotpotqa_qwen25_14b_200_topk8_ablation.yaml"),
             Artifact("configs/hotpotqa_qwen3_14b_200_topk5_ablation.yaml"),
             Artifact("configs/hotpotqa_qwen3_14b_200_topk8_ablation.yaml"),
+        ],
+        "2WikiMultiHopQA JAIR-extension configs": [
+            Artifact("configs/twowiki_qwen25_14b_500_core.yaml"),
+            Artifact("configs/twowiki_qwen3_14b_500_core.yaml"),
+            Artifact("configs/twowiki_gemma3_12b_500_core.yaml"),
+        ],
+        "LongBench external validation configs": [
+            Artifact("configs/longbench_qwen25_14b_300_external.yaml"),
+            Artifact("configs/longbench_qwen3_14b_300_external.yaml"),
+            Artifact("configs/longbench_gemma3_12b_300_external.yaml"),
         ],
         "BABILong external configs": [
             Artifact("configs/babilong_qwen25_14b_200_external.yaml"),
@@ -183,6 +200,20 @@ def main() -> int:
             Artifact("data/processed/hotpotqa_cue_200.jsonl"),
             Artifact("data/processed/hotpotqa_cue_500.jsonl"),
             Artifact("data/processed/babilong_cue_200_external.jsonl"),
+        ]
+
+    if args.strict_jair_extension:
+        groups["JAIR-extension generated inputs"] = [
+            Artifact("data/processed/twowiki_cue_500.jsonl"),
+            Artifact("data/processed/longbench_cue_300_external.jsonl"),
+        ]
+        groups["JAIR-extension completed outputs"] = [
+            Artifact("outputs/twowiki_qwen25_14b_500_core/results/per_sample_metrics.csv"),
+            Artifact("outputs/twowiki_qwen3_14b_500_core/results/per_sample_metrics.csv"),
+            Artifact("outputs/twowiki_gemma3_12b_500_core/results/per_sample_metrics.csv"),
+            Artifact("outputs/longbench_qwen25_14b_300_external/results/per_sample_metrics.csv"),
+            Artifact("outputs/longbench_qwen3_14b_300_external/results/per_sample_metrics.csv"),
+            Artifact("outputs/longbench_gemma3_12b_300_external/results/per_sample_metrics.csv"),
         ]
 
     stale_docs = [
@@ -249,6 +280,7 @@ def main() -> int:
         "root": str(root),
         "strict_data": bool(args.strict_data),
         "strict_clean": bool(args.strict_clean),
+        "strict_jair_extension": bool(args.strict_jair_extension),
         "checked": total_checked,
         "missing_required": total_missing,
         "ok": total_missing == 0,

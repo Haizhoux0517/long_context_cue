@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 CONTEXT_LENGTHS = (4000, 8000, 16000, 32000)
-SOURCES = ("controlled", "hotpotqa", "ruler", "longbench", "babilong")
+SOURCES = ("controlled", "hotpotqa", "2wikimultihopqa", "ruler", "longbench", "babilong")
 EVIDENCE_POSITIONS = ("front", "middle", "end", "scattered", "unknown")
 EVIDENCE_DENSITIES = ("high", "medium", "low", "unknown")
 DISTRACTOR_SIMILARITIES = ("none", "low", "high", "conflicting", "unknown")

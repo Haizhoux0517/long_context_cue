@@ -1,0 +1,27 @@
+dataset_path: data/processed/longbench_cue_300_external.jsonl
+output_dir: outputs/longbench_qwen3_14b_300_external
+model:
+  provider: ollama
+  model_name: qwen3:14b
+  num_ctx: 32768
+  timeout: 600
+generation:
+  max_tokens: 1024
+  temperature: 0.0
+methods:
+- no_evidence
+- direct
+- retrieve_then_read
+retrieval:
+  top_k: 3
+  chunk_size: 220
+  overlap: 40
+evaluation:
+  compute_cue: true
+  compute_failure_types: true
+logging:
+  save_full_prompts: false
+  save_intermediate: true
+  compress_outputs: false
+protocol:
+  version: diagnostic_v1_fixed
