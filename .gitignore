@@ -1,16 +1,31 @@
-
-# Runtime generated files
-data/
-outputs/
+# Python / test cache
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
 *.pyd
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
 
-# Temporary experiment archives
+# Local runtime outputs
+outputs/
+logs/
+*.log
+
+# Local archives and temporary downloads
 *.tar.gz
 *.zip
+
+# Data policy:
+# keep raw/cache data out of git, but allow the four paper-release processed JSONL inputs
+# so that `python scripts/check_release_artifacts.py --strict-data` can pass for reviewers.
+data/*
+!data/processed/
+data/processed/*
+!data/processed/controlled_oncu_200_safe16k.jsonl
+!data/processed/hotpotqa_cue_200.jsonl
+!data/processed/hotpotqa_cue_500.jsonl
+!data/processed/babilong_cue_200_external.jsonl
 
 # Debug-only configs
 configs/*debug*_core.yaml
