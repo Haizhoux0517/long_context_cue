@@ -1,407 +1,307 @@
-# Reproducing ONCU Experiments
+# Reproducing the ONCU Diagnostic Experiments
 
-This document describes how to reproduce the final ONCU diagnostic experiments for long-context evidence utilization.
+This document describes how to audit and reproduce the final experiments reported in:
 
-The project evaluates whether long-context language models can use evidence embedded in long contexts, using **Oracle-Normalized Context Utilization (ONCU)** and a fixed four-condition diagnostic protocol.
+> **A Controlled Diagnostic Framework for Evidence Utilization in Long-Context Language Models**
+
+The release is designed around four layers:
+
+1. fixed YAML configurations;
+2. processed JSONL evaluation inputs;
+3. deterministic local inference settings;
+4. frozen result artifacts and table-level summaries.
+
+For a paper-table-to-file mapping, see [`ARTIFACT_MANIFEST.md`](ARTIFACT_MANIFEST.md).
 
 ---
 
-## 1. Main Experimental Matrix
+## 1. Release sanity check
 
-The final SCI-scale matrix evaluates three open-weight local models:
+Run the release checker first:
 
-- `qwen2.5:14b`
-- `qwen3:14b`
-- `gemma3:12b`
-
-on two 200-sample benchmark settings:
-
-- `Controlled-ONCU-safe16K-200`
-- `HotpotQA-ONCU-200`
-
-under four fixed diagnostic conditions:
-
-- `no_evidence`
-- `direct` / full-context input
-- `retrieve_then_read`
-- `oracle` / oracle-evidence reference
-
-Total predictions in the final main matrix:
-
-```text
-3 models × 2 datasets × 200 samples × 4 conditions = 4800 predictions
+```bash
+python scripts/check_release_artifacts.py
 ```
 
-The main result configs are stored under:
+For a complete release that includes processed JSONL inputs, run:
+
+```bash
+python scripts/check_release_artifacts.py --strict-data
+```
+
+Expected result:
 
 ```text
-configs/*_200_core_final.yaml
+missing required: 0
+result: PASS
+```
+
+If the default check passes but `--strict-data` fails, the code/config/result release is present but the processed runtime inputs under `data/processed/` are missing from the local checkout. Restore them from the release or regenerate them using the dataset builders below.
+
+Run unit tests:
+
+```bash
+python -m pytest -q
 ```
 
 ---
 
 ## 2. Environment
 
-The experiments were run with local Ollama inference and deterministic decoding.
-
-Recommended environment:
+Recommended setup:
 
 ```bash
 python --version
-# Python 3.11+ recommended
+# Python 3.10+ supported; Python 3.11+ recommended
 
-pip install -r requirements.txt
+python -m pip install -U pip
+python -m pip install -r requirements.txt
+python -m pip install -e .
 ```
 
-Ollama models used:
+Local Ollama models used in the reported experiments:
 
 ```bash
 ollama pull qwen2.5:14b
 ollama pull qwen3:14b
 ollama pull gemma3:12b
-```
-
-Confirm models:
-
-```bash
 ollama list
 ```
 
-The main inference settings are:
+Core inference settings recorded in the fixed configs:
 
 ```text
 temperature = 0.0
 num_ctx = 32768
 max_tokens = 1024
-retrieval.top_k = 3 for the main matrix
-chunk_size = 220
-overlap = 40
+retrieval.top_k = 3 for the main matrix and HotpotQA-500 robustness runs
+retrieval.chunk_size = 220
+retrieval.overlap = 40
+protocol.version = diagnostic_v1_fixed
 ```
 
 ---
 
-## 3. Data Files
+## 3. Processed input files
 
-The final 200-sample datasets are expected at:
+The paper release uses four processed JSONL inputs:
 
 ```text
 data/processed/controlled_oncu_200_safe16k.jsonl
 data/processed/hotpotqa_cue_200.jsonl
+data/processed/hotpotqa_cue_500.jsonl
+data/processed/babilong_cue_200_external.jsonl
 ```
 
-The controlled dataset uses the safe 16K subset to reduce truncation-related confounds near backend context limits.
+These files are materialized evaluation inputs referenced by the fixed configs. They contain sample IDs, questions, passage-annotated contexts, gold answers, and metadata. ONCU-compatible datasets also contain oracle-evidence identifiers. BABILong-200 is used only for answer-performance validation because the current adapter does not expose oracle evidence compatible with ONCU.
 
-The HotpotQA-derived dataset aligns supporting facts to passage-level oracle evidence and is used for realistic multi-hop evaluation.
+If the files are absent, regenerate them before rerunning inference. Example builder commands are:
+
+```bash
+mkdir -p data/processed
+
+python scripts/build_controlled_cue.py   --output data/processed/controlled_oncu_200_safe16k.jsonl   --limit 200   --context-lengths 4000 8000 16000   --seed 42
+
+python scripts/build_hotpotqa_cue.py   --output data/processed/hotpotqa_cue_200.jsonl   --limit 200   --seed 42
+
+python scripts/build_hotpotqa_cue.py   --output data/processed/hotpotqa_cue_500.jsonl   --limit 500   --seed 42
+
+python scripts/build_babilong_cue.py   --output data/processed/babilong_cue_200_external.jsonl   --configs 0k 1k 2k 4k   --tasks qa1 qa2 qa3 qa6 qa7   --limit-per-task 10
+```
+
+If builder CLI options change in a future branch, inspect the current help messages:
+
+```bash
+python scripts/build_controlled_cue.py --help
+python scripts/build_hotpotqa_cue.py --help
+python scripts/build_babilong_cue.py --help
+```
+
+Original public datasets, including HotpotQA and BABILong, should be obtained from their official sources subject to their licenses and terms of use.
 
 ---
 
-## 4. Main Final Configs
+## 4. Final 200-sample core matrix
 
-The final main experiment configs are:
+The main matrix evaluates three models on two datasets under four fixed diagnostic conditions:
+
+```text
+3 models × 2 datasets × 200 samples × 4 conditions = 4800 predictions
+```
+
+Final configs:
 
 ```text
 configs/controlled_safe16k_qwen25_14b_200_core_final.yaml
-configs/hotpotqa_qwen25_14b_200_core_final.yaml
-
 configs/controlled_safe16k_qwen3_14b_200_core_final.yaml
-configs/hotpotqa_qwen3_14b_200_core_final.yaml
-
 configs/controlled_safe16k_gemma3_12b_200_core_final.yaml
+configs/hotpotqa_qwen25_14b_200_core_final.yaml
+configs/hotpotqa_qwen3_14b_200_core_final.yaml
 configs/hotpotqa_gemma3_12b_200_core_final.yaml
 ```
 
-Validate the configs:
+Validate configs:
 
 ```bash
-python scripts/validate_diagnostic_protocol.py \
-  configs/controlled_safe16k_qwen25_14b_200_core_final.yaml \
-  configs/hotpotqa_qwen25_14b_200_core_final.yaml \
-  configs/controlled_safe16k_qwen3_14b_200_core_final.yaml \
-  configs/hotpotqa_qwen3_14b_200_core_final.yaml \
-  configs/controlled_safe16k_gemma3_12b_200_core_final.yaml \
-  configs/hotpotqa_gemma3_12b_200_core_final.yaml \
-  --require-core
+python scripts/validate_diagnostic_protocol.py   configs/controlled_safe16k_qwen25_14b_200_core_final.yaml   configs/controlled_safe16k_qwen3_14b_200_core_final.yaml   configs/controlled_safe16k_gemma3_12b_200_core_final.yaml   configs/hotpotqa_qwen25_14b_200_core_final.yaml   configs/hotpotqa_qwen3_14b_200_core_final.yaml   configs/hotpotqa_gemma3_12b_200_core_final.yaml   --require-core
 ```
 
-Expected protocol version:
-
-```text
-diagnostic_v1_fixed
-```
-
----
-
-## 5. Running the Final Main Experiments
-
-Example command:
+Run a config:
 
 ```bash
-python -m longcue.run_experiment \
-  --config configs/controlled_safe16k_qwen25_14b_200_core_final.yaml
+python -m longcue.run_experiment   --config configs/controlled_safe16k_qwen25_14b_200_core_final.yaml
 ```
 
-Run all six main configs:
+Recompute ONCU for a completed run:
 
 ```bash
-python -m longcue.run_experiment \
-  --config configs/controlled_safe16k_qwen25_14b_200_core_final.yaml
-
-python -m longcue.run_experiment \
-  --config configs/hotpotqa_qwen25_14b_200_core_final.yaml
-
-python -m longcue.run_experiment \
-  --config configs/controlled_safe16k_qwen3_14b_200_core_final.yaml
-
-python -m longcue.run_experiment \
-  --config configs/hotpotqa_qwen3_14b_200_core_final.yaml
-
-python -m longcue.run_experiment \
-  --config configs/controlled_safe16k_gemma3_12b_200_core_final.yaml
-
-python -m longcue.run_experiment \
-  --config configs/hotpotqa_gemma3_12b_200_core_final.yaml
+python scripts/recompute_oncu.py   --metrics outputs/controlled_safe16k_qwen25_14b_200_core_final/results/per_sample_metrics.csv   --output outputs/controlled_safe16k_qwen25_14b_200_core_final/results/oncu_metrics_multiscore.csv   --aggregate outputs/controlled_safe16k_qwen25_14b_200_core_final/results/oncu_metrics_multiscore_summary.csv   --markdown outputs/controlled_safe16k_qwen25_14b_200_core_final/tables/oncu_metrics_multiscore_summary.md
 ```
 
-Each run writes outputs under:
-
-```text
-outputs/<RUN_NAME>/
-```
-
-Each completed run should contain:
-
-```text
-outputs/<RUN_NAME>/results/per_sample_metrics.csv
-outputs/<RUN_NAME>/results/oncu_metrics_multiscore.csv
-outputs/<RUN_NAME>/results/oncu_metrics_multiscore_summary.csv
-outputs/<RUN_NAME>/tables/oncu_metrics_multiscore_summary.md
-```
-
----
-
-## 6. Recomputing ONCU After Each Run
-
-After each experiment run, recompute ONCU:
-
-```bash
-python scripts/recompute_oncu.py \
-  --metrics outputs/<RUN_NAME>/results/per_sample_metrics.csv \
-  --output outputs/<RUN_NAME>/results/oncu_metrics_multiscore.csv \
-  --aggregate outputs/<RUN_NAME>/results/oncu_metrics_multiscore_summary.csv \
-  --markdown outputs/<RUN_NAME>/tables/oncu_metrics_multiscore_summary.md
-```
-
-Example:
-
-```bash
-python scripts/recompute_oncu.py \
-  --metrics outputs/hotpotqa_qwen25_14b_200_core_final/results/per_sample_metrics.csv \
-  --output outputs/hotpotqa_qwen25_14b_200_core_final/results/oncu_metrics_multiscore.csv \
-  --aggregate outputs/hotpotqa_qwen25_14b_200_core_final/results/oncu_metrics_multiscore_summary.csv \
-  --markdown outputs/hotpotqa_qwen25_14b_200_core_final/tables/oncu_metrics_multiscore_summary.md
-```
-
----
-
-## 7. Final Summary Outputs
-
-The final backup directory is:
+Frozen artifacts used by the paper:
 
 ```text
 experiment_backups/sci200_final_3model_20260525/
 ```
 
-Important final summary files:
+Important summary files:
 
 ```text
-experiment_backups/sci200_final_3model_20260525/summary/
-experiment_backups/sci200_final_3model_20260525/ci/
-experiment_backups/sci200_final_3model_20260525/failure_analysis/
-```
-
-Important CSV files:
-
-```text
+experiment_backups/sci200_final_3model_20260525/summary/sci200_answer_evidence_summary.csv
+experiment_backups/sci200_final_3model_20260525/summary/sci200_oncu_relaxed_f1_summary.csv
 experiment_backups/sci200_final_3model_20260525/ci/sci200_metric_bootstrap_ci.csv
 experiment_backups/sci200_final_3model_20260525/ci/sci200_oncu_bootstrap_ci.csv
-experiment_backups/sci200_final_3model_20260525/ci/sci200_oncu_ci_compact.csv
-
 experiment_backups/sci200_final_3model_20260525/failure_analysis/sci200_failure_breakdown_contextual_compact.csv
-experiment_backups/sci200_final_3model_20260525/failure_analysis/sci200_failure_breakdown_long.csv
-experiment_backups/sci200_final_3model_20260525/failure_analysis/sci200_failure_raw_values.csv
 ```
 
 ---
 
-## 8. Bootstrap Confidence Intervals
-
-Bootstrap confidence intervals are generated by:
-
-```bash
-python scripts/bootstrap_sci200_final_ci.py
-```
-
-This computes:
-
-- sample-level bootstrap confidence intervals for answer and evidence metrics;
-- group-level bootstrap confidence intervals for ONCU.
-
-The final 200-sample analysis uses:
-
-```text
-5000 bootstrap replicates
-two-sided 95% percentile intervals
-```
-
-The script writes:
-
-```text
-experiment_backups/sci200_final_3model_20260525/ci/sci200_metric_bootstrap_ci.csv
-experiment_backups/sci200_final_3model_20260525/ci/sci200_metric_bootstrap_ci.tex
-experiment_backups/sci200_final_3model_20260525/ci/sci200_oncu_bootstrap_ci.csv
-experiment_backups/sci200_final_3model_20260525/ci/sci200_oncu_bootstrap_ci.tex
-experiment_backups/sci200_final_3model_20260525/ci/sci200_oncu_ci_compact.csv
-experiment_backups/sci200_final_3model_20260525/ci/sci200_oncu_ci_compact.tex
-```
-
----
-
-## 9. Failure-Type Breakdown
-
-The final 200-sample failure breakdown is generated by:
-
-```bash
-python scripts/summarize_sci200_failure_breakdown.py
-```
-
-This produces:
-
-```text
-experiment_backups/sci200_final_3model_20260525/failure_analysis/sci200_failure_breakdown_contextual_compact.csv
-experiment_backups/sci200_final_3model_20260525/failure_analysis/sci200_failure_breakdown_contextual_compact.tex
-experiment_backups/sci200_final_3model_20260525/failure_analysis/sci200_failure_breakdown_compact_all_conditions.csv
-experiment_backups/sci200_final_3model_20260525/failure_analysis/sci200_failure_breakdown_long.csv
-experiment_backups/sci200_final_3model_20260525/failure_analysis/sci200_failure_raw_values.csv
-```
-
-The contextual compact table is the one used in the paper:
-
-```text
-sci200_failure_breakdown_contextual_compact.csv
-```
-
-Failure categories:
-
-```text
-Loc.   = evidence localization failure
-Sel.   = evidence selection failure
-Int.   = evidence integration failure
-Conv.  = answer conversion failure
-Succ.  = categorical success
-Parse  = structured-output parsing failure
-```
-
-The categorical success label is stricter than relaxed answer F1 and should be interpreted as a diagnostic label, not as a replacement for continuous answer metrics.
-
----
-
-## 10. HotpotQA Retrieval Top-k Ablation
-
-The top-k ablation evaluates whether increasing lexical retrieval breadth improves retrieved-evidence utilization on HotpotQA-ONCU-200.
+## 5. HotpotQA retrieval-budget ablation
 
 Ablation configs:
 
 ```text
 configs/hotpotqa_qwen25_14b_200_topk5_ablation.yaml
 configs/hotpotqa_qwen25_14b_200_topk8_ablation.yaml
-
 configs/hotpotqa_qwen3_14b_200_topk5_ablation.yaml
 configs/hotpotqa_qwen3_14b_200_topk8_ablation.yaml
 ```
 
-Example:
+These vary lexical retrieval `top_k` while keeping the dataset, decoding policy, output contract, chunk size, overlap, and evaluation pipeline fixed.
+
+---
+
+## 6. HotpotQA-500 robustness
+
+HotpotQA-500 configs:
+
+```text
+configs/hotpotqa_qwen25_14b_500_core_robust.yaml
+configs/hotpotqa_qwen3_14b_500_core_robust.yaml
+configs/hotpotqa_gemma3_12b_500_core_robust.yaml
+```
+
+Frozen artifacts:
+
+```text
+experiment_backups/hotpotqa_500_robustness_20260525/
+```
+
+Main files:
+
+```text
+experiment_backups/hotpotqa_500_robustness_20260525/hotpotqa_200_vs_500_robustness_summary.csv
+experiment_backups/hotpotqa_500_robustness_20260525/ci/hotpotqa500_metric_bootstrap_ci.csv
+experiment_backups/hotpotqa_500_robustness_20260525/ci/hotpotqa500_oncu_bootstrap_ci.csv
+experiment_backups/hotpotqa_500_robustness_20260525/final_tables/hotpotqa_200_vs_500_with_ci.csv
+```
+
+---
+
+## 7. BABILong-200 external validation
+
+BABILong-200 is not treated as an ONCU benchmark in this release. It is used as external answer-performance validation because the current BABILong adapter does not provide oracle-evidence annotations compatible with ONCU.
+
+Configs:
+
+```text
+configs/babilong_qwen25_14b_200_external.yaml
+configs/babilong_qwen3_14b_200_external.yaml
+configs/babilong_gemma3_12b_200_external.yaml
+```
+
+Frozen artifacts:
+
+```text
+experiment_backups/babilong_200_external_20260526/
+```
+
+Main files:
+
+```text
+experiment_backups/babilong_200_external_20260526/babilong_200_external_summary.csv
+experiment_backups/babilong_200_external_20260526/ci/babilong200_metric_bootstrap_ci.csv
+experiment_backups/babilong_200_external_20260526/final_tables/babilong200_external_ci_compact.csv
+```
+
+---
+
+## 8. Regenerating confidence intervals and summaries
+
+Final 200-sample bootstrap CIs:
 
 ```bash
-python -m longcue.run_experiment \
-  --config configs/hotpotqa_qwen25_14b_200_topk5_ablation.yaml
-
-python scripts/recompute_oncu.py \
-  --metrics outputs/hotpotqa_qwen25_14b_200_topk5_ablation/results/per_sample_metrics.csv \
-  --output outputs/hotpotqa_qwen25_14b_200_topk5_ablation/results/oncu_metrics_multiscore.csv \
-  --aggregate outputs/hotpotqa_qwen25_14b_200_topk5_ablation/results/oncu_metrics_multiscore_summary.csv \
-  --markdown outputs/hotpotqa_qwen25_14b_200_topk5_ablation/tables/oncu_metrics_multiscore_summary.md
+python scripts/bootstrap_sci200_final_ci.py
 ```
 
-The Qwen2.5-14B and Qwen3-14B ablation results show that increasing top-k partially improves retrieved evidence coverage and ONCU, but does not fully close the gap to full-context performance.
+HotpotQA-500 bootstrap CIs:
+
+```bash
+python scripts/bootstrap_hotpotqa500_robustness_ci.py
+```
+
+BABILong-200 bootstrap CIs:
+
+```bash
+python scripts/bootstrap_babilong200_external_ci.py
+```
+
+Failure breakdown:
+
+```bash
+python scripts/summarize_sci200_failure_breakdown.py
+```
 
 ---
 
-## 11. Parse Error Policy
+## 9. Canonical release directories
 
-Structured-output parsing failures are retained and scored as incorrect.
-
-They are **not removed** from the denominator.
-
-Observed final main-matrix parse-error counts:
+Only these directories are used as canonical evidence for the current paper:
 
 ```text
-Qwen2.5-14B Controlled-safe16K-200: 0/800
-Qwen2.5-14B HotpotQA-ONCU-200:     0/800
-Qwen3-14B Controlled-safe16K-200:   0/800
-Qwen3-14B HotpotQA-ONCU-200:        1/800
-Gemma3-12B Controlled-safe16K-200:  6/800
-Gemma3-12B HotpotQA-ONCU-200:       0/800
+experiment_backups/sci200_final_3model_20260525/
+experiment_backups/hotpotqa_500_robustness_20260525/
+experiment_backups/babilong_200_external_20260526/
 ```
 
-This policy avoids selectively discarding difficult model outputs and preserves comparability across models.
+If older backup folders are present, treat them as historical development artifacts, not as the source for the final paper tables.
 
 ---
 
-## 12. Recommended Reproduction Order
+## 10. Final release checklist
 
-For a complete reproduction, run in this order:
+Before submission or archival release:
 
-1. Validate configs.
-2. Run the six final main configs.
-3. Recompute ONCU for each run.
-4. Run `scripts/bootstrap_sci200_final_ci.py`.
-5. Run `scripts/summarize_sci200_failure_breakdown.py`.
-6. Run the HotpotQA top-k ablation configs.
-7. Compare generated summary CSV files against the paper tables.
+```bash
+python -m pytest -q
+python scripts/check_release_artifacts.py
+python scripts/check_release_artifacts.py --strict-data
+git status
+```
 
----
-
-## 13. Notes on Interpretation
-
-ONCU should be interpreted jointly with:
-
-- answer F1;
-- evidence F1;
-- no-evidence baseline;
-- oracle-evidence reference;
-- failure-type breakdown;
-- dataset structure.
-
-A low full-context ONCU can indicate failure to use available evidence embedded in the long input.
-
-A low retrieved-evidence ONCU can indicate retrieval coverage, ranking, or multi-hop evidence-selection failures.
-
-The oracle-evidence condition is an empirical reference, not necessarily a strict per-example upper bound, because retrieved chunks may contain oracle passages plus adjacent local context.
-
----
-
-## 14. Paper Files
-
-The main paper draft is stored under:
+Expected release-audit result:
 
 ```text
-paper/
+missing required: 0
+result: PASS
 ```
-
-Recommended files:
-
-```text
-paper/main_ieee_oncu_final_sci_3model_200_with_topk_qwen25_qwen3.tex
-paper/references.bib
-```
-
