@@ -135,3 +135,11 @@ experiment_backups/babilong_200_external_20260526/
 ```
 
 Older backup folders, if present, are historical intermediate backups and are not used for the submitted paper tables.
+
+### Retriever-family ablation
+
+The repository includes a reviewer-facing retriever-family ablation to test
+whether retrieved-evidence failures are specific to the default lexical retriever.
+See `configs/ablations/retriever_family_hotpotqa_qwen25.yaml`,
+`configs/ablations/retriever_family_twowiki_qwen25.yaml`, and
+`scripts/run_retriever_family_ablation.py`.

@@ -157,3 +157,15 @@ Expected result for a complete paper-release checkout:
 missing required: 0
 result: PASS
 ```
+
+## Retriever-family ablation scaffold
+
+- `scripts/run_retriever_family_ablation.py`
+  - Runs retrieval-only and optional reader-facing ablations across lexical,
+    dense, hybrid, deterministic iterative, and oracle retriever families.
+- `longcue/methods/retrievers.py`
+  - Shared deterministic retriever implementations and retrieval diagnostics.
+- `configs/ablations/retriever_family_hotpotqa_qwen25.yaml`
+  - HotpotQA-ONCU-200 retriever-family ablation for Qwen2.5-14B.
+- `configs/ablations/retriever_family_twowiki_qwen25.yaml`
+  - 2WikiMultiHopQA-ONCU-500 retriever-family ablation for Qwen2.5-14B.

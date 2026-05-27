@@ -115,6 +115,7 @@ def main() -> int:
             Artifact("longcue/evaluation/oncu.py"),
             Artifact("longcue/evaluation/failure_diagnosis.py"),
             Artifact("longcue/methods/retrieve_then_read.py"),
+            Artifact("longcue/methods/retrievers.py"),
             Artifact("longcue/models/ollama.py"),
         ],
         "dataset builders and adapters": [
@@ -131,6 +132,7 @@ def main() -> int:
             Artifact("scripts/validate_diagnostic_protocol.py"),
             Artifact("scripts/recompute_oncu.py"),
             Artifact("scripts/recompute_twowiki500_tables.py"),
+            Artifact("scripts/run_retriever_family_ablation.py"),
             Artifact("scripts/bootstrap_sci200_final_ci.py"),
             Artifact("scripts/bootstrap_hotpotqa500_robustness_ci.py"),
             Artifact("scripts/bootstrap_babilong200_external_ci.py"),
@@ -158,6 +160,10 @@ def main() -> int:
             Artifact("configs/twowiki_qwen25_14b_500_core.yaml"),
             Artifact("configs/twowiki_qwen3_14b_500_core.yaml"),
             Artifact("configs/twowiki_gemma3_12b_500_core.yaml"),
+        ],
+        "retriever-family ablation configs": [
+            Artifact("configs/ablations/retriever_family_hotpotqa_qwen25.yaml"),
+            Artifact("configs/ablations/retriever_family_twowiki_qwen25.yaml"),
         ],
         "LongBench external validation configs": [
             Artifact("configs/longbench_qwen25_14b_300_external.yaml"),

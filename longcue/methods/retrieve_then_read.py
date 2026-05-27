@@ -1,17 +1,14 @@
 from __future__ import annotations
 
 import logging
-import re
 from typing import Any
 
 from longcue.data.schema import BenchmarkSample
 from longcue.models.base import BaseModelClient
 from longcue.prompts.templates import direct_answer_prompt
-from longcue.utils.token_utils import chunk_words
 
 from .common import parse_answer, result_payload
-
-WORD_PATTERN = re.compile(r"\w+")
+from .retrievers import retrieve_chunks
 
 
 def run(
@@ -24,12 +21,20 @@ def run(
     **_: Any,
 ) -> dict[str, Any]:
     settings = retrieval or {}
-    chunks = chunk_words(
-        sample.long_context,
+    retrieved_chunks = retrieve_chunks(
+        sample=sample,
+        retriever=str(settings.get("retriever", "lexical")),
+        top_k=int(settings.get("top_k", 3)),
         chunk_size=int(settings.get("chunk_size", 220)),
         overlap=int(settings.get("overlap", 40)),
+        dense_model_name=str(
+            settings.get("dense_model_name", "sentence-transformers/all-MiniLM-L6-v2")
+        ),
+        rrf_k=int(settings.get("rrf_k", 60)),
+        iterative_seed_k=int(settings.get("iterative_seed_k", 2)),
+        iterative_expansion_words=int(settings.get("iterative_expansion_words", 96)),
     )
-    retrieved = retrieve_top_k(sample.question, chunks, top_k=int(settings.get("top_k", 3)))
+    retrieved = [chunk.text for chunk in retrieved_chunks]
     context = "\n\n".join(retrieved)
     prompt = direct_answer_prompt(
         sample.question,
@@ -44,23 +49,37 @@ def run(
         raw,
         parse_answer(raw, logger, passage_text=prompt),
         prompt,
-        intermediate={"retrieved_chunks": retrieved, "chunk_count": len(chunks)},
+        intermediate={
+            "retrieved_chunks": retrieved,
+            "retrieved_passage_ids": [
+                list(chunk.passage_ids) for chunk in retrieved_chunks
+            ],
+            "chunk_count": len(retrieved_chunks),
+            "retriever": str(settings.get("retriever", "lexical")),
+        },
     )
 
 
 def retrieve_top_k(question: str, chunks: list[str], top_k: int = 3) -> list[str]:
-    if not chunks or top_k <= 0:
-        return []
-    try:
-        from sklearn.feature_extraction.text import TfidfVectorizer
+    """Backward-compatible lexical helper retained for older imports/tests."""
+    from longcue.data.schema import BenchmarkSample
 
-        matrix = TfidfVectorizer().fit_transform(chunks + [question])
-        scores = (matrix[:-1] @ matrix[-1].T).toarray().ravel()
-    except ImportError:
-        question_terms = set(WORD_PATTERN.findall(question.lower()))
-        scores = [
-            len(question_terms.intersection(WORD_PATTERN.findall(chunk.lower())))
-            for chunk in chunks
-        ]
-    ranked = sorted(enumerate(scores), key=lambda item: (-float(item[1]), item[0]))
-    return [chunks[index] for index, _ in ranked[: min(top_k, len(chunks))]]
+    sample = BenchmarkSample(
+        id="compat_retrieval_sample",
+        question=question,
+        gold_answer="unknown",
+        oracle_evidence=[],
+        long_context="\n\n".join(chunks) if chunks else "empty context",
+        distractors=[],
+        evidence_position="unknown",
+        context_length=0,
+        evidence_density="unknown",
+        distractor_similarity="unknown",
+        reasoning_type="unknown",
+        source="controlled",
+        answer_type="unknown",
+    )
+    return [
+        chunk.text
+        for chunk in retrieve_chunks(sample=sample, retriever="lexical", top_k=top_k)
+    ]

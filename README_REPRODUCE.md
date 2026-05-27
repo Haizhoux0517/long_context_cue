@@ -292,3 +292,47 @@ python scripts/summarize_sci200_failure_breakdown.py
 ## 9. Notes for reviewers
 
 The released summaries are intended to allow table-level auditing without rerunning all local LLM inference. Full reruns require local Ollama model availability, GPU/CPU resources, and the original public source datasets. Structured-output parse failures are retained and scored as incorrect in the released metrics.
+
+## Retriever-family ablation for reviewer audit
+
+This ablation is designed to answer whether the retrieved-evidence bottleneck is
+specific to the default deterministic lexical retriever. It should be treated as a
+diagnostic ablation, not as a replacement for the fixed four-condition ONCU matrix.
+
+Install the optional dense-retrieval dependency before running dense or hybrid
+retrievers:
+
+```bash
+pip install -r requirements.txt
+```
+
+Run retrieval-only diagnostics first:
+
+```bash
+python scripts/run_retriever_family_ablation.py \
+  --config configs/ablations/retriever_family_hotpotqa_qwen25.yaml
+
+python scripts/run_retriever_family_ablation.py \
+  --config configs/ablations/retriever_family_twowiki_qwen25.yaml
+```
+
+The retrieval-only output reports evidence recall, full-chain coverage,
+distractor passage rate, and oracle-hit rate for lexical, dense, hybrid,
+deterministic iterative, and oracle retrievers over `top_k = 3, 5, 8, 16`.
+
+If retrieval-only diagnostics show that dense or hybrid retrieval changes evidence
+coverage, run the reader-facing ablation for Qwen2.5-14B:
+
+```bash
+python scripts/run_retriever_family_ablation.py \
+  --config configs/ablations/retriever_family_hotpotqa_qwen25.yaml \
+  --run-reader
+
+python scripts/run_retriever_family_ablation.py \
+  --config configs/ablations/retriever_family_twowiki_qwen25.yaml \
+  --run-reader
+```
+
+Reader-facing outputs include answer F1, evidence F1, parse errors, and
+ONCU-Relaxed-F1 computed against the frozen no-evidence and oracle reference
+rows from the corresponding release artifacts.
