@@ -29,3 +29,16 @@ data/processed/*
 
 # Debug-only configs
 configs/*debug*_core.yaml
+
+# Generated experiment artifacts
+outputs/
+data/processed/twowiki_cue_500.jsonl
+data/processed/twowiki_cue_500.skipped.json
+
+# Temporary transfer bundles
+*.zip
+*.patch
+
+# Python cache
+__pycache__/
+*.pyc
