@@ -2,21 +2,21 @@
 
 This repository contains the code, fixed configurations, processed inputs, and frozen result artifacts for the paper:
 
-> **A Controlled Diagnostic Framework for Evidence Utilization in Long-Context Language Models**
+> **Oracle-Normalized Evidence Utilization: A Diagnostic Framework for Long-Context and Retrieval-Augmented Language Models**
 
-The project evaluates whether long-context language models actually use evidence embedded in long inputs. The main diagnostic metric is **Oracle-Normalized Context Utilization (ONCU)**, which normalizes a contextual condition between a no-evidence baseline and an oracle-evidence reference.
+The project evaluates whether long-context and retrieval-augmented language models recover the evidence-derived advantage made available by a context. The main diagnostic metric is **Oracle-Normalized Context Utilization (ONCU)**, which normalizes a contextual condition between a no-evidence baseline and an oracle-evidence reference.
 
-The repository is organized for paper review and reproducibility. For full reproduction commands, use [`README_REPRODUCE.md`](README_REPRODUCE.md). For the mapping from paper tables to repository files, use [`ARTIFACT_MANIFEST.md`](ARTIFACT_MANIFEST.md).
+For full reproduction commands, use [`README_REPRODUCE.md`](README_REPRODUCE.md). For the mapping from paper tables to repository files, use [`ARTIFACT_MANIFEST.md`](ARTIFACT_MANIFEST.md).
 
 ---
 
-## What is included
+## Repository layout
 
 ```text
 longcue/                         Core Python package
-scripts/                         Dataset builders, protocol checks, CI and summary scripts
+scripts/                         Dataset builders, validators, bootstrap, and summary scripts
 configs/                         Fixed YAML configs for reported runs
-data/processed/                  Four processed JSONL inputs used by the paper experiments
+data/processed/                  Processed JSONL inputs used by the paper experiments
 experiment_backups/              Frozen result summaries, protocol manifests, CIs, and final tables
 README_REPRODUCE.md              Full reproduction guide
 ARTIFACT_MANIFEST.md             Paper-table-to-repository artifact map
@@ -24,14 +24,17 @@ requirements.txt                 Runtime dependencies
 pyproject.toml                   Package metadata
 ```
 
-The four processed inputs expected for the final release are:
+The processed inputs expected for the paper release are:
 
 ```text
 data/processed/controlled_oncu_200_safe16k.jsonl
 data/processed/hotpotqa_cue_200.jsonl
 data/processed/hotpotqa_cue_500.jsonl
+data/processed/twowiki_cue_500.jsonl
 data/processed/babilong_cue_200_external.jsonl
 ```
+
+The 2Wiki input is intentionally listed here because the submitted manuscript reports 2WikiMultiHopQA-ONCU-500 results. If it is absent in a lightweight checkout, regenerate it with `scripts/build_2wiki_cue.py` as described in `README_REPRODUCE.md`.
 
 ---
 
@@ -43,25 +46,23 @@ From the repository root:
 python -m pip install -r requirements.txt
 python -m pytest -q
 python scripts/check_release_artifacts.py
-python scripts/check_release_artifacts.py --strict-data
+python scripts/check_release_artifacts.py --strict-data --strict-clean
 ```
 
-A complete release should report:
+A complete paper-release checkout should report:
 
 ```text
 missing required: 0
 result: PASS
 ```
 
-Use `--strict-data` to verify that the processed JSONL inputs used by the reported experiments are present in the repository snapshot.
+The `--strict-data` mode checks that the materialized JSONL inputs referenced by the reported paper experiments are present. If the 2Wiki JSONL is not tracked in a lightweight branch, regenerate it first or add it from the released artifact bundle.
 
 ---
 
 ## Main experiment families
 
 ### Final 200-sample core matrix
-
-The main ONCU-compatible matrix evaluates:
 
 ```text
 3 models × 2 datasets × 200 samples × 4 conditions = 4800 predictions
@@ -82,19 +83,22 @@ Controlled-ONCU-safe16K-200
 HotpotQA-ONCU-200
 ```
 
-Conditions:
+Canonical frozen artifacts:
 
 ```text
-no_evidence
-direct / full context
-retrieve_then_read
-oracle / oracle evidence
+experiment_backups/sci200_final_3model_20260525/
+```
+
+### 2WikiMultiHopQA-ONCU-500 validation
+
+```text
+3 models × 500 samples × 4 conditions = 6000 predictions
 ```
 
 Canonical frozen artifacts:
 
 ```text
-experiment_backups/sci200_final_3model_20260525/
+experiment_backups/twowiki_500_validation_20260527/
 ```
 
 ### HotpotQA-500 robustness
@@ -119,24 +123,15 @@ experiment_backups/babilong_200_external_20260526/
 
 ---
 
-## Reproducibility documents
-
-Use these files in order:
-
-1. [`README_REPRODUCE.md`](README_REPRODUCE.md): environment setup, data generation/restoration, run commands, and checks.
-2. [`ARTIFACT_MANIFEST.md`](ARTIFACT_MANIFEST.md): exact mapping from paper tables to repository paths.
-3. [`scripts/check_release_artifacts.py`](scripts/check_release_artifacts.py): automated audit for required files.
-
----
-
 ## Notes on historical artifacts
 
 Only these release directories are used for the current paper claims:
 
 ```text
 experiment_backups/sci200_final_3model_20260525/
+experiment_backups/twowiki_500_validation_20260527/
 experiment_backups/hotpotqa_500_robustness_20260525/
 experiment_backups/babilong_200_external_20260526/
 ```
 
-Older backup folders, if present, are historical intermediate artifacts and should not be used as paper evidence unless explicitly referenced by `ARTIFACT_MANIFEST.md`.
+Older backup folders, if present, are historical intermediate backups and are not used for the submitted paper tables.

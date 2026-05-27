@@ -1,0 +1,17 @@
+\begin{table*}[!t]
+\renewcommand{\arraystretch}{1.12}
+\caption{2WikiMultiHopQA-ONCU-500 ONCU-Relaxed-F1 Results. ONCU is computed over valid metadata groups where the oracle-evidence reference exceeds the no-evidence baseline. Bracketed values are 95\% bootstrap confidence intervals over valid groups using 5,000 bootstrap resamples.}
+\label{tab:twowiki500_oncu_results}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lccccccc}
+\toprule
+Model & Valid Groups & $S_{\mathrm{no}}$ & $S_{\mathrm{oracle}}$ & $S_{\mathrm{full}}$ & Full ONCU [95\% CI] & $S_{\mathrm{ret}}$ & Ret. ONCU [95\% CI] \\
+\midrule
+Qwen2.5-14B & 36/37 & 0.261 & 0.816 & 0.605 & \textbf{0.610 [0.518, 0.694]} & 0.464 & 0.381 [0.301, 0.465] \\
+Qwen3-14B & 34/37 & 0.359 & 0.785 & 0.597 & \textbf{0.534 [0.427, 0.641]} & 0.498 & 0.367 [0.257, 0.485] \\
+Gemma3-12B & 31/37 & 0.377 & 0.835 & 0.548 & \textbf{0.369 [0.252, 0.487]} & 0.465 & 0.215 [0.146, 0.288] \\
+\bottomrule
+\end{tabular}
+\end{table*}

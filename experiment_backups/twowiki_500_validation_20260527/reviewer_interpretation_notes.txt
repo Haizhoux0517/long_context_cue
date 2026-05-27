@@ -1,0 +1,5 @@
+Reviewer-facing interpretation notes:
+1. Do not claim Gemma3 is the strongest model from the 2Wiki run. Its overall mean EM is highest only when all four conditions are pooled; ONCU shows weaker recovered evidence advantage under full context.
+2. The key 2Wiki finding is not “retrieval is bad” in general. It is that this deterministic lexical retrieve-then-read condition has a multi-hop evidence-chain localization bottleneck.
+3. The non-trivial no-evidence baselines, especially Qwen3 and Gemma3, strengthen the need for oracle-normalized evaluation.
+4. The uploaded bundle did not include official bootstrap CI files. The ONCU CIs in the table were recomputed from per-sample metrics by grouping on reasoning_type, context_length, evidence_position, evidence_density, and distractor_similarity, then bootstrapping valid groups with 5,000 resamples and seed 42.

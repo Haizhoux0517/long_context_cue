@@ -88,9 +88,9 @@ def main() -> int:
     )
     parser.add_argument("--json", action="store_true", help="Emit machine-readable JSON summary.")
     parser.add_argument(
-        "--strict-jair-extension",
+        "--strict-longbench",
         action="store_true",
-        help="Require JAIR-extension 2WikiMultiHopQA and LongBench generated inputs/results after those runs are completed.",
+        help="Require optional LongBench generated inputs/results after those exploratory runs are completed.",
     )
     args = parser.parse_args()
 
@@ -130,6 +130,7 @@ def main() -> int:
         "validation and summary scripts": [
             Artifact("scripts/validate_diagnostic_protocol.py"),
             Artifact("scripts/recompute_oncu.py"),
+            Artifact("scripts/recompute_twowiki500_tables.py"),
             Artifact("scripts/bootstrap_sci200_final_ci.py"),
             Artifact("scripts/bootstrap_hotpotqa500_robustness_ci.py"),
             Artifact("scripts/bootstrap_babilong200_external_ci.py"),
@@ -186,6 +187,19 @@ def main() -> int:
             Artifact("experiment_backups/hotpotqa_500_robustness_20260525/ci/hotpotqa500_oncu_bootstrap_ci.csv"),
             Artifact("experiment_backups/hotpotqa_500_robustness_20260525/final_tables/hotpotqa_200_vs_500_with_ci.csv"),
         ],
+        "2WikiMultiHopQA-500 frozen results": [
+            Artifact("experiment_backups/twowiki_500_validation_20260527", "dir"),
+            Artifact("experiment_backups/twowiki_500_validation_20260527/summary/twowiki_condition_summary.csv"),
+            Artifact("experiment_backups/twowiki_500_validation_20260527/summary/twowiki_oncu_relaxed_f1_summary.csv"),
+            Artifact("experiment_backups/twowiki_500_validation_20260527/ci/twowiki_oncu_relaxed_f1_bootstrap_ci.csv"),
+            Artifact("experiment_backups/twowiki_500_validation_20260527/failure_analysis/twowiki_failure_breakdown_long.csv"),
+            Artifact("experiment_backups/twowiki_500_validation_20260527/final_tables/twowiki_main_results_table.tex"),
+            Artifact("experiment_backups/twowiki_500_validation_20260527/final_tables/twowiki_oncu_results_table.tex"),
+            Artifact("experiment_backups/twowiki_500_validation_20260527/final_tables/twowiki_failure_breakdown_table.tex"),
+            Artifact("experiment_backups/twowiki_500_validation_20260527/per_model/*/protocol_manifest.json", "glob"),
+            Artifact("experiment_backups/twowiki_500_validation_20260527/per_model/*/resolved_config.json", "glob"),
+            Artifact("experiment_backups/twowiki_500_validation_20260527/per_model/*/per_sample_metrics.csv", "glob"),
+        ],
         "BABILong-200 frozen results": [
             Artifact("experiment_backups/babilong_200_external_20260526", "dir"),
             Artifact("experiment_backups/babilong_200_external_20260526/babilong_200_external_summary.csv"),
@@ -199,18 +213,15 @@ def main() -> int:
             Artifact("data/processed/controlled_oncu_200_safe16k.jsonl"),
             Artifact("data/processed/hotpotqa_cue_200.jsonl"),
             Artifact("data/processed/hotpotqa_cue_500.jsonl"),
+            Artifact("data/processed/twowiki_cue_500.jsonl"),
             Artifact("data/processed/babilong_cue_200_external.jsonl"),
         ]
 
-    if args.strict_jair_extension:
-        groups["JAIR-extension generated inputs"] = [
-            Artifact("data/processed/twowiki_cue_500.jsonl"),
+    if args.strict_longbench:
+        groups["optional LongBench generated inputs"] = [
             Artifact("data/processed/longbench_cue_300_external.jsonl"),
         ]
-        groups["JAIR-extension completed outputs"] = [
-            Artifact("outputs/twowiki_qwen25_14b_500_core/results/per_sample_metrics.csv"),
-            Artifact("outputs/twowiki_qwen3_14b_500_core/results/per_sample_metrics.csv"),
-            Artifact("outputs/twowiki_gemma3_12b_500_core/results/per_sample_metrics.csv"),
+        groups["optional LongBench completed outputs"] = [
             Artifact("outputs/longbench_qwen25_14b_300_external/results/per_sample_metrics.csv"),
             Artifact("outputs/longbench_qwen3_14b_300_external/results/per_sample_metrics.csv"),
             Artifact("outputs/longbench_gemma3_12b_300_external/results/per_sample_metrics.csv"),
@@ -280,7 +291,7 @@ def main() -> int:
         "root": str(root),
         "strict_data": bool(args.strict_data),
         "strict_clean": bool(args.strict_clean),
-        "strict_jair_extension": bool(args.strict_jair_extension),
+        "strict_longbench": bool(args.strict_longbench),
         "checked": total_checked,
         "missing_required": total_missing,
         "ok": total_missing == 0,

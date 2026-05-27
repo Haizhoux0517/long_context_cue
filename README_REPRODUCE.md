@@ -1,10 +1,10 @@
 # Reproducing the ONCU Diagnostic Experiments
 
-This document describes how to audit and reproduce the final experiments reported in:
+This document describes how to audit and reproduce the experiments reported in:
 
-> **A Controlled Diagnostic Framework for Evidence Utilization in Long-Context Language Models**
+> **Oracle-Normalized Evidence Utilization: A Diagnostic Framework for Long-Context and Retrieval-Augmented Language Models**
 
-The release is designed around four layers:
+The release is organized around four layers:
 
 1. fixed YAML configurations;
 2. processed JSONL evaluation inputs;
@@ -23,10 +23,10 @@ Run the release checker first:
 python scripts/check_release_artifacts.py
 ```
 
-For a complete release that includes processed JSONL inputs, run:
+For a complete release that includes processed JSONL inputs and enforces root cleanliness, run:
 
 ```bash
-python scripts/check_release_artifacts.py --strict-data
+python scripts/check_release_artifacts.py --strict-data --strict-clean
 ```
 
 Expected result:
@@ -35,8 +35,6 @@ Expected result:
 missing required: 0
 result: PASS
 ```
-
-If the default check passes but `--strict-data` fails, the code/config/result release is present but the processed runtime inputs under `data/processed/` are missing from the local checkout. Restore them from the release or regenerate them using the dataset builders below.
 
 Run unit tests:
 
@@ -74,7 +72,7 @@ Core inference settings recorded in the fixed configs:
 temperature = 0.0
 num_ctx = 32768
 max_tokens = 1024
-retrieval.top_k = 3 for the main matrix and HotpotQA-500 robustness runs
+retrieval.top_k = 3 for the main matrix, HotpotQA-500, and 2Wiki-500 runs
 retrieval.chunk_size = 220
 retrieval.overlap = 40
 protocol.version = diagnostic_v1_fixed
@@ -84,18 +82,19 @@ protocol.version = diagnostic_v1_fixed
 
 ## 3. Processed input files
 
-The paper release uses four processed JSONL inputs:
+The paper release uses five processed JSONL inputs:
 
 ```text
 data/processed/controlled_oncu_200_safe16k.jsonl
 data/processed/hotpotqa_cue_200.jsonl
 data/processed/hotpotqa_cue_500.jsonl
+data/processed/twowiki_cue_500.jsonl
 data/processed/babilong_cue_200_external.jsonl
 ```
 
-These files are materialized evaluation inputs referenced by the fixed configs. They contain sample IDs, questions, passage-annotated contexts, gold answers, and metadata. ONCU-compatible datasets also contain oracle-evidence identifiers. BABILong-200 is used only for answer-performance validation because the current adapter does not expose oracle evidence compatible with ONCU.
+These files contain sample IDs, questions, passage-annotated contexts, gold answers, and metadata. ONCU-compatible datasets also contain oracle-evidence identifiers. BABILong-200 is used only for answer-performance validation because the current adapter does not expose oracle evidence compatible with ONCU.
 
-If the files are absent, regenerate them before rerunning inference. Example builder commands are:
+If the files are absent, regenerate them before rerunning inference:
 
 ```bash
 mkdir -p data/processed
@@ -106,24 +105,27 @@ python scripts/build_hotpotqa_cue.py   --output data/processed/hotpotqa_cue_200.
 
 python scripts/build_hotpotqa_cue.py   --output data/processed/hotpotqa_cue_500.jsonl   --limit 500   --seed 42
 
+python scripts/build_2wiki_cue.py   --output data/processed/twowiki_cue_500.jsonl   --limit 500   --seed 42
+
 python scripts/build_babilong_cue.py   --output data/processed/babilong_cue_200_external.jsonl   --configs 0k 1k 2k 4k   --tasks qa1 qa2 qa3 qa6 qa7   --limit-per-task 10
 ```
 
-If builder CLI options change in a future branch, inspect the current help messages:
+Expected 2Wiki generated-data audit:
 
-```bash
-python scripts/build_controlled_cue.py --help
-python scripts/build_hotpotqa_cue.py --help
-python scripts/build_babilong_cue.py --help
+```text
+samples = 500
+skipped = 0
+sha256(data/processed/twowiki_cue_500.jsonl) =
+081189b8766d7924661b218579ad808fb1fc293adffa41f3863b70d55ae5917a
 ```
 
-Original public datasets, including HotpotQA and BABILong, should be obtained from their official sources subject to their licenses and terms of use.
+Original public datasets, including HotpotQA, 2WikiMultiHopQA, and BABILong, should be obtained from their official sources subject to their licenses and terms of use.
 
 ---
 
 ## 4. Final 200-sample core matrix
 
-The main matrix evaluates three models on two datasets under four fixed diagnostic conditions:
+The balanced main matrix evaluates three models on two datasets under four fixed diagnostic conditions:
 
 ```text
 3 models × 2 datasets × 200 samples × 4 conditions = 4800 predictions
@@ -143,19 +145,13 @@ configs/hotpotqa_gemma3_12b_200_core_final.yaml
 Validate configs:
 
 ```bash
-python scripts/validate_diagnostic_protocol.py   configs/controlled_safe16k_qwen25_14b_200_core_final.yaml   configs/controlled_safe16k_qwen3_14b_200_core_final.yaml   configs/controlled_safe16k_gemma3_12b_200_core_final.yaml   configs/hotpotqa_qwen25_14b_200_core_final.yaml   configs/hotpotqa_qwen3_14b_200_core_final.yaml   configs/hotpotqa_gemma3_12b_200_core_final.yaml   --require-core
+python scripts/validate_diagnostic_protocol.py   --require-core   configs/controlled_safe16k_qwen25_14b_200_core_final.yaml   configs/controlled_safe16k_qwen3_14b_200_core_final.yaml   configs/controlled_safe16k_gemma3_12b_200_core_final.yaml   configs/hotpotqa_qwen25_14b_200_core_final.yaml   configs/hotpotqa_qwen3_14b_200_core_final.yaml   configs/hotpotqa_gemma3_12b_200_core_final.yaml
 ```
 
-Run a config:
+Run one config:
 
 ```bash
-python -m longcue.run_experiment   --config configs/controlled_safe16k_qwen25_14b_200_core_final.yaml
-```
-
-Recompute ONCU for a completed run:
-
-```bash
-python scripts/recompute_oncu.py   --metrics outputs/controlled_safe16k_qwen25_14b_200_core_final/results/per_sample_metrics.csv   --output outputs/controlled_safe16k_qwen25_14b_200_core_final/results/oncu_metrics_multiscore.csv   --aggregate outputs/controlled_safe16k_qwen25_14b_200_core_final/results/oncu_metrics_multiscore_summary.csv   --markdown outputs/controlled_safe16k_qwen25_14b_200_core_final/tables/oncu_metrics_multiscore_summary.md
+python -m longcue.run_experiment   --config configs/hotpotqa_qwen25_14b_200_core_final.yaml
 ```
 
 Frozen artifacts used by the paper:
@@ -164,19 +160,55 @@ Frozen artifacts used by the paper:
 experiment_backups/sci200_final_3model_20260525/
 ```
 
-Important summary files:
+---
+
+## 5. 2WikiMultiHopQA-ONCU-500 validation
+
+2WikiMultiHopQA-ONCU-500 is the larger realistic multi-hop validation component:
 
 ```text
-experiment_backups/sci200_final_3model_20260525/summary/sci200_answer_evidence_summary.csv
-experiment_backups/sci200_final_3model_20260525/summary/sci200_oncu_relaxed_f1_summary.csv
-experiment_backups/sci200_final_3model_20260525/ci/sci200_metric_bootstrap_ci.csv
-experiment_backups/sci200_final_3model_20260525/ci/sci200_oncu_bootstrap_ci.csv
-experiment_backups/sci200_final_3model_20260525/failure_analysis/sci200_failure_breakdown_contextual_compact.csv
+3 models × 500 samples × 4 conditions = 6000 predictions
+```
+
+Configs:
+
+```text
+configs/twowiki_qwen25_14b_500_core.yaml
+configs/twowiki_qwen3_14b_500_core.yaml
+configs/twowiki_gemma3_12b_500_core.yaml
+```
+
+Validate configs:
+
+```bash
+python scripts/validate_diagnostic_protocol.py   --require-core   configs/twowiki_qwen25_14b_500_core.yaml   configs/twowiki_qwen3_14b_500_core.yaml   configs/twowiki_gemma3_12b_500_core.yaml
+```
+
+Run the completed 2Wiki experiment family:
+
+```bash
+python -m longcue.run_experiment   --config configs/twowiki_qwen25_14b_500_core.yaml
+
+python -m longcue.run_experiment   --config configs/twowiki_qwen3_14b_500_core.yaml
+
+python -m longcue.run_experiment   --config configs/twowiki_gemma3_12b_500_core.yaml
+```
+
+Frozen artifacts used by the paper:
+
+```text
+experiment_backups/twowiki_500_validation_20260527/
+```
+
+Regenerate 2Wiki paper-facing derived tables from frozen per-sample metrics:
+
+```bash
+python scripts/recompute_twowiki500_tables.py
 ```
 
 ---
 
-## 5. HotpotQA retrieval-budget ablation
+## 6. HotpotQA retrieval-budget ablation and HotpotQA-500 robustness
 
 Ablation configs:
 
@@ -187,13 +219,7 @@ configs/hotpotqa_qwen3_14b_200_topk5_ablation.yaml
 configs/hotpotqa_qwen3_14b_200_topk8_ablation.yaml
 ```
 
-These vary lexical retrieval `top_k` while keeping the dataset, decoding policy, output contract, chunk size, overlap, and evaluation pipeline fixed.
-
----
-
-## 6. HotpotQA-500 robustness
-
-HotpotQA-500 configs:
+HotpotQA-500 robustness configs:
 
 ```text
 configs/hotpotqa_qwen25_14b_500_core_robust.yaml
@@ -207,20 +233,11 @@ Frozen artifacts:
 experiment_backups/hotpotqa_500_robustness_20260525/
 ```
 
-Main files:
-
-```text
-experiment_backups/hotpotqa_500_robustness_20260525/hotpotqa_200_vs_500_robustness_summary.csv
-experiment_backups/hotpotqa_500_robustness_20260525/ci/hotpotqa500_metric_bootstrap_ci.csv
-experiment_backups/hotpotqa_500_robustness_20260525/ci/hotpotqa500_oncu_bootstrap_ci.csv
-experiment_backups/hotpotqa_500_robustness_20260525/final_tables/hotpotqa_200_vs_500_with_ci.csv
-```
-
 ---
 
 ## 7. BABILong-200 external validation
 
-BABILong-200 is not treated as an ONCU benchmark in this release. It is used as external answer-performance validation because the current BABILong adapter does not provide oracle-evidence annotations compatible with ONCU.
+BABILong-200 is not treated as an ONCU benchmark. It is used as external answer-performance validation because the current BABILong adapter does not provide oracle-evidence annotations compatible with ONCU.
 
 Configs:
 
@@ -234,14 +251,6 @@ Frozen artifacts:
 
 ```text
 experiment_backups/babilong_200_external_20260526/
-```
-
-Main files:
-
-```text
-experiment_backups/babilong_200_external_20260526/babilong_200_external_summary.csv
-experiment_backups/babilong_200_external_20260526/ci/babilong200_metric_bootstrap_ci.csv
-experiment_backups/babilong_200_external_20260526/final_tables/babilong200_external_ci_compact.csv
 ```
 
 ---
@@ -266,7 +275,13 @@ BABILong-200 bootstrap CIs:
 python scripts/bootstrap_babilong200_external_ci.py
 ```
 
-Failure breakdown:
+2Wiki-500 derived summaries:
+
+```bash
+python scripts/recompute_twowiki500_tables.py
+```
+
+Failure breakdown for the final 200-sample matrix:
 
 ```bash
 python scripts/summarize_sci200_failure_breakdown.py
@@ -274,34 +289,6 @@ python scripts/summarize_sci200_failure_breakdown.py
 
 ---
 
-## 9. Canonical release directories
+## 9. Notes for reviewers
 
-Only these directories are used as canonical evidence for the current paper:
-
-```text
-experiment_backups/sci200_final_3model_20260525/
-experiment_backups/hotpotqa_500_robustness_20260525/
-experiment_backups/babilong_200_external_20260526/
-```
-
-If older backup folders are present, treat them as historical development artifacts, not as the source for the final paper tables.
-
----
-
-## 10. Final release checklist
-
-Before submission or archival release:
-
-```bash
-python -m pytest -q
-python scripts/check_release_artifacts.py
-python scripts/check_release_artifacts.py --strict-data
-git status
-```
-
-Expected release-audit result:
-
-```text
-missing required: 0
-result: PASS
-```
+The released summaries are intended to allow table-level auditing without rerunning all local LLM inference. Full reruns require local Ollama model availability, GPU/CPU resources, and the original public source datasets. Structured-output parse failures are retained and scored as incorrect in the released metrics.
