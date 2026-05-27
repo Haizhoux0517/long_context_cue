@@ -28,8 +28,15 @@ from longcue.evaluation.evidence_metrics import citation_grounding, evidence_sco
 from longcue.evaluation.failure_diagnosis import diagnose_failure
 from longcue.methods.common import parse_answer
 from longcue.methods.retrievers import (
+    RetrievedChunk,
+    dense_ranking,
+    extract_passage_ids,
+    lexical_ranking,
+    make_chunks,
+    reciprocal_rank_fusion,
     retrieve_chunks,
     retrieval_diagnostics,
+    _query_expansion_text,
 )
 from longcue.models.base import BaseModelClient
 from longcue.prompts.templates import direct_answer_prompt
@@ -46,17 +53,25 @@ def main() -> None:
         action="store_true",
         help="Also run the reader model on selected retriever/top-k conditions.",
     )
+    parser.add_argument(
+        "--limit",
+        type=int,
+        default=None,
+        help="Optional smoke-test limit on the number of samples to process.",
+    )
     args = parser.parse_args()
-    run_ablation(Path(args.config), run_reader=args.run_reader)
+    run_ablation(Path(args.config), run_reader=args.run_reader, limit=args.limit)
 
 
-def run_ablation(config_path: Path, *, run_reader: bool = False) -> None:
+def run_ablation(config_path: Path, *, run_reader: bool = False, limit: int | None = None) -> None:
     config = _load_yaml(config_path)
     output_dir = _resolve_path(config_path, str(config["output_dir"]))
     output_dir.mkdir(parents=True, exist_ok=True)
 
     dataset_path = _resolve_path(config_path, str(config["dataset_path"]))
     samples = load_samples(dataset_path)
+    if limit is not None:
+        samples = samples[: max(0, int(limit))]
     settings = config.get("retriever_family", {})
     retrievers = [str(item) for item in settings.get("retrievers", ["lexical", "oracle"])]
     top_ks = [int(item) for item in settings.get("top_k", [3, 5, 8, 16])]
@@ -64,27 +79,25 @@ def run_ablation(config_path: Path, *, run_reader: bool = False) -> None:
     overlap = int(settings.get("overlap", 40))
 
     retrieval_rows = []
-    for sample in samples:
+    for sample in _progress(samples, desc="retrieval-only samples"):
+        ranking_bundle = _precompute_rankings_for_sample(
+            sample=sample,
+            retrievers=retrievers,
+            chunk_size=chunk_size,
+            overlap=overlap,
+            dense_model_name=str(
+                settings.get(
+                    "dense_model_name",
+                    "sentence-transformers/all-MiniLM-L6-v2",
+                )
+            ),
+            rrf_k=int(settings.get("rrf_k", 60)),
+            iterative_seed_k=int(settings.get("iterative_seed_k", 2)),
+            iterative_expansion_words=int(settings.get("iterative_expansion_words", 96)),
+        )
         for retriever in retrievers:
             for top_k in top_ks:
-                chunks = retrieve_chunks(
-                    sample=sample,
-                    retriever=retriever,
-                    top_k=top_k,
-                    chunk_size=chunk_size,
-                    overlap=overlap,
-                    dense_model_name=str(
-                        settings.get(
-                            "dense_model_name",
-                            "sentence-transformers/all-MiniLM-L6-v2",
-                        )
-                    ),
-                    rrf_k=int(settings.get("rrf_k", 60)),
-                    iterative_seed_k=int(settings.get("iterative_seed_k", 2)),
-                    iterative_expansion_words=int(
-                        settings.get("iterative_expansion_words", 96)
-                    ),
-                )
+                chunks = _chunks_for_retriever_topk(sample, ranking_bundle, retriever, top_k)
                 diag = retrieval_diagnostics(chunks, sample.gold_evidence_ids)
                 retrieval_rows.append(
                     {
@@ -144,6 +157,96 @@ def run_ablation(config_path: Path, *, run_reader: bool = False) -> None:
             _write_markdown(output_dir / "reader_oncu_summary.md", oncu_summary)
 
 
+
+def _progress(items: list[Any], *, desc: str) -> Any:
+    try:
+        from tqdm import tqdm
+
+        return tqdm(items, desc=desc, unit="sample")
+    except Exception:  # pragma: no cover - progress bars are optional.
+        return items
+
+
+def _precompute_rankings_for_sample(
+    *,
+    sample: Any,
+    retrievers: list[str],
+    chunk_size: int,
+    overlap: int,
+    dense_model_name: str,
+    rrf_k: int,
+    iterative_seed_k: int,
+    iterative_expansion_words: int,
+) -> dict[str, Any]:
+    """Precompute all expensive rankings once per sample.
+
+    The first implementation recomputed dense embeddings for every retriever/top-k
+    pair. This helper computes chunks, lexical rankings, dense rankings, and fused
+    rankings once, then all top-k values are obtained by slicing prefixes.
+    """
+    normalized = {str(name).lower().strip() for name in retrievers}
+    chunks = make_chunks(sample.long_context, chunk_size=chunk_size, overlap=overlap)
+    rankings: dict[str, list[tuple[int, float]]] = {}
+
+    needs_lexical = bool(normalized.intersection({"lexical", "hybrid", "iterative", "multi_hop_iterative", "multihop_iterative"}))
+    needs_dense = bool(normalized.intersection({"dense", "hybrid"}))
+
+    lexical_ranked: list[tuple[int, float]] | None = None
+    dense_ranked: list[tuple[int, float]] | None = None
+
+    if chunks and needs_lexical:
+        lexical_ranked = lexical_ranking(sample.question, chunks)
+    if chunks and needs_dense:
+        dense_ranked = dense_ranking(sample.question, chunks, model_name=dense_model_name)
+
+    if "lexical" in normalized and lexical_ranked is not None:
+        rankings["lexical"] = lexical_ranked
+    if "dense" in normalized and dense_ranked is not None:
+        rankings["dense"] = dense_ranked
+    if "hybrid" in normalized and lexical_ranked is not None and dense_ranked is not None:
+        rankings["hybrid"] = reciprocal_rank_fusion(
+            [[idx for idx, _ in lexical_ranked], [idx for idx, _ in dense_ranked]],
+            rrf_k=rrf_k,
+        )
+    if normalized.intersection({"iterative", "multi_hop_iterative", "multihop_iterative"}) and lexical_ranked is not None:
+        seed_chunks = [chunks[idx] for idx, _ in lexical_ranked[: max(1, iterative_seed_k)]]
+        expansion = _query_expansion_text(seed_chunks, max_words=iterative_expansion_words)
+        expanded_query = f"{sample.question}\n{expansion}".strip()
+        second_pass = lexical_ranking(expanded_query, chunks)
+        iterative_ranked = reciprocal_rank_fusion(
+            [[idx for idx, _ in lexical_ranked], [idx for idx, _ in second_pass]],
+            rrf_k=rrf_k,
+        )
+        rankings["iterative"] = iterative_ranked
+        rankings["multi_hop_iterative"] = iterative_ranked
+        rankings["multihop_iterative"] = iterative_ranked
+
+    return {"chunks": chunks, "rankings": rankings}
+
+
+def _chunks_for_retriever_topk(
+    sample: Any,
+    ranking_bundle: dict[str, Any],
+    retriever: str,
+    top_k: int,
+) -> list[RetrievedChunk]:
+    name = str(retriever).lower().strip()
+    if name == "oracle":
+        return retrieve_chunks(sample=sample, retriever="oracle", top_k=top_k)
+    chunks = list(ranking_bundle.get("chunks", []))
+    ranking = list(ranking_bundle.get("rankings", {}).get(name, []))
+    return [
+        RetrievedChunk(
+            index=int(index),
+            text=chunks[int(index)],
+            score=float(score),
+            passage_ids=extract_passage_ids(chunks[int(index)]),
+            retriever=name,
+        )
+        for index, score in ranking[:top_k]
+    ]
+
+
 def _run_reader_conditions(
     config_path: Path,
     config: dict[str, Any],
@@ -167,27 +270,25 @@ def _run_reader_conditions(
     rows: list[dict[str, Any]] = []
     raw_rows: list[dict[str, Any]] = []
 
-    for sample in samples:
+    for sample in _progress(samples, desc="reader samples"):
+        ranking_bundle = _precompute_rankings_for_sample(
+            sample=sample,
+            retrievers=retrievers,
+            chunk_size=int(settings.get("chunk_size", 220)),
+            overlap=int(settings.get("overlap", 40)),
+            dense_model_name=str(
+                settings.get(
+                    "dense_model_name",
+                    "sentence-transformers/all-MiniLM-L6-v2",
+                )
+            ),
+            rrf_k=int(settings.get("rrf_k", 60)),
+            iterative_seed_k=int(settings.get("iterative_seed_k", 2)),
+            iterative_expansion_words=int(settings.get("iterative_expansion_words", 96)),
+        )
         for retriever in retrievers:
             for top_k in top_ks:
-                chunks = retrieve_chunks(
-                    sample=sample,
-                    retriever=retriever,
-                    top_k=top_k,
-                    chunk_size=int(settings.get("chunk_size", 220)),
-                    overlap=int(settings.get("overlap", 40)),
-                    dense_model_name=str(
-                        settings.get(
-                            "dense_model_name",
-                            "sentence-transformers/all-MiniLM-L6-v2",
-                        )
-                    ),
-                    rrf_k=int(settings.get("rrf_k", 60)),
-                    iterative_seed_k=int(settings.get("iterative_seed_k", 2)),
-                    iterative_expansion_words=int(
-                        settings.get("iterative_expansion_words", 96)
-                    ),
-                )
+                chunks = _chunks_for_retriever_topk(sample, ranking_bundle, retriever, top_k)
                 context = "\n\n".join(chunk.text for chunk in chunks)
                 prompt = direct_answer_prompt(
                     sample.question,

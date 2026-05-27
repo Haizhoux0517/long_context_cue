@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from functools import lru_cache
 import math
 import re
 from typing import Any, Iterable
@@ -133,7 +134,7 @@ def dense_ranking(
             "'pip install sentence-transformers'."
         ) from exc
 
-    model = SentenceTransformer(model_name)
+    model = _get_sentence_transformer(model_name)
     query_embedding = model.encode([query], normalize_embeddings=True, show_progress_bar=False)
     chunk_embeddings = model.encode(chunks, normalize_embeddings=True, show_progress_bar=False)
     scores = cos_sim(query_embedding, chunk_embeddings)[0].cpu().tolist()
@@ -141,6 +142,14 @@ def dense_ranking(
         ((idx, float(score)) for idx, score in enumerate(scores)),
         key=lambda item: (-item[1], item[0]),
     )
+
+
+
+@lru_cache(maxsize=2)
+def _get_sentence_transformer(model_name: str) -> Any:
+    from sentence_transformers import SentenceTransformer
+
+    return SentenceTransformer(model_name)
 
 
 def reciprocal_rank_fusion(
