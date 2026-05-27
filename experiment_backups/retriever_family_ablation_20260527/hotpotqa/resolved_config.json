@@ -1,0 +1,51 @@
+{
+  "dataset_name": "hotpotqa_oncu_200",
+  "dataset_path": "data/processed/hotpotqa_cue_200.jsonl",
+  "generation": {
+    "max_tokens": 1024,
+    "temperature": 0.0
+  },
+  "logging": {
+    "save_full_prompts": false
+  },
+  "model": {
+    "model_name": "qwen2.5:14b",
+    "num_ctx": 32768,
+    "provider": "ollama",
+    "timeout": 600
+  },
+  "output_dir": "outputs/retriever_family_hotpotqa_qwen25",
+  "reference_metrics_path": "experiment_backups/sci200_final_3model_20260525/hotpotqa_qwen25_14b_200_core_final/results/per_sample_metrics.csv",
+  "retriever_family": {
+    "chunk_size": 220,
+    "dense_model_name": "sentence-transformers/all-MiniLM-L6-v2",
+    "iterative_expansion_words": 96,
+    "iterative_seed_k": 2,
+    "overlap": 40,
+    "reader_retrievers": [
+      "lexical",
+      "dense",
+      "hybrid",
+      "iterative",
+      "oracle"
+    ],
+    "reader_top_k": [
+      3,
+      8
+    ],
+    "retrievers": [
+      "lexical",
+      "dense",
+      "hybrid",
+      "iterative",
+      "oracle"
+    ],
+    "rrf_k": 60,
+    "top_k": [
+      3,
+      5,
+      8,
+      16
+    ]
+  }
+}

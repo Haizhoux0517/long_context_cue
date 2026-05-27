@@ -1,0 +1,22 @@
+{
+  "chunk_size": 220,
+  "config": "configs/ablations/retriever_family_hotpotqa_qwen25.yaml",
+  "dataset_path": "/workspace/long_context_cue/data/processed/hotpotqa_cue_200.jsonl",
+  "overlap": 40,
+  "purpose": "retriever_family_ablation",
+  "retrievers": [
+    "lexical",
+    "dense",
+    "hybrid",
+    "iterative",
+    "oracle"
+  ],
+  "run_reader": false,
+  "sample_count": 200,
+  "top_k": [
+    3,
+    5,
+    8,
+    16
+  ]
+}
