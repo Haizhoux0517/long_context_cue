@@ -1,0 +1,25 @@
+{
+  "case_study_rows": 10,
+  "controlled_scaling_rows": 240,
+  "core_rows": 18,
+  "generated_files": [
+    "experiment_backups/metric_comparison_20260530/metric_comparison_condition_summary.csv",
+    "experiment_backups/metric_comparison_20260530/metric_comparison_controlled_scaling.csv",
+    "experiment_backups/metric_comparison_20260530/metric_comparison_retrieval_only.csv",
+    "experiment_backups/metric_comparison_20260530/metric_comparison_case_studies.csv",
+    "experiment_backups/metric_comparison_20260530/metric_comparison_alternative_scores_table.tex",
+    "experiment_backups/metric_comparison_20260530/metric_comparison_case_studies_table.tex",
+    "experiment_backups/metric_comparison_20260530/metric_comparison_case_studies.md"
+  ],
+  "output_dir": "experiment_backups/metric_comparison_20260530",
+  "retrieval_rows": 40,
+  "source_files": [
+    "experiment_backups/sci200_final_3model_20260525/summary/sci200_answer_evidence_summary.csv",
+    "experiment_backups/sci200_final_3model_20260525/summary/sci200_oncu_relaxed_f1_summary.csv",
+    "experiment_backups/twowiki_500_validation_20260527/summary/twowiki_condition_summary.csv",
+    "experiment_backups/twowiki_500_validation_20260527/summary/twowiki_oncu_relaxed_f1_summary.csv",
+    "experiment_backups/controlled_scaling_20260527/summary/controlled_scaling_oncu_by_length_position.csv",
+    "experiment_backups/retriever_family_ablation_20260527/hotpotqa/retrieval_only_summary.csv",
+    "experiment_backups/retriever_family_ablation_20260527/twowiki/retrieval_only_summary.csv"
+  ]
+}

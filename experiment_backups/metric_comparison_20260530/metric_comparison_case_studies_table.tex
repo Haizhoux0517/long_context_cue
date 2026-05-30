@@ -1,0 +1,24 @@
+\begin{table*}[!t]
+\renewcommand{\arraystretch}{1.08}
+\caption{Metric-Comparison Case Studies. Raw answer F1, evidence F1 or chain coverage, context gain, oracle gap, and ONCU answer different diagnostic questions.}
+\label{tab:metric_comparison_case_studies}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{p{0.25\textwidth}llrrrrp{0.28\textwidth}}
+\toprule
+Case & Model/Retriever & Setting & Ans./Recall & Ev./Coverage & Gain & Gap & ONCU & Diagnostic reading \\
+\midrule
+Controlled full context: raw F1 hides oracle-normalized under-recovery & Qwen3-14B & Full context & 0.526 & 0.706 & 0.518 & 0.469 & 0.535 & Full-context condition under-recovers oracle advantage. \\
+Controlled retrieved evidence: compact evidence recovers oracle advantage & Qwen3-14B & Retrieved evidence & 0.993 & 0.972 & 0.985 & 0.002 & 0.994 & Compact evidence recovers most oracle advantage. \\
+HotpotQA full context: raw and ONCU agree that full context helps & Qwen2.5-14B & Full context & 0.733 & 0.688 & 0.491 & 0.035 & 0.906 & Full context preserves multi-hop evidence better than retrieval. \\
+HotpotQA retrieved evidence: retrieval coverage lowers ONCU & Qwen2.5-14B & Retrieved evidence & 0.590 & 0.478 & 0.349 & 0.178 & 0.639 & Condition improves substantially over no-evidence baseline. \\
+2Wiki full context: non-trivial raw F1 but moderate ONCU & Qwen3-14B & Full context & 0.560 & 0.663 & 0.287 & 0.174 & 0.534 & Realistic multi-hop utilization remains incomplete. \\
+2Wiki retrieved evidence: low ONCU despite compact input & Qwen3-14B & Retrieved evidence & 0.400 & 0.352 & 0.126 & 0.335 & 0.367 & Retrieved evidence loses recoverable advantage. \\
+Controlled 32K early evidence: raw context gain and ONCU collapse & Qwen3-14B & Full context & 0.000 & -- & 0.000 & 0.996 & 0.000 & Full-context condition under-recovers oracle advantage. \\
+Controlled 32K final-decile evidence: ONCU recovers at the end & Qwen3-14B & Full context & 0.988 & -- & 0.988 & 0.000 & 1.000 & Condition improves substantially over no-evidence baseline. \\
+Retrieval-only HotpotQA lexical@3: recall before reading & lexical & top-k=3 & 0.633 & 0.540 & -- & -- & -- & Retrieval may bottleneck multi-hop coverage. \\
+Retrieval-only 2Wiki dense@16: coverage increases with budget & dense & top-k=16 & 0.842 & 0.756 & -- & -- & -- & Retrieval may bottleneck multi-hop coverage. \\
+\bottomrule
+\end{tabular}
+\end{table*}
