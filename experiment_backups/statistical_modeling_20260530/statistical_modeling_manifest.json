@@ -1,0 +1,18 @@
+{
+  "bootstrap_replicates": 5000,
+  "notes": [
+    "Paired contrasts resample matched units with replacement.",
+    "P-values are normal-approximation diagnostics derived from paired differences or OLS standard errors.",
+    "Holm controls family-wise error rate for the confirmatory family; Benjamini-Hochberg is also reported for exploratory auditing.",
+    "Regression rows are descriptive support for effect direction; the paper's main claims are based on fixed-condition outputs and confidence intervals."
+  ],
+  "outputs": {
+    "effects": "statistical_effects_summary.csv",
+    "effects_table": "statistical_effects_table.tex",
+    "regression": "statistical_regression_summary.csv",
+    "regression_table": "statistical_regression_table.tex"
+  },
+  "random_seed": 20260530,
+  "score_field": "answer_f1_relaxed",
+  "script": "scripts/statistical_modeling.py"
+}

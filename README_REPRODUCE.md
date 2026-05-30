@@ -406,3 +406,26 @@ controlled_scaling_regression.csv
 controlled_scaling_heatmap_table.tex
 controlled_scaling_regression_table.tex
 ```
+
+---
+
+## Statistical modeling support
+
+After the frozen result artifacts have been generated or restored, regenerate the reviewer-facing statistical support tables with:
+
+```bash
+python scripts/statistical_modeling.py \
+  --output-dir experiment_backups/statistical_modeling_20260530
+```
+
+The script produces paired condition contrasts, controlled length-position contrasts, retrieval-family contrasts, and compact regression-style diagnostics:
+
+```text
+experiment_backups/statistical_modeling_20260530/statistical_effects_summary.csv
+experiment_backups/statistical_modeling_20260530/statistical_effects_table.tex
+experiment_backups/statistical_modeling_20260530/statistical_regression_summary.csv
+experiment_backups/statistical_modeling_20260530/statistical_regression_table.tex
+experiment_backups/statistical_modeling_20260530/statistical_modeling_manifest.json
+```
+
+The confirmatory contrasts use paired/sample-matched resampling whenever the same examples are evaluated under multiple conditions. The regression rows are intended as diagnostic support for effect direction and magnitude, not as replacements for the released fixed-condition metrics.

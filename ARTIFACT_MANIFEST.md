@@ -28,6 +28,8 @@ Only these release directories are canonical for the current paper:
 | HotpotQA-500 robustness and valid-group audit | `experiment_backups/hotpotqa_500_robustness_20260525/` | Released |
 | BABILong-200 external validation | `experiment_backups/babilong_200_external_20260526/` | Released |
 
+| Statistical modeling support | `experiment_backups/statistical_modeling_20260530/` | Released |
+
 Older directories such as `experiment_backups/core_2x2_qwen25_qwen3_20260524/`, `experiment_backups/sci200_partial_qwen25_20260525/`, and `experiment_backups/sci200_qwen_family_20260525/`, if present, are historical intermediate backups and are not the source for final paper tables.
 
 ---
@@ -188,3 +190,14 @@ model outputs are materialized. It adds:
 
 Once completed runs are copied to `experiment_backups/controlled_scaling_20260527/`,
 this manifest should be updated to mark the frozen scaling results as released.
+
+
+## Statistical modeling support artifacts
+
+| Artifact | Purpose |
+|---|---|
+| `scripts/statistical_modeling.py` | Generates paired effect-size summaries, multiple-comparison-adjusted p-values, and regression-style diagnostics. |
+| `experiment_backups/statistical_modeling_20260530/statistical_effects_summary.csv` | Machine-readable paired contrasts for core conditions, controlled scaling, and retriever ablations. |
+| `experiment_backups/statistical_modeling_20260530/statistical_effects_table.tex` | Compact LaTeX table for the main statistical support section. |
+| `experiment_backups/statistical_modeling_20260530/statistical_regression_summary.csv` | Regression-style diagnostics over length-position cells and retrieval-family summary cells. |
+| `experiment_backups/statistical_modeling_20260530/statistical_regression_table.tex` | Compact LaTeX table for regression-style robustness checks. |

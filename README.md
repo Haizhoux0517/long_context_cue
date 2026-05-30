@@ -165,3 +165,14 @@ configs/scaling/controlled_scaling_gemma3_12b_3200.yaml
 The scaling scaffold is a diagnostic extension. It is intended to test whether
 full-context ONCU changes systematically with input length and evidence location,
 rather than replacing the fixed 200-sample core matrix.
+
+
+## Reviewer-facing statistical support
+
+The release includes a statistical support layer in addition to the descriptive ONCU tables. Run:
+
+```bash
+python scripts/statistical_modeling.py
+```
+
+to regenerate paired effect-size summaries, bootstrap confidence intervals, Holm/FDR adjusted significance diagnostics, and compact LaTeX tables under `experiment_backups/statistical_modeling_20260530/`.

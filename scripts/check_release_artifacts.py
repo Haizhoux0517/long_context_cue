@@ -135,6 +135,7 @@ def main() -> int:
             Artifact("scripts/recompute_twowiki500_tables.py"),
             Artifact("scripts/run_retriever_family_ablation.py"),
             Artifact("scripts/summarize_controlled_scaling.py"),
+            Artifact("scripts/statistical_modeling.py"),
             Artifact("scripts/bootstrap_sci200_final_ci.py"),
             Artifact("scripts/bootstrap_hotpotqa500_robustness_ci.py"),
             Artifact("scripts/bootstrap_babilong200_external_ci.py"),
@@ -218,6 +219,14 @@ def main() -> int:
             Artifact("experiment_backups/babilong_200_external_20260526/babilong_200_external_summary.csv"),
             Artifact("experiment_backups/babilong_200_external_20260526/ci/babilong200_metric_bootstrap_ci.csv"),
             Artifact("experiment_backups/babilong_200_external_20260526/final_tables/babilong200_external_ci_compact.csv"),
+        ],
+        "statistical modeling support artifacts": [
+            Artifact("experiment_backups/statistical_modeling_20260530", "dir"),
+            Artifact("experiment_backups/statistical_modeling_20260530/statistical_effects_summary.csv"),
+            Artifact("experiment_backups/statistical_modeling_20260530/statistical_effects_table.tex"),
+            Artifact("experiment_backups/statistical_modeling_20260530/statistical_regression_summary.csv"),
+            Artifact("experiment_backups/statistical_modeling_20260530/statistical_regression_table.tex"),
+            Artifact("experiment_backups/statistical_modeling_20260530/statistical_modeling_manifest.json"),
         ],
     }
 
