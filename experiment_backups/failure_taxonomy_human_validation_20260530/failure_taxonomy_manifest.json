@@ -1,0 +1,23 @@
+{
+  "task": "failure_taxonomy_human_validation_export",
+  "sample_size_requested": 300,
+  "sample_size_exported": 300,
+  "seed": 42,
+  "include_no_evidence": false,
+  "labels": [
+    "localization",
+    "selection",
+    "integration",
+    "conversion",
+    "parse_format",
+    "ambiguous"
+  ],
+  "outputs": [
+    "failure_taxonomy_audit_sample_blind.csv",
+    "failure_taxonomy_audit_sample_key.csv",
+    "failure_taxonomy_annotator_a.csv",
+    "failure_taxonomy_annotator_b.csv",
+    "failure_taxonomy_annotation_codebook.md",
+    "failure_taxonomy_audit_strata.csv"
+  ]
+}
