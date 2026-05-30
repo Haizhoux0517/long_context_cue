@@ -56,7 +56,8 @@ Older directories such as `experiment_backups/core_2x2_qwen25_qwen3_20260524/`, 
 | Dataset/component | Repository path | Status | Notes |
 |---|---|---:|---|
 | Controlled builder | `scripts/build_controlled_cue.py` | Released | Builds controlled ONCU-compatible examples. |
-| Controlled generator | `longcue/data/controlled_generator.py` | Released | Synthetic context/evidence generation. |
+| Controlled scaling builder | `scripts/build_controlled_scaling_cue.py` | Released | Builds decile-position controlled scaling examples. |
+| Controlled generator | `longcue/data/controlled_generator.py` | Released | Synthetic context/evidence generation, including optional decile-position placement. |
 | HotpotQA builder | `scripts/build_hotpotqa_cue.py` | Released | Builds HotpotQA-derived examples. |
 | HotpotQA adapter | `longcue/data/hotpotqa_adapter.py` | Released | Maps supporting facts to passage identifiers. |
 | 2Wiki builder | `scripts/build_2wiki_cue.py` | Released | Builds 2WikiMultiHopQA-derived examples. |
@@ -92,6 +93,7 @@ The 2Wiki file is byte-level reproducible with seed 42. The expected SHA256 chec
 | Experiment family | Config paths | Status |
 |---|---|---:|
 | Controlled-safe16K-200 final matrix | `configs/controlled_safe16k_*_200_core_final.yaml` | Released |
+| Controlled scaling extension | `configs/scaling/controlled_scaling_*_3200.yaml` | Released |
 | HotpotQA-200 final matrix | `configs/hotpotqa_*_200_core_final.yaml` | Released |
 | 2WikiMultiHopQA-500 validation | `configs/twowiki_*_500_core.yaml` | Released |
 | HotpotQA-500 robustness | `configs/hotpotqa_*_500_core_robust.yaml` | Released |
@@ -133,6 +135,7 @@ The 2Wiki file is byte-level reproducible with seed 42. The expected SHA256 chec
 | HotpotQA-500 bootstrap CIs | `scripts/bootstrap_hotpotqa500_robustness_ci.py` | Released |
 | BABILong-200 bootstrap CIs | `scripts/bootstrap_babilong200_external_ci.py` | Released |
 | Failure breakdown | `scripts/summarize_sci200_failure_breakdown.py` | Released |
+| Controlled scaling summaries | `scripts/summarize_controlled_scaling.py` | Released |
 | Release artifact audit | `scripts/check_release_artifacts.py` | Released |
 
 ---
@@ -169,3 +172,19 @@ result: PASS
   - HotpotQA-ONCU-200 retriever-family ablation for Qwen2.5-14B.
 - `configs/ablations/retriever_family_twowiki_qwen25.yaml`
   - 2WikiMultiHopQA-ONCU-500 retriever-family ablation for Qwen2.5-14B.
+
+
+## Controlled scaling extension scaffold
+
+The controlled scaling extension is released as a scaffold until the long-running
+model outputs are materialized. It adds:
+
+- `scripts/build_controlled_scaling_cue.py`
+  - Generates 4K/8K/16K/32K controlled examples with ten position deciles.
+- `scripts/summarize_controlled_scaling.py`
+  - Summarizes completed scaling runs into ONCU, failure-heatmap, and regression CSVs.
+- `configs/scaling/controlled_scaling_*_3200.yaml`
+  - Fixed three-model configs for the 3200-sample scaling input.
+
+Once completed runs are copied to `experiment_backups/controlled_scaling_20260527/`,
+this manifest should be updated to mark the frozen scaling results as released.

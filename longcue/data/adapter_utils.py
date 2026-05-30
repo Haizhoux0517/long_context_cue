@@ -261,7 +261,30 @@ def _insert_blocks(
                 result, [block], fractions[index % len(fractions)], target_tokens
             )
         return result
+    fraction = _evidence_position_fraction(evidence_position)
+    if fraction is not None:
+        return _insert_at_token_fraction(paragraphs, evidence_blocks, fraction, target_tokens)
     return paragraphs + evidence_blocks
+
+
+def _evidence_position_fraction(evidence_position: str) -> float | None:
+    """Return a token-fraction insertion point for decile evidence positions.
+
+    Controlled scaling studies use labels ``pos_00`` ... ``pos_09`` to place
+    evidence in ten approximately even buckets across the context. The midpoint
+    of each decile is used so that ``pos_00`` corresponds to 5% into the input
+    and ``pos_09`` to 95%.
+    """
+    text = str(evidence_position).strip().lower()
+    if not text.startswith("pos_"):
+        return None
+    try:
+        index = int(text.split("_", 1)[1])
+    except (IndexError, ValueError):
+        return None
+    if index < 0 or index > 9:
+        return None
+    return (index + 0.5) / 10.0
 
 
 def _insert_at_token_fraction(

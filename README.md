@@ -143,3 +143,25 @@ whether retrieved-evidence failures are specific to the default lexical retrieve
 See `configs/ablations/retriever_family_hotpotqa_qwen25.yaml`,
 `configs/ablations/retriever_family_twowiki_qwen25.yaml`, and
 `scripts/run_retriever_family_ablation.py`.
+
+### Controlled context-length and position scaling scaffold
+
+The repository also includes a controlled scaling scaffold for auditing ONCU as a
+function of context length and fine-grained evidence position. This extension
+uses ten evidence-position deciles (`pos_00` ... `pos_09`) across 4K, 8K, 16K,
+and 32K contexts, while retaining the controlled distractor and reasoning-type
+factors.
+
+Key files:
+
+```text
+scripts/build_controlled_scaling_cue.py
+scripts/summarize_controlled_scaling.py
+configs/scaling/controlled_scaling_qwen25_14b_3200.yaml
+configs/scaling/controlled_scaling_qwen3_14b_3200.yaml
+configs/scaling/controlled_scaling_gemma3_12b_3200.yaml
+```
+
+The scaling scaffold is a diagnostic extension. It is intended to test whether
+full-context ONCU changes systematically with input length and evidence location,
+rather than replacing the fixed 200-sample core matrix.

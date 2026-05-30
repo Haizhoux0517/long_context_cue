@@ -5,10 +5,11 @@ from collections import Counter
 from dataclasses import dataclass
 
 from .adapter_utils import compose_context, passage_id, sample_from_parts
-from .schema import BenchmarkSample, Distractor, Evidence
+from .schema import BenchmarkSample, DECILE_EVIDENCE_POSITIONS, Distractor, Evidence
 
 CONTROLLED_CONTEXT_LENGTHS = (4000, 8000, 16000, 32000)
 CONTROLLED_EVIDENCE_POSITIONS = ("front", "middle", "end", "scattered")
+CONTROLLED_DECILE_EVIDENCE_POSITIONS = DECILE_EVIDENCE_POSITIONS
 CONTROLLED_DISTRACTOR_SIMILARITIES = ("none", "low", "high", "conflicting")
 CONTROLLED_REASONING_TYPES = ("single_hop", "multi_hop", "comparison", "arithmetic")
 
@@ -72,8 +73,35 @@ class ControlledCUEGenerator:
             distractor_similarity=similarity,
             reasoning_type=reasoning_type,
             answer_type=answer_type,
-            metadata={"cell_replicate": replicate, "seed": self.seed, "cue_applicable": True},
+            metadata={
+                "cell_replicate": replicate,
+                "seed": self.seed,
+                "cue_applicable": True,
+                "evidence_position_fraction": evidence_position_fraction(position),
+                "evidence_position_bucket": position,
+            },
         )
+
+
+def evidence_position_fraction(position: str) -> float | None:
+    """Return approximate fractional location for named or decile evidence positions."""
+    if position == "front":
+        return 0.05
+    if position == "middle":
+        return 0.50
+    if position == "end":
+        return 0.88
+    if position == "scattered":
+        return None
+    text = str(position).strip().lower()
+    if text.startswith("pos_"):
+        try:
+            index = int(text.split("_", 1)[1])
+        except (IndexError, ValueError):
+            return None
+        if 0 <= index <= 9:
+            return (index + 0.5) / 10.0
+    return None
 
 
 def make_controlled_task(

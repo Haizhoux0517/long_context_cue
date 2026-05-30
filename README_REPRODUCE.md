@@ -336,3 +336,73 @@ python scripts/run_retriever_family_ablation.py \
 Reader-facing outputs include answer F1, evidence F1, parse errors, and
 ONCU-Relaxed-F1 computed against the frozen no-evidence and oracle reference
 rows from the corresponding release artifacts.
+
+---
+
+## 10. Controlled context-length and position scaling extension
+
+This extension audits ONCU as a function of context length and fine-grained
+evidence location. It is motivated by position-sensitive long-context failures
+and should be treated as a controlled diagnostic extension rather than as a
+replacement for the fixed main matrix.
+
+Generate the 3200-sample scaling input:
+
+```bash
+python scripts/build_controlled_scaling_cue.py \
+  --output data/processed/controlled_scaling_3200.jsonl \
+  --num-per-cell 5 \
+  --seed 42
+```
+
+Expected grid size:
+
+```text
+4 context lengths × 10 evidence-position deciles × 4 distractor levels × 4 reasoning types × 5 seeds = 3200 samples
+```
+
+Validate the fixed scaling configs:
+
+```bash
+python scripts/validate_diagnostic_protocol.py \
+  --require-core \
+  configs/scaling/controlled_scaling_qwen25_14b_3200.yaml \
+  configs/scaling/controlled_scaling_qwen3_14b_3200.yaml \
+  configs/scaling/controlled_scaling_gemma3_12b_3200.yaml
+```
+
+Run the first model before expanding to the full three-model family:
+
+```bash
+python -m longcue.run_experiment \
+  --config configs/scaling/controlled_scaling_qwen25_14b_3200.yaml
+```
+
+After one or more runs complete, summarize the scaling outputs:
+
+```bash
+python scripts/summarize_controlled_scaling.py \
+  --run-dir outputs/controlled_scaling_qwen25_14b_3200 \
+  --output-dir experiment_backups/controlled_scaling_20260527/summary
+```
+
+For all three models, repeat `--run-dir`:
+
+```bash
+python scripts/summarize_controlled_scaling.py \
+  --run-dir outputs/controlled_scaling_qwen25_14b_3200 \
+  --run-dir outputs/controlled_scaling_qwen3_14b_3200 \
+  --run-dir outputs/controlled_scaling_gemma3_12b_3200 \
+  --output-dir experiment_backups/controlled_scaling_20260527/summary
+```
+
+The summarizer writes:
+
+```text
+controlled_scaling_condition_summary.csv
+controlled_scaling_oncu_by_length_position.csv
+controlled_scaling_failure_heatmap.csv
+controlled_scaling_regression.csv
+controlled_scaling_heatmap_table.tex
+controlled_scaling_regression_table.tex
+```

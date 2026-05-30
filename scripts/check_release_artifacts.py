@@ -120,6 +120,7 @@ def main() -> int:
         ],
         "dataset builders and adapters": [
             Artifact("scripts/build_controlled_cue.py"),
+            Artifact("scripts/build_controlled_scaling_cue.py"),
             Artifact("scripts/build_hotpotqa_cue.py"),
             Artifact("scripts/build_2wiki_cue.py"),
             Artifact("scripts/build_babilong_cue.py"),
@@ -133,11 +134,17 @@ def main() -> int:
             Artifact("scripts/recompute_oncu.py"),
             Artifact("scripts/recompute_twowiki500_tables.py"),
             Artifact("scripts/run_retriever_family_ablation.py"),
+            Artifact("scripts/summarize_controlled_scaling.py"),
             Artifact("scripts/bootstrap_sci200_final_ci.py"),
             Artifact("scripts/bootstrap_hotpotqa500_robustness_ci.py"),
             Artifact("scripts/bootstrap_babilong200_external_ci.py"),
             Artifact("scripts/summarize_sci200_failure_breakdown.py"),
             Artifact("scripts/check_release_artifacts.py"),
+        ],
+        "controlled scaling configs": [
+            Artifact("configs/scaling/controlled_scaling_qwen25_14b_3200.yaml"),
+            Artifact("configs/scaling/controlled_scaling_qwen3_14b_3200.yaml"),
+            Artifact("configs/scaling/controlled_scaling_gemma3_12b_3200.yaml"),
         ],
         "final 200-sample configs": [
             Artifact("configs/controlled_safe16k_qwen25_14b_200_core_final.yaml"),

@@ -5,7 +5,8 @@ from typing import Any
 
 CONTEXT_LENGTHS = (4000, 8000, 16000, 32000)
 SOURCES = ("controlled", "hotpotqa", "2wikimultihopqa", "ruler", "longbench", "babilong")
-EVIDENCE_POSITIONS = ("front", "middle", "end", "scattered", "unknown")
+DECILE_EVIDENCE_POSITIONS = tuple(f"pos_{index:02d}" for index in range(10))
+EVIDENCE_POSITIONS = ("front", "middle", "end", "scattered", "unknown", *DECILE_EVIDENCE_POSITIONS)
 EVIDENCE_DENSITIES = ("high", "medium", "low", "unknown")
 DISTRACTOR_SIMILARITIES = ("none", "low", "high", "conflicting", "unknown")
 REASONING_TYPES = (

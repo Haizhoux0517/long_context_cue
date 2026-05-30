@@ -1,0 +1,18 @@
+\begin{table*}[!t]
+\renewcommand{\arraystretch}{1.08}
+\caption{Controlled scaling ONCU heatmap for gemma3:12b. Values are clipped ONCU-Relaxed-F1 for the full-context condition.}
+\label{tab:controlled_scaling_heatmap}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lcccccccccc}
+\toprule
+Context & pos_00 & pos_01 & pos_02 & pos_03 & pos_04 & pos_05 & pos_06 & pos_07 & pos_08 & pos_09 \\
+\midrule
+4K & 0.825 & 0.821 & 0.778 & 0.782 & 0.795 & 0.763 & 0.800 & 0.787 & 0.775 & 0.787 \\
+8K & 0.160 & 0.164 & 0.547 & 0.498 & 0.429 & 0.504 & 0.799 & 0.797 & 0.762 & 0.766 \\
+16K & 0.125 & 0.090 & 0.121 & 0.084 & 0.089 & 0.119 & 0.533 & 0.442 & 0.742 & 0.725 \\
+32K & 0.007 & 0.030 & 0.068 & 0.072 & 0.000 & 0.107 & 0.028 & 0.055 & 0.454 & 0.750 \\
+\bottomrule
+\end{tabular}
+\end{table*}

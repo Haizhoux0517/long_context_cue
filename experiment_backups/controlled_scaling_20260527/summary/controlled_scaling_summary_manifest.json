@@ -1,0 +1,158 @@
+{
+  "input_rows": 38400,
+  "manifests": [
+    {
+      "generation": {
+        "max_tokens": 1024,
+        "temperature": 0.0
+      },
+      "methods": [
+        {
+          "core_diagnostic": true,
+          "description": "Question-only condition used to estimate answer priors and parametric knowledge.",
+          "display_name": "No Evidence",
+          "family": "diagnostic_baseline",
+          "name": "no_evidence",
+          "role": "question_only_lower_bound"
+        },
+        {
+          "core_diagnostic": true,
+          "description": "Full long-context condition used to measure evidence utilization when all context is supplied.",
+          "display_name": "Full Context",
+          "family": "diagnostic_condition",
+          "name": "direct",
+          "role": "full_context_condition"
+        },
+        {
+          "core_diagnostic": true,
+          "description": "Deterministic evidence-narrowing condition that tests whether performance recovers when the effective context is shortened.",
+          "display_name": "Retrieved Evidence",
+          "family": "diagnostic_condition",
+          "name": "retrieve_then_read",
+          "role": "evidence_narrowed_condition"
+        },
+        {
+          "core_diagnostic": true,
+          "description": "Gold-evidence condition used as an upper reference for ONCU normalization.",
+          "display_name": "Oracle Evidence",
+          "family": "diagnostic_baseline",
+          "name": "oracle",
+          "role": "oracle_evidence_upper_reference"
+        }
+      ],
+      "protocol_version": "diagnostic_v1_fixed",
+      "purpose": "Diagnostic evaluation protocol. Templates are fixed across models and datasets; results should not be interpreted as prompt optimization.",
+      "retrieval": {
+        "chunk_size": 220,
+        "overlap": 40,
+        "top_k": 3
+      }
+    },
+    {
+      "generation": {
+        "max_tokens": 1024,
+        "temperature": 0.0
+      },
+      "methods": [
+        {
+          "core_diagnostic": true,
+          "description": "Question-only condition used to estimate answer priors and parametric knowledge.",
+          "display_name": "No Evidence",
+          "family": "diagnostic_baseline",
+          "name": "no_evidence",
+          "role": "question_only_lower_bound"
+        },
+        {
+          "core_diagnostic": true,
+          "description": "Full long-context condition used to measure evidence utilization when all context is supplied.",
+          "display_name": "Full Context",
+          "family": "diagnostic_condition",
+          "name": "direct",
+          "role": "full_context_condition"
+        },
+        {
+          "core_diagnostic": true,
+          "description": "Deterministic evidence-narrowing condition that tests whether performance recovers when the effective context is shortened.",
+          "display_name": "Retrieved Evidence",
+          "family": "diagnostic_condition",
+          "name": "retrieve_then_read",
+          "role": "evidence_narrowed_condition"
+        },
+        {
+          "core_diagnostic": true,
+          "description": "Gold-evidence condition used as an upper reference for ONCU normalization.",
+          "display_name": "Oracle Evidence",
+          "family": "diagnostic_baseline",
+          "name": "oracle",
+          "role": "oracle_evidence_upper_reference"
+        }
+      ],
+      "protocol_version": "diagnostic_v1_fixed",
+      "purpose": "Diagnostic evaluation protocol. Templates are fixed across models and datasets; results should not be interpreted as prompt optimization.",
+      "retrieval": {
+        "chunk_size": 220,
+        "overlap": 40,
+        "top_k": 3
+      }
+    },
+    {
+      "generation": {
+        "max_tokens": 1024,
+        "temperature": 0.0
+      },
+      "methods": [
+        {
+          "core_diagnostic": true,
+          "description": "Question-only condition used to estimate answer priors and parametric knowledge.",
+          "display_name": "No Evidence",
+          "family": "diagnostic_baseline",
+          "name": "no_evidence",
+          "role": "question_only_lower_bound"
+        },
+        {
+          "core_diagnostic": true,
+          "description": "Full long-context condition used to measure evidence utilization when all context is supplied.",
+          "display_name": "Full Context",
+          "family": "diagnostic_condition",
+          "name": "direct",
+          "role": "full_context_condition"
+        },
+        {
+          "core_diagnostic": true,
+          "description": "Deterministic evidence-narrowing condition that tests whether performance recovers when the effective context is shortened.",
+          "display_name": "Retrieved Evidence",
+          "family": "diagnostic_condition",
+          "name": "retrieve_then_read",
+          "role": "evidence_narrowed_condition"
+        },
+        {
+          "core_diagnostic": true,
+          "description": "Gold-evidence condition used as an upper reference for ONCU normalization.",
+          "display_name": "Oracle Evidence",
+          "family": "diagnostic_baseline",
+          "name": "oracle",
+          "role": "oracle_evidence_upper_reference"
+        }
+      ],
+      "protocol_version": "diagnostic_v1_fixed",
+      "purpose": "Diagnostic evaluation protocol. Templates are fixed across models and datasets; results should not be interpreted as prompt optimization.",
+      "retrieval": {
+        "chunk_size": 220,
+        "overlap": 40,
+        "top_k": 3
+      }
+    }
+  ],
+  "outputs": {
+    "condition_summary": "controlled_scaling_condition_summary.csv",
+    "failure_heatmap": "controlled_scaling_failure_heatmap.csv",
+    "oncu_by_length_position": "controlled_scaling_oncu_by_length_position.csv",
+    "regression": "controlled_scaling_regression.csv"
+  },
+  "run_dirs": [
+    "outputs/controlled_scaling_qwen25_14b_3200",
+    "outputs/controlled_scaling_qwen3_14b_3200",
+    "outputs/controlled_scaling_gemma3_12b_3200"
+  ],
+  "score_field": "answer_f1_relaxed"
+}
