@@ -1,0 +1,29 @@
+{
+  "inputs": {
+    "annotator_a": "/mnt/data/failure_taxonomy_annotator_a_labeled(1).csv",
+    "annotator_b": "/mnt/data/failure_taxonomy_annotator_b_annotated.csv",
+    "key": "/mnt/data/failure_taxonomy_audit_sample_key.csv",
+    "adjudication": "/mnt/data/failure_taxonomy_adjudicated.csv"
+  },
+  "labels": [
+    "localization",
+    "selection",
+    "integration",
+    "conversion",
+    "parse_format",
+    "ambiguous"
+  ],
+  "summary": {
+    "annotated_items": 300,
+    "pre_adjudication_agreed_items": 213,
+    "pre_adjudication_disagreements": 87,
+    "pre_adjudication_raw_agreement": 0.71,
+    "pre_adjudication_cohens_kappa": 0.5879771414138225,
+    "adjudicated_items": 87,
+    "rule_vs_final_human_raw_agreement": 0.5133333333333333,
+    "rule_vs_final_human_cohens_kappa": 0.355389415435333,
+    "missing_adjudication_rows": 0,
+    "extra_adjudication_rows": 0
+  },
+  "notes": "Independent annotator requested anonymity. Do not publish annotator personal identifiers."
+}

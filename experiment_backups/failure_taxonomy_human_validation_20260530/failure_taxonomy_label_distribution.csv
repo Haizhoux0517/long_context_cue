@@ -1,0 +1,7 @@
+label,annotator_a,annotator_b,rule_based,final_human
+localization,71,78,74,81
+selection,56,75,71,84
+integration,30,18,74,16
+conversion,136,120,81,110
+parse_format,7,8,0,8
+ambiguous,0,1,0,1

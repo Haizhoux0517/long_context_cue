@@ -1,0 +1,12 @@
+metric,value
+annotated_items,300.0
+pre_adjudication_agreed_items,213.0
+pre_adjudication_disagreements,87.0
+pre_adjudication_raw_agreement,0.71
+pre_adjudication_cohens_kappa,0.5879771414138225
+adjudicated_items,87.0
+rule_vs_final_human_agreed_items,154.0
+rule_vs_final_human_raw_agreement,0.5133333333333333
+rule_vs_final_human_cohens_kappa,0.355389415435333
+missing_adjudication_rows,0.0
+extra_adjudication_rows,0.0

@@ -1,0 +1,5 @@
+Human Validation of Failure-Type Assignment
+
+We validated the rule-based failure taxonomy on a stratified audit sample of 300 failed predictions. Two annotators independently assigned one of six labels: localization, selection, integration, conversion, parse-format, or ambiguous. One annotator was the author and the other was an anonymous independent annotator; the independent annotator requested not to be named. Annotators were blind to the rule-based labels during the initial annotation pass. Before adjudication, the annotators agreed on 213/300 items (raw agreement = 0.710; Cohen's kappa = 0.588). The remaining 87 disagreements were resolved by blind adjudication to obtain final human labels.
+
+Against the adjudicated human labels, the rule-based taxonomy matched 154/300 items (raw agreement = 0.513; Cohen's kappa = 0.355). We therefore treat the automatic taxonomy as a scalable diagnostic approximation rather than as ground-truth causal attribution. The agreement profile supports using the taxonomy for aggregate diagnostic analysis while preserving human-validation results and disagreement patterns as released artifacts.
