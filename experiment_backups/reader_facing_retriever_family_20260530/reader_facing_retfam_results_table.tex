@@ -1,0 +1,68 @@
+\begin{table*}[!t]
+\renewcommand{\arraystretch}{1.10}
+\caption{Reader-facing retriever-family results. Each row reports answer and evidence performance after actually running the reader on retrieved contexts produced by lexical, dense, and hybrid retrieval. ONCU is computed using the existing no-evidence and oracle-evidence references for the same model and dataset.}
+\label{tab:reader_facing_retfam_results}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{llcrrrrr}
+\toprule
+Model & Dataset & Ret. & $k$ & Ans. F1 & Ev. F1 & ONCU & Parse \\
+\midrule
+gemma3:12b & hotpotqa & dense & 3 & 0.482 & 0.329 & -- & 0 \
+gemma3:12b & hotpotqa & dense & 8 & 0.529 & 0.413 & -- & 0 \
+gemma3:12b & hotpotqa & dense & 16 & 0.605 & 0.503 & -- & 0 \
+gemma3:12b & hotpotqa & hybrid & 3 & 0.520 & 0.358 & -- & 0 \
+gemma3:12b & hotpotqa & hybrid & 8 & 0.558 & 0.477 & -- & 0 \
+gemma3:12b & hotpotqa & hybrid & 16 & 0.604 & 0.557 & -- & 0 \
+gemma3:12b & hotpotqa & lexical & 3 & 0.552 & 0.408 & -- & 0 \
+gemma3:12b & hotpotqa & lexical & 8 & 0.598 & 0.460 & -- & 0 \
+gemma3:12b & hotpotqa & lexical & 16 & 0.622 & 0.505 & -- & 0 \
+qwen2.5:14b & hotpotqa & dense & 3 & 0.511 & 0.376 & -- & 0 \
+qwen2.5:14b & hotpotqa & dense & 8 & 0.573 & 0.464 & -- & 0 \
+qwen2.5:14b & hotpotqa & dense & 16 & 0.649 & 0.539 & -- & 0 \
+qwen2.5:14b & hotpotqa & hybrid & 3 & 0.525 & 0.418 & -- & 0 \
+qwen2.5:14b & hotpotqa & hybrid & 8 & 0.608 & 0.519 & -- & 0 \
+qwen2.5:14b & hotpotqa & hybrid & 16 & 0.663 & 0.566 & -- & 0 \
+qwen2.5:14b & hotpotqa & lexical & 3 & 0.572 & 0.476 & -- & 1 \
+qwen2.5:14b & hotpotqa & lexical & 8 & 0.608 & 0.522 & -- & 0 \
+qwen2.5:14b & hotpotqa & lexical & 16 & 0.632 & 0.528 & -- & 0 \
+qwen3:14b & hotpotqa & dense & 3 & 0.479 & 0.367 & -- & 0 \
+qwen3:14b & hotpotqa & dense & 8 & 0.550 & 0.462 & -- & 0 \
+qwen3:14b & hotpotqa & dense & 16 & 0.623 & 0.562 & -- & 1 \
+qwen3:14b & hotpotqa & hybrid & 3 & 0.511 & 0.422 & -- & 0 \
+qwen3:14b & hotpotqa & hybrid & 8 & 0.605 & 0.531 & -- & 0 \
+qwen3:14b & hotpotqa & hybrid & 16 & 0.614 & 0.590 & -- & 0 \
+qwen3:14b & hotpotqa & lexical & 3 & 0.559 & 0.466 & -- & 0 \
+qwen3:14b & hotpotqa & lexical & 8 & 0.610 & 0.527 & -- & 1 \
+qwen3:14b & hotpotqa & lexical & 16 & 0.621 & 0.531 & -- & 1 \
+gemma3:12b & 2wikimultihopqa & dense & 3 & 0.468 & 0.398 & -- & 0 \
+gemma3:12b & 2wikimultihopqa & dense & 8 & 0.485 & 0.460 & -- & 0 \
+gemma3:12b & 2wikimultihopqa & dense & 16 & 0.499 & 0.515 & -- & 0 \
+gemma3:12b & 2wikimultihopqa & hybrid & 3 & 0.405 & 0.318 & -- & 0 \
+gemma3:12b & 2wikimultihopqa & hybrid & 8 & 0.418 & 0.379 & -- & 0 \
+gemma3:12b & 2wikimultihopqa & hybrid & 16 & 0.478 & 0.455 & -- & 1 \
+gemma3:12b & 2wikimultihopqa & lexical & 3 & 0.393 & 0.319 & -- & 0 \
+gemma3:12b & 2wikimultihopqa & lexical & 8 & 0.418 & 0.353 & -- & 0 \
+gemma3:12b & 2wikimultihopqa & lexical & 16 & 0.443 & 0.395 & -- & 0 \
+qwen2.5:14b & 2wikimultihopqa & dense & 3 & 0.442 & 0.413 & -- & 1 \
+qwen2.5:14b & 2wikimultihopqa & dense & 8 & 0.465 & 0.466 & -- & 2 \
+qwen2.5:14b & 2wikimultihopqa & dense & 16 & 0.473 & 0.513 & -- & 1 \
+qwen2.5:14b & 2wikimultihopqa & hybrid & 3 & 0.371 & 0.342 & -- & 1 \
+qwen2.5:14b & 2wikimultihopqa & hybrid & 8 & 0.403 & 0.390 & -- & 1 \
+qwen2.5:14b & 2wikimultihopqa & hybrid & 16 & 0.461 & 0.460 & -- & 1 \
+qwen2.5:14b & 2wikimultihopqa & lexical & 3 & 0.370 & 0.325 & -- & 1 \
+qwen2.5:14b & 2wikimultihopqa & lexical & 8 & 0.387 & 0.355 & -- & 2 \
+qwen2.5:14b & 2wikimultihopqa & lexical & 16 & 0.416 & 0.398 & -- & 1 \
+qwen3:14b & 2wikimultihopqa & dense & 3 & 0.426 & 0.415 & -- & 0 \
+qwen3:14b & 2wikimultihopqa & dense & 8 & 0.466 & 0.490 & -- & 0 \
+qwen3:14b & 2wikimultihopqa & dense & 16 & 0.467 & 0.531 & -- & 0 \
+qwen3:14b & 2wikimultihopqa & hybrid & 3 & 0.387 & 0.352 & -- & 0 \
+qwen3:14b & 2wikimultihopqa & hybrid & 8 & 0.426 & 0.419 & -- & 0 \
+qwen3:14b & 2wikimultihopqa & hybrid & 16 & 0.484 & 0.475 & -- & 0 \
+qwen3:14b & 2wikimultihopqa & lexical & 3 & 0.400 & 0.345 & -- & 0 \
+qwen3:14b & 2wikimultihopqa & lexical & 8 & 0.426 & 0.386 & -- & 0 \
+qwen3:14b & 2wikimultihopqa & lexical & 16 & 0.454 & 0.429 & -- & 0 \
+\bottomrule
+\end{tabular}
+\end{table*}

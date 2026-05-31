@@ -319,7 +319,7 @@ def _run_reader_conditions(
                         "prompt": prompt if bool(config.get("logging", {}).get("save_full_prompts", False)) else "",
                     }
                 )
-    save_jsonl(output_dir / "reader_raw_responses.jsonl", raw_rows)
+    save_jsonl(raw_rows, output_dir / "reader_raw_responses.jsonl")
     return rows
 
 

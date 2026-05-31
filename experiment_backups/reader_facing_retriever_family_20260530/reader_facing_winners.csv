@@ -1,0 +1,7 @@
+dataset_name,model_name,best_oncu_retriever,best_oncu_top_k,best_oncu_relaxed_f1,best_answer_retriever,best_answer_top_k,best_answer_f1_relaxed
+2wikimultihopqa,gemma3:12b,dense,3,,dense,16,0.49906663336663337
+2wikimultihopqa,qwen2.5:14b,dense,3,,dense,16,0.47266664446664447
+2wikimultihopqa,qwen3:14b,dense,3,,hybrid,16,0.4835764568764569
+hotpotqa,gemma3:12b,dense,3,,lexical,16,0.6218206793206793
+hotpotqa,qwen2.5:14b,dense,3,,hybrid,16,0.6629796918767507
+hotpotqa,qwen3:14b,dense,3,,dense,16,0.622889652014652
