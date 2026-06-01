@@ -1,0 +1,76 @@
+| source | model_name | reasoning_type | context_length | evidence_position | evidence_density | distractor_similarity | long_method | score_field | score_no_evidence | score_oracle | score_long | n | cue_valid | cue_invalid_reason | cue_raw | cue_clipped |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2wikimultihopqa | mistral-small3.1:24b | multi_hop | 4000 | front | low | unknown | direct | exact_match | 0.0909 | 0.7273 | 0.5455 | 22 | True |  | 0.7143 | 0.7143 |
+| 2wikimultihopqa | mistral-small3.1:24b | multi_hop | 4000 | front | low | unknown | retrieve_then_read | exact_match | 0.0909 | 0.7273 | 0.2727 | 22 | True |  | 0.2857 | 0.2857 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 8000 | middle | low | unknown | direct | exact_match | 0.1667 | 1.0000 | 0.5000 | 6 | True |  | 0.4000 | 0.4000 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 8000 | middle | low | unknown | retrieve_then_read | exact_match | 0.1667 | 1.0000 | 0.3333 | 6 | True |  | 0.2000 | 0.2000 |
+| 2wikimultihopqa | mistral-small3.1:24b | multi_hop | 16000 | end | low | unknown | direct | exact_match | 0.0417 | 0.6250 | 0.5000 | 24 | True |  | 0.7857 | 0.7857 |
+| 2wikimultihopqa | mistral-small3.1:24b | multi_hop | 16000 | end | low | unknown | retrieve_then_read | exact_match | 0.0417 | 0.6250 | 0.1250 | 24 | True |  | 0.1429 | 0.1429 |
+| 2wikimultihopqa | mistral-small3.1:24b | multi_hop | 4000 | scattered | low | unknown | direct | exact_match | 0.0435 | 0.6522 | 0.5217 | 23 | True |  | 0.7857 | 0.7857 |
+| 2wikimultihopqa | mistral-small3.1:24b | multi_hop | 4000 | scattered | low | unknown | retrieve_then_read | exact_match | 0.0435 | 0.6522 | 0.1739 | 23 | True |  | 0.2143 | 0.2143 |
+| 2wikimultihopqa | mistral-small3.1:24b | multi_hop | 8000 | front | low | unknown | direct | exact_match | 0.0000 | 0.6957 | 0.4348 | 23 | True |  | 0.6250 | 0.6250 |
+| 2wikimultihopqa | mistral-small3.1:24b | multi_hop | 8000 | front | low | unknown | retrieve_then_read | exact_match | 0.0000 | 0.6957 | 0.1739 | 23 | True |  | 0.2500 | 0.2500 |
+| 2wikimultihopqa | mistral-small3.1:24b | multi_hop | 16000 | middle | low | unknown | direct | exact_match | 0.1154 | 0.5000 | 0.3846 | 26 | True |  | 0.7000 | 0.7000 |
+| 2wikimultihopqa | mistral-small3.1:24b | multi_hop | 16000 | middle | low | unknown | retrieve_then_read | exact_match | 0.1154 | 0.5000 | 0.1923 | 26 | True |  | 0.2000 | 0.2000 |
+| 2wikimultihopqa | mistral-small3.1:24b | multi_hop | 4000 | end | low | unknown | direct | exact_match | 0.0455 | 0.6364 | 0.3636 | 22 | True |  | 0.5385 | 0.5385 |
+| 2wikimultihopqa | mistral-small3.1:24b | multi_hop | 4000 | end | low | unknown | retrieve_then_read | exact_match | 0.0455 | 0.6364 | 0.0909 | 22 | True |  | 0.0769 | 0.0769 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 8000 | scattered | low | unknown | direct | exact_match | 0.4444 | 0.8889 | 0.5556 | 9 | True |  | 0.2500 | 0.2500 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 8000 | scattered | low | unknown | retrieve_then_read | exact_match | 0.4444 | 0.8889 | 0.4444 | 9 | True |  | 0.0000 | 0.0000 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 16000 | front | medium | unknown | direct | exact_match | 0.5000 | 1.0000 | 0.7500 | 8 | True |  | 0.5000 | 0.5000 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 16000 | front | medium | unknown | retrieve_then_read | exact_match | 0.5000 | 1.0000 | 0.7500 | 8 | True |  | 0.5000 | 0.5000 |
+| 2wikimultihopqa | mistral-small3.1:24b | multi_hop | 4000 | middle | low | unknown | direct | exact_match | 0.0417 | 0.6667 | 0.4583 | 24 | True |  | 0.6667 | 0.6667 |
+| 2wikimultihopqa | mistral-small3.1:24b | multi_hop | 4000 | middle | low | unknown | retrieve_then_read | exact_match | 0.0417 | 0.6667 | 0.1250 | 24 | True |  | 0.1333 | 0.1333 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 8000 | end | medium | unknown | direct | exact_match | 0.3333 | 0.8333 | 0.7500 | 12 | True |  | 0.8333 | 0.8333 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 8000 | end | medium | unknown | retrieve_then_read | exact_match | 0.3333 | 0.8333 | 0.6667 | 12 | True |  | 0.6667 | 0.6667 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 16000 | scattered | medium | unknown | direct | exact_match | 0.5000 | 0.7857 | 0.6429 | 14 | True |  | 0.5000 | 0.5000 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 16000 | scattered | medium | unknown | retrieve_then_read | exact_match | 0.5000 | 0.7857 | 0.5000 | 14 | True |  | 0.0000 | 0.0000 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 4000 | front | medium | unknown | direct | exact_match | 0.2727 | 0.9091 | 0.0909 | 11 | True |  | -0.2857 | 0.0000 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 4000 | front | medium | unknown | retrieve_then_read | exact_match | 0.2727 | 0.9091 | 0.0909 | 11 | True |  | -0.2857 | 0.0000 |
+| 2wikimultihopqa | mistral-small3.1:24b | multi_hop | 8000 | middle | low | unknown | direct | exact_match | 0.0370 | 0.5185 | 0.4815 | 27 | True |  | 0.9231 | 0.9231 |
+| 2wikimultihopqa | mistral-small3.1:24b | multi_hop | 8000 | middle | low | unknown | retrieve_then_read | exact_match | 0.0370 | 0.5185 | 0.1852 | 27 | True |  | 0.3077 | 0.3077 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 8000 | front | low | unknown | direct | exact_match | 0.8000 | 1.0000 | 0.8000 | 10 | True |  | 0.0000 | 0.0000 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 8000 | front | low | unknown | retrieve_then_read | exact_match | 0.8000 | 1.0000 | 0.7000 | 10 | True |  | -0.5000 | 0.0000 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 16000 | middle | medium | unknown | direct | exact_match | 0.6250 | 1.0000 | 0.6250 | 8 | True |  | 0.0000 | 0.0000 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 16000 | middle | medium | unknown | retrieve_then_read | exact_match | 0.6250 | 1.0000 | 0.3750 | 8 | True |  | -0.6667 | 0.0000 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 8000 | scattered | medium | unknown | direct | exact_match | 0.6154 | 1.0000 | 0.8462 | 13 | True |  | 0.6000 | 0.6000 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 8000 | scattered | medium | unknown | retrieve_then_read | exact_match | 0.6154 | 1.0000 | 0.9231 | 13 | True |  | 0.8000 | 0.8000 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 16000 | front | low | unknown | direct | exact_match | 0.1667 | 0.6667 | 0.6667 | 6 | True |  | 1.0000 | 1.0000 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 16000 | front | low | unknown | retrieve_then_read | exact_match | 0.1667 | 0.6667 | 0.5000 | 6 | True |  | 0.6667 | 0.6667 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 16000 | end | medium | unknown | direct | exact_match | 0.8000 | 1.0000 | 1.0000 | 5 | True |  | 1.0000 | 1.0000 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 16000 | end | medium | unknown | retrieve_then_read | exact_match | 0.8000 | 1.0000 | 0.6000 | 5 | True |  | -1.0000 | 0.0000 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 16000 | middle | low | unknown | direct | exact_match | 0.3750 | 0.7500 | 0.2500 | 8 | True |  | -0.3333 | 0.0000 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 16000 | middle | low | unknown | retrieve_then_read | exact_match | 0.3750 | 0.7500 | 0.5000 | 8 | True |  | 0.3333 | 0.3333 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 4000 | end | low | unknown | direct | exact_match | 0.2500 | 0.8333 | 0.5000 | 12 | True |  | 0.4286 | 0.4286 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 4000 | end | low | unknown | retrieve_then_read | exact_match | 0.2500 | 0.8333 | 0.5000 | 12 | True |  | 0.4286 | 0.4286 |
+| 2wikimultihopqa | mistral-small3.1:24b | multi_hop | 8000 | end | low | unknown | direct | exact_match | 0.1905 | 0.4286 | 0.4286 | 21 | True |  | 1.0000 | 1.0000 |
+| 2wikimultihopqa | mistral-small3.1:24b | multi_hop | 8000 | end | low | unknown | retrieve_then_read | exact_match | 0.1905 | 0.4286 | 0.1429 | 21 | True |  | -0.2000 | 0.0000 |
+| 2wikimultihopqa | mistral-small3.1:24b | multi_hop | 16000 | scattered | low | unknown | direct | exact_match | 0.0526 | 0.6316 | 0.4211 | 19 | True |  | 0.6364 | 0.6364 |
+| 2wikimultihopqa | mistral-small3.1:24b | multi_hop | 16000 | scattered | low | unknown | retrieve_then_read | exact_match | 0.0526 | 0.6316 | 0.0526 | 19 | True |  | 0.0000 | 0.0000 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 16000 | end | low | unknown | direct | exact_match | 0.4615 | 0.8462 | 0.7692 | 13 | True |  | 0.8000 | 0.8000 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 16000 | end | low | unknown | retrieve_then_read | exact_match | 0.4615 | 0.8462 | 0.5385 | 13 | True |  | 0.2000 | 0.2000 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 4000 | scattered | low | unknown | direct | exact_match | 0.5000 | 0.8333 | 0.3333 | 6 | True |  | -0.5000 | 0.0000 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 4000 | scattered | low | unknown | retrieve_then_read | exact_match | 0.5000 | 0.8333 | 0.5000 | 6 | True |  | 0.0000 | 0.0000 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 4000 | end | medium | unknown | direct | exact_match | 0.5000 | 1.0000 | 0.8750 | 8 | True |  | 0.7500 | 0.7500 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 4000 | end | medium | unknown | retrieve_then_read | exact_match | 0.5000 | 1.0000 | 0.3750 | 8 | True |  | -0.2500 | 0.0000 |
+| 2wikimultihopqa | mistral-small3.1:24b | multi_hop | 8000 | scattered | low | unknown | direct | exact_match | 0.0500 | 0.5500 | 0.2500 | 20 | True |  | 0.4000 | 0.4000 |
+| 2wikimultihopqa | mistral-small3.1:24b | multi_hop | 8000 | scattered | low | unknown | retrieve_then_read | exact_match | 0.0500 | 0.5500 | 0.1500 | 20 | True |  | 0.2000 | 0.2000 |
+| 2wikimultihopqa | mistral-small3.1:24b | multi_hop | 16000 | front | low | unknown | direct | exact_match | 0.0000 | 0.7778 | 0.5926 | 27 | True |  | 0.7619 | 0.7619 |
+| 2wikimultihopqa | mistral-small3.1:24b | multi_hop | 16000 | front | low | unknown | retrieve_then_read | exact_match | 0.0000 | 0.7778 | 0.2963 | 27 | True |  | 0.3810 | 0.3810 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 4000 | middle | medium | unknown | direct | exact_match | 0.1111 | 0.7778 | 0.3333 | 9 | True |  | 0.3333 | 0.3333 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 4000 | middle | medium | unknown | retrieve_then_read | exact_match | 0.1111 | 0.7778 | 0.2222 | 9 | True |  | 0.1667 | 0.1667 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 8000 | end | low | unknown | direct | exact_match | 0.8750 | 0.6250 | 0.5000 | 8 | False | oracle_not_above_no_evidence |  |  |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 8000 | end | low | unknown | retrieve_then_read | exact_match | 0.8750 | 0.6250 | 0.5000 | 8 | False | oracle_not_above_no_evidence |  |  |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 4000 | scattered | medium | unknown | direct | exact_match | 0.6667 | 0.9167 | 0.6667 | 12 | True |  | 0.0000 | 0.0000 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 4000 | scattered | medium | unknown | retrieve_then_read | exact_match | 0.6667 | 0.9167 | 0.6667 | 12 | True |  | 0.0000 | 0.0000 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 4000 | front | low | unknown | direct | exact_match | 0.4444 | 0.7778 | 0.5556 | 9 | True |  | 0.3333 | 0.3333 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 4000 | front | low | unknown | retrieve_then_read | exact_match | 0.4444 | 0.7778 | 0.6667 | 9 | True |  | 0.6667 | 0.6667 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 4000 | scattered | high | unknown | direct | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 4000 | scattered | high | unknown | retrieve_then_read | exact_match | 0.0000 | 0.0000 | 0.0000 | 1 | False | oracle_not_above_no_evidence |  |  |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 4000 | middle | low | unknown | direct | exact_match | 0.7500 | 0.8750 | 0.8750 | 8 | True |  | 1.0000 | 1.0000 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 4000 | middle | low | unknown | retrieve_then_read | exact_match | 0.7500 | 0.8750 | 0.7500 | 8 | True |  | 0.0000 | 0.0000 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 8000 | middle | medium | unknown | direct | exact_match | 0.2222 | 0.6667 | 0.6667 | 9 | True |  | 1.0000 | 1.0000 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 8000 | middle | medium | unknown | retrieve_then_read | exact_match | 0.2222 | 0.6667 | 0.4444 | 9 | True |  | 0.5000 | 0.5000 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 16000 | scattered | low | unknown | direct | exact_match | 0.6250 | 0.8750 | 1.0000 | 8 | True |  | 1.5000 | 1.0000 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 16000 | scattered | low | unknown | retrieve_then_read | exact_match | 0.6250 | 0.8750 | 0.8750 | 8 | True |  | 1.0000 | 1.0000 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 8000 | front | medium | unknown | direct | exact_match | 0.5556 | 1.0000 | 0.8889 | 9 | True |  | 0.7500 | 0.7500 |
+| 2wikimultihopqa | mistral-small3.1:24b | comparison | 8000 | front | medium | unknown | retrieve_then_read | exact_match | 0.5556 | 1.0000 | 0.7778 | 9 | True |  | 0.5000 | 0.5000 |
