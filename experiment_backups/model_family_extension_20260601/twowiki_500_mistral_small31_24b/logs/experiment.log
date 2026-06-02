@@ -1,0 +1,2 @@
+2026-06-01 00:46:21 | INFO | longcue | Loaded 500 samples from /workspace/long_context_cue/data/processed/twowiki_cue_500.jsonl
+2026-06-01 00:46:21 | INFO | longcue | Running methods: no_evidence, direct, retrieve_then_read, oracle

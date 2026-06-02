@@ -1,0 +1,3 @@
+2026-05-31 21:34:47 | INFO | longcue | Loaded 200 samples from /workspace/long_context_cue/data/processed/controlled_oncu_200_safe16k.jsonl
+2026-05-31 21:34:47 | INFO | longcue | Running methods: no_evidence, direct, retrieve_then_read, oracle
+2026-05-31 23:32:12 | INFO | longcue | Wrote 800 per-sample metric rows to /workspace/long_context_cue/outputs/model_family_extension/controlled_safe16k_200_mistral_small31_24b/results

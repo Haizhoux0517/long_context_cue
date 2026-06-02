@@ -1,0 +1,4 @@
+2026-05-31 23:32:13 | INFO | longcue | Loaded 200 samples from /workspace/long_context_cue/data/processed/hotpotqa_cue_200.jsonl
+2026-05-31 23:32:13 | INFO | longcue | Running methods: no_evidence, direct, retrieve_then_read, oracle
+2026-06-01 00:08:19 | WARNING | longcue | No JSON object found. Output prefix: '{\n  "answer": "2013",\n  "evidence_ids": [],\n  "explanation": "The film \'The Informant!\' directed by Steven Soderbergh was released in 2009, not about a corporate executive whistleblower. The film \'The Whistleblower\' directed by Larysa Kondracki was released in 2010, not directed by Steven Soderbergh'
+2026-06-01 00:44:55 | INFO | longcue | Wrote 800 per-sample metric rows to /workspace/long_context_cue/outputs/model_family_extension/hotpotqa_200_mistral_small31_24b/results

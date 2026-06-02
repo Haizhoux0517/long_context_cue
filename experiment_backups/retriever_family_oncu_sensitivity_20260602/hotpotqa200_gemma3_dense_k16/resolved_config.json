@@ -1,0 +1,42 @@
+{
+  "dataset_path": "data/processed/hotpotqa_cue_200.jsonl",
+  "output_dir": "outputs/retriever_family_oncu_sensitivity/hotpotqa200_gemma3_dense_k16",
+  "model": {
+    "provider": "ollama",
+    "model_name": "gemma3:12b",
+    "num_ctx": 32768,
+    "timeout": 600
+  },
+  "generation": {
+    "max_tokens": 1024,
+    "temperature": 0.0
+  },
+  "methods": [
+    "no_evidence",
+    "direct",
+    "retrieve_then_read",
+    "oracle"
+  ],
+  "retrieval": {
+    "top_k": 16,
+    "chunk_size": 220,
+    "overlap": 40,
+    "retriever": "dense",
+    "dense_model_name": "sentence-transformers/all-MiniLM-L6-v2",
+    "rrf_k": 60
+  },
+  "evaluation": {
+    "compute_cue": true,
+    "compute_failure_types": true
+  },
+  "logging": {
+    "save_full_prompts": false,
+    "save_intermediate": true,
+    "compress_outputs": false
+  },
+  "protocol": {
+    "version": "diagnostic_v1_fixed",
+    "purpose": "retriever_family_oncu_sensitivity",
+    "retrieved_condition_variant": "dense@16"
+  }
+}
