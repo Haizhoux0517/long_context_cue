@@ -1,0 +1,21 @@
+\begin{table*}[!t]
+\renewcommand{\arraystretch}{1.08}
+\caption{Comparison of ONCU with Alternative Diagnostic Scores.}
+\label{tab:metric_comparison_alternatives}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{lccclp{0.30\textwidth}}
+\toprule
+Metric & Baseline & Oracle & Evidence & Primary use & Main limitation \\
+\midrule
+Raw answer F1 / EM & No & No & No & Final answer correctness & Can conflate context use with no-evidence priors or parametric knowledge. \\
+Evidence F1 & No & No & Post-reader evidence overlap & Cited evidence quality & Can be high when the final answer is converted incorrectly. \\
+Retrieval recall@$k$ & No & No & Pre-reader availability & Retriever evidence coverage & Does not measure whether the reader uses retrieved evidence. \\
+Oracle gap $S_{\\mathrm{oracle}}-S_c$ & No & Partially & Optional & Distance from isolated-evidence reference & Does not adjust for no-evidence answerability. \\
+Context gain $S_c-S_{\\mathrm{no}}$ & Yes & No & Optional & Improvement over no-evidence baseline & Does not indicate how much recoverable evidence advantage was captured. \\
+ONCU raw & Yes & Yes & Via chosen score field & Recovered oracle-evidence advantage & Requires a positive oracle-over-baseline denominator. \\
+ONCU clipped & Yes & Yes & Via chosen score field & Aggregate recovered fraction & Clips diagnostic extremes above 1 or below 0. \\
+\bottomrule
+\end{tabular}
+\end{table*}

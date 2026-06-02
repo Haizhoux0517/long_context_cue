@@ -1,0 +1,25 @@
+{
+  "run_dir": "outputs/ruler_lite_external_20260530_qwen3_nothink",
+  "metrics_path": "outputs/ruler_lite_external_20260530_qwen3_nothink/per_sample_metrics.csv",
+  "output_dir": "experiment_backups/ruler_lite_external_20260530_qwen3_nothink",
+  "num_rows": 480,
+  "models": [
+    "qwen3:14b"
+  ],
+  "conditions": [
+    "full_context",
+    "retrieved_context"
+  ],
+  "tasks": [
+    "aggregation_sum",
+    "multi_hop_trace",
+    "retrieval_key_value"
+  ],
+  "context_lengths": [
+    4000,
+    8000,
+    16000,
+    32000
+  ],
+  "role": "External answer-performance validation; not ONCU."
+}

@@ -1,0 +1,3 @@
+model_name,condition,n,exact_match,answer_f1,parse_failure_rate
+qwen3:14b,full_context,240,0.7583333333333333,0.7611111111111111,0.0
+qwen3:14b,retrieved_context,240,0.8958333333333334,0.8972222222222223,0.0

@@ -1,0 +1,38 @@
+dataset_name: twowiki_oncu_500
+dataset_path: data/processed/twowiki_cue_500.jsonl
+output_dir: outputs/reader_facing_retfam_twowiki500_qwen3
+reference_metrics_path: experiment_backups/twowiki_500_validation_20260527/per_model/qwen3/per_sample_metrics.csv
+model:
+  provider: ollama
+  model_name: qwen3:14b
+  num_ctx: 32768
+  timeout: 900
+generation:
+  max_tokens: 1024
+  temperature: 0.0
+retriever_family:
+  retrievers:
+  - lexical
+  - dense
+  - hybrid
+  - oracle
+  top_k:
+  - 3
+  - 8
+  - 16
+  reader_retrievers:
+  - lexical
+  - dense
+  - hybrid
+  reader_top_k:
+  - 3
+  - 8
+  - 16
+  chunk_size: 220
+  overlap: 40
+  dense_model_name: sentence-transformers/all-MiniLM-L6-v2
+  rrf_k: 60
+  iterative_seed_k: 2
+  iterative_expansion_words: 96
+logging:
+  save_full_prompts: false

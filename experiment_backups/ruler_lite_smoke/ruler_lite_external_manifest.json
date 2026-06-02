@@ -1,0 +1,22 @@
+{
+  "run_dir": "outputs/ruler_lite_smoke",
+  "metrics_path": "outputs/ruler_lite_smoke/per_sample_metrics.csv",
+  "output_dir": "experiment_backups/ruler_lite_smoke",
+  "num_rows": 6,
+  "models": [
+    "qwen2.5:14b"
+  ],
+  "conditions": [
+    "full_context",
+    "retrieved_context"
+  ],
+  "tasks": [
+    "aggregation_sum",
+    "multi_hop_trace",
+    "retrieval_key_value"
+  ],
+  "context_lengths": [
+    4000
+  ],
+  "role": "External answer-performance validation; not ONCU."
+}

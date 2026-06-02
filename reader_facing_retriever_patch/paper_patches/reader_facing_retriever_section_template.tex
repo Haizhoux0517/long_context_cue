@@ -1,0 +1,9 @@
+% Insert after the existing retrieval-family retrieval-only ablation section, after the experiment has been run.
+\subsection{Reader-Facing Retriever-Family ONCU Experiment}
+\label{subsec:reader_facing_retriever_family}
+
+The retrieval-family ablation above tests evidence-chain availability before the reader is called. To determine whether retrieval improvements translate into end-to-end retrieve-then-read behavior, we additionally run a reader-facing retriever-family experiment. For each evaluated model, dataset, retriever family, and retrieval budget, the reader receives the retrieved context and is scored with the same answer contract, decoding policy, parser, and evaluator used in the main diagnostic runs. We evaluate lexical, dense, and hybrid retrieval at top-$k \in \{3,8,16\}$ on HotpotQA-ONCU-200 and 2WikiMultiHopQA-ONCU-500. ONCU is recomputed using the existing no-evidence and oracle-evidence references for the same model and dataset.
+
+\input{reader_facing_retfam_results_table.tex}
+
+This experiment separates two possible explanations for the retrieved-evidence results. If dense or hybrid retrieval improves evidence-chain coverage but does not improve reader-facing ONCU, the bottleneck lies partly in reader-side utilization or answer conversion after retrieval. If dense or hybrid retrieval improves both evidence-chain coverage and reader-facing ONCU, then the earlier lexical retrieved-evidence condition understated the potential of retrieve-then-read systems. In either case, the reader-facing experiment prevents the retrieval-only ablation from being overinterpreted as a system-level RAG result.

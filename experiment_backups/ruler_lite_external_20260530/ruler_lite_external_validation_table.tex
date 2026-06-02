@@ -1,0 +1,20 @@
+\begin{table*}[!t]
+\renewcommand{\arraystretch}{1.10}
+\caption{RULER-lite External Answer-Performance Validation. This out-of-protocol validation reports answer performance only and is not used for ONCU computation because the setting is not constructed with the four-condition oracle-normalized protocol.}
+\label{tab:ruler_lite_external_validation}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{llrrrr}
+\toprule
+Model & Condition & $n$ & Exact Match & Answer F1 & Parse Fail. \\
+\midrule
+gemma3:12b & full\_context & 240 & 0.521 & 0.521 & 0.163 \\
+gemma3:12b & retrieved\_context & 240 & 0.713 & 0.713 & 0.000 \\
+qwen2.5:14b & full\_context & 240 & 0.771 & 0.771 & 0.037 \\
+qwen2.5:14b & retrieved\_context & 240 & 0.871 & 0.871 & 0.000 \\
+qwen3:14b & full\_context & 240 & 0.000 & 0.000 & 1.000 \\
+qwen3:14b & retrieved\_context & 240 & 0.000 & 0.000 & 1.000 \\
+\bottomrule
+\end{tabular}
+\end{table*}

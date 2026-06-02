@@ -1,0 +1,41 @@
+component,dataset_name,retriever,top_k,n,retrieval_precision,retrieval_recall,retrieval_f1,oracle_hit_rate,full_chain_coverage,distractor_id_rate,retrieved_passage_count,diagnostic_reading
+hotpotqa,hotpotqa_oncu_200,dense,3,200,0.465185,0.501833,0.460592,0.595,0.405,0.309815,2.325,Retrieval may bottleneck multi-hop coverage.
+hotpotqa,hotpotqa_oncu_200,dense,5,200,0.453923,0.581833,0.486347,0.675,0.475,0.396077,2.975,Retrieval may bottleneck multi-hop coverage.
+hotpotqa,hotpotqa_oncu_200,dense,8,200,0.457541,0.656583,0.509238,0.77,0.53,0.467459,3.825,Retrieval may bottleneck multi-hop coverage.
+hotpotqa,hotpotqa_oncu_200,dense,16,200,0.387115,0.832,0.497355,0.905,0.745,0.587885,6.035,Retrieval may bottleneck multi-hop coverage.
+hotpotqa,hotpotqa_oncu_200,hybrid,3,200,0.61056,0.565167,0.565529,0.675,0.455,0.09944,1.765,Retrieval may bottleneck multi-hop coverage.
+hotpotqa,hotpotqa_oncu_200,hybrid,5,200,0.609238,0.634917,0.59118,0.745,0.525,0.195762,2.37,Retrieval may bottleneck multi-hop coverage.
+hotpotqa,hotpotqa_oncu_200,hybrid,8,200,0.559597,0.721167,0.591886,0.825,0.615,0.320403,3.325,Retrieval may bottleneck multi-hop coverage.
+hotpotqa,hotpotqa_oncu_200,hybrid,16,200,0.48441,0.87325,0.573759,0.94,0.805,0.48559,5.525,Complete evidence chain is available to a reader.
+hotpotqa,hotpotqa_oncu_200,iterative,3,200,0.631262,0.54825,0.565226,0.675,0.43,0.083738,1.67,Retrieval may bottleneck multi-hop coverage.
+hotpotqa,hotpotqa_oncu_200,iterative,5,200,0.611778,0.602417,0.578786,0.72,0.49,0.163222,2.17,Retrieval may bottleneck multi-hop coverage.
+hotpotqa,hotpotqa_oncu_200,iterative,8,200,0.567399,0.683667,0.583097,0.785,0.575,0.282601,3.06,Retrieval may bottleneck multi-hop coverage.
+hotpotqa,hotpotqa_oncu_200,iterative,16,200,0.440691,0.78075,0.516965,0.86,0.7,0.499309,5.145,Retrieval may bottleneck multi-hop coverage.
+hotpotqa,hotpotqa_oncu_200,lexical,3,200,0.690262,0.632833,0.64,0.74,0.54,0.084738,1.885,Retrieval may bottleneck multi-hop coverage.
+hotpotqa,hotpotqa_oncu_200,lexical,5,200,0.680927,0.680333,0.654227,0.795,0.57,0.164073,2.355,Retrieval may bottleneck multi-hop coverage.
+hotpotqa,hotpotqa_oncu_200,lexical,8,200,0.628341,0.728667,0.638016,0.83,0.625,0.241659,2.98,Retrieval may bottleneck multi-hop coverage.
+hotpotqa,hotpotqa_oncu_200,lexical,16,200,0.486393,0.818667,0.556602,0.89,0.75,0.458607,5.09,Retrieval may bottleneck multi-hop coverage.
+hotpotqa,hotpotqa_oncu_200,oracle,3,200,1.0,0.96325,0.978571,1.0,0.865,0.0,2.36,Complete evidence chain is available to a reader.
+hotpotqa,hotpotqa_oncu_200,oracle,5,200,1.0,1.0,1.0,1.0,1.0,0.0,2.515,Complete evidence chain is available to a reader.
+hotpotqa,hotpotqa_oncu_200,oracle,8,200,1.0,1.0,1.0,1.0,1.0,0.0,2.515,Complete evidence chain is available to a reader.
+hotpotqa,hotpotqa_oncu_200,oracle,16,200,1.0,1.0,1.0,1.0,1.0,0.0,2.515,Complete evidence chain is available to a reader.
+twowiki,twowiki_oncu_500,dense,3,500,0.563578,0.602333,0.544881,0.702,0.472,0.224422,2.82,Retrieval may bottleneck multi-hop coverage.
+twowiki,twowiki_oncu_500,dense,5,500,0.54006,0.656,0.548725,0.754,0.526,0.30194,3.466,Retrieval may bottleneck multi-hop coverage.
+twowiki,twowiki_oncu_500,dense,8,500,0.535313,0.7215,0.563725,0.816,0.596,0.372687,4.132,Retrieval may bottleneck multi-hop coverage.
+twowiki,twowiki_oncu_500,dense,16,500,0.467213,0.8415,0.547667,0.902,0.756,0.510787,5.79,Retrieval may bottleneck multi-hop coverage.
+twowiki,twowiki_oncu_500,hybrid,3,500,0.548333,0.484333,0.501924,0.566,0.386,0.065667,1.444,Retrieval may bottleneck multi-hop coverage.
+twowiki,twowiki_oncu_500,hybrid,5,500,0.572878,0.5295,0.53176,0.616,0.424,0.097122,1.724,Retrieval may bottleneck multi-hop coverage.
+twowiki,twowiki_oncu_500,hybrid,8,500,0.57191,0.5835,0.551044,0.67,0.478,0.15609,2.19,Retrieval may bottleneck multi-hop coverage.
+twowiki,twowiki_oncu_500,hybrid,16,500,0.540804,0.725667,0.570046,0.802,0.628,0.331196,3.948,Retrieval may bottleneck multi-hop coverage.
+twowiki,twowiki_oncu_500,iterative,3,500,0.2918,0.229833,0.245514,0.304,0.16,0.0442,0.688,Retrieval may bottleneck multi-hop coverage.
+twowiki,twowiki_oncu_500,iterative,5,500,0.325176,0.266833,0.27857,0.348,0.192,0.076824,0.884,Retrieval may bottleneck multi-hop coverage.
+twowiki,twowiki_oncu_500,iterative,8,500,0.359352,0.326833,0.319491,0.412,0.246,0.142648,1.302,Retrieval may bottleneck multi-hop coverage.
+twowiki,twowiki_oncu_500,iterative,16,500,0.428983,0.526,0.428921,0.62,0.418,0.295017,2.896,Retrieval may bottleneck multi-hop coverage.
+twowiki,twowiki_oncu_500,lexical,3,500,0.538667,0.467833,0.486752,0.552,0.368,0.033333,1.284,Retrieval may bottleneck multi-hop coverage.
+twowiki,twowiki_oncu_500,lexical,5,500,0.559329,0.497333,0.510251,0.584,0.398,0.064671,1.476,Retrieval may bottleneck multi-hop coverage.
+twowiki,twowiki_oncu_500,lexical,8,500,0.561205,0.534833,0.52777,0.618,0.432,0.126795,1.826,Retrieval may bottleneck multi-hop coverage.
+twowiki,twowiki_oncu_500,lexical,16,500,0.517723,0.623167,0.525154,0.7,0.524,0.260277,3.018,Retrieval may bottleneck multi-hop coverage.
+twowiki,twowiki_oncu_500,oracle,3,500,1.0,0.94,0.965619,1.0,0.762,0.0,2.238,Retrieval may bottleneck multi-hop coverage.
+twowiki,twowiki_oncu_500,oracle,5,500,1.0,0.999667,0.999818,1.0,0.998,0.0,2.478,Complete evidence chain is available to a reader.
+twowiki,twowiki_oncu_500,oracle,8,500,1.0,1.0,1.0,1.0,1.0,0.0,2.48,Complete evidence chain is available to a reader.
+twowiki,twowiki_oncu_500,oracle,16,500,1.0,1.0,1.0,1.0,1.0,0.0,2.48,Complete evidence chain is available to a reader.

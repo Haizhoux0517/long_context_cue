@@ -1,0 +1,7 @@
+model_name,condition,n,exact_match,answer_f1,parse_failure_rate
+gemma3:12b,full_context,240,0.5208333333333334,0.5208333333333334,0.1625
+gemma3:12b,retrieved_context,240,0.7125,0.7125,0.0
+qwen2.5:14b,full_context,240,0.7708333333333334,0.7708333333333334,0.0375
+qwen2.5:14b,retrieved_context,240,0.8708333333333333,0.8708333333333333,0.0
+qwen3:14b,full_context,240,0.0,0.0,1.0
+qwen3:14b,retrieved_context,240,0.0,0.0,1.0

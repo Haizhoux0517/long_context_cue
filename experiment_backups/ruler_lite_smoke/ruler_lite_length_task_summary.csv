@@ -1,0 +1,7 @@
+condition,task_name,context_length,n,exact_match,answer_f1,parse_failure_rate
+full_context,aggregation_sum,4000,1,0.0,0.0,0.0
+full_context,multi_hop_trace,4000,1,1.0,1.0,0.0
+full_context,retrieval_key_value,4000,1,1.0,1.0,0.0
+retrieved_context,aggregation_sum,4000,1,0.0,0.0,0.0
+retrieved_context,multi_hop_trace,4000,1,1.0,1.0,0.0
+retrieved_context,retrieval_key_value,4000,1,1.0,1.0,0.0

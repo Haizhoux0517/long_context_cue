@@ -1,0 +1,7 @@
+model_name,condition,task_name,context_length,n,exact_match,answer_f1,parse_failure_rate
+qwen2.5:14b,full_context,aggregation_sum,4000,1,0.0,0.0,0.0
+qwen2.5:14b,full_context,multi_hop_trace,4000,1,1.0,1.0,0.0
+qwen2.5:14b,full_context,retrieval_key_value,4000,1,1.0,1.0,0.0
+qwen2.5:14b,retrieved_context,aggregation_sum,4000,1,0.0,0.0,0.0
+qwen2.5:14b,retrieved_context,multi_hop_trace,4000,1,1.0,1.0,0.0
+qwen2.5:14b,retrieved_context,retrieval_key_value,4000,1,1.0,1.0,0.0
