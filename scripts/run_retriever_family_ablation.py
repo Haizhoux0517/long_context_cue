@@ -435,20 +435,74 @@ def _metric_row(
 
 
 def _compute_reader_oncu(reader_rows: list[dict[str, Any]], reference_metrics_path: Path) -> list[dict[str, Any]]:
+    """Compute ONCU for reader-facing retriever-family rows.
+
+    This function joins current retrieved-condition rows against existing
+    no-evidence and oracle-evidence reference rows by sample_id.
+
+    It intentionally computes ONCU at the sample level for reranked retrieval
+    sensitivity runs. The main paper may still aggregate ONCU by metadata group,
+    but this reader-facing sensitivity path needs a robust join for arbitrary
+    retriever labels such as hybrid_ce64.
+    """
     reference_rows = _read_csv(reference_metrics_path)
-    reference_rows = [
-        row for row in reference_rows if row.get("method") in {"no_evidence", "oracle"}
-    ]
-    combined = reference_rows + reader_rows
-    rows = compute_cue_rows(combined, score_field="answer_f1_relaxed")
-    for row in rows:
-        method = str(row.get("long_method", ""))
-        if method.startswith("retfam_"):
-            parts = method.replace("retfam_", "").rsplit("_k", 1)
-            row["retriever"] = parts[0]
-            row["top_k"] = parts[1] if len(parts) > 1 else ""
-        row["score_field"] = "answer_f1_relaxed"
-    return [row for row in rows if str(row.get("long_method", "")).startswith("retfam_")]
+
+    score_field = "answer_f1_relaxed"
+    ref_by_sample: dict[str, dict[str, dict[str, Any]]] = defaultdict(dict)
+
+    for row in reference_rows:
+        method = str(row.get("method", ""))
+        if method not in {"no_evidence", "oracle"}:
+            continue
+        sample_id = str(row.get("sample_id", ""))
+        if not sample_id:
+            continue
+        ref_by_sample[sample_id][method] = row
+
+    out: list[dict[str, Any]] = []
+    for row in reader_rows:
+        sample_id = str(row.get("sample_id", ""))
+        refs = ref_by_sample.get(sample_id, {})
+        no_row = refs.get("no_evidence")
+        oracle_row = refs.get("oracle")
+
+        if no_row is None or oracle_row is None:
+            continue
+
+        try:
+            s_no = float(no_row.get(score_field, no_row.get("answer_f1", 0.0)))
+            s_oracle = float(oracle_row.get(score_field, oracle_row.get("answer_f1", 0.0)))
+            s_context = float(row.get(score_field, row.get("answer_f1", 0.0)))
+        except (TypeError, ValueError):
+            continue
+
+        denom = s_oracle - s_no
+        cue_valid = denom > 0.0
+        cue_raw = ""
+        cue_clipped = ""
+
+        if cue_valid:
+            raw = (s_context - s_no) / denom
+            clipped = min(1.0, max(0.0, raw))
+            cue_raw = raw
+            cue_clipped = clipped
+
+        enriched = dict(row)
+        enriched.update(
+            {
+                "score_field": score_field,
+                "s_no": s_no,
+                "s_oracle": s_oracle,
+                "s_context": s_context,
+                "cue_denominator": denom,
+                "cue_valid": cue_valid,
+                "cue_raw": cue_raw,
+                "cue_clipped": cue_clipped,
+            }
+        )
+        out.append(enriched)
+
+    return out
 
 
 def _summarize_retrieval(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
