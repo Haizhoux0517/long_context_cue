@@ -176,3 +176,11 @@ python scripts/statistical_modeling.py
 ```
 
 to regenerate paired effect-size summaries, bootstrap confidence intervals, Holm/FDR adjusted significance diagnostics, and compact LaTeX tables under `experiment_backups/statistical_modeling_20260530/`.
+
+## License
+
+The source code in this repository is licensed under the MIT License. See `LICENSE`.
+
+The paper text, figures, tables, documentation, README files, and supplementary materials are licensed under Creative Commons Attribution 4.0 International (CC BY 4.0), unless otherwise noted. See `LICENSE-DOCS`.
+
+Third-party datasets and benchmark resources retain their original licenses and terms of use. This repository does not relicense third-party datasets. See `DATA_LICENSES.md`.
