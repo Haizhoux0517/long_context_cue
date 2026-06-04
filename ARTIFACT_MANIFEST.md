@@ -49,6 +49,8 @@ Older directories such as `experiment_backups/core_2x2_qwen25_qwen3_20260524/`, 
 | Failure diagnosis | `longcue/evaluation/failure_diagnosis.py` | Released | Rule-based diagnostic failure categories. |
 | Retrieval condition | `longcue/methods/retrieve_then_read.py` | Released | Deterministic lexical retrieve-then-read condition. |
 | Ollama wrapper | `longcue/models/ollama.py` | Released | Local Ollama model calls. |
+| Runtime/model environment record | `scripts/export_runtime_record.py`; `RUNTIME_REPRODUCIBILITY_RECORD.md` | Released | Captures Ollama version, model tags/digests and quantization metadata exposed by Ollama, package versions, GPU/VRAM information, context length, deterministic decoding controls, and runtime logging policy. |
+
 | Release checker | `scripts/check_release_artifacts.py` | Released | Verifies files declared by this manifest. |
 
 ---

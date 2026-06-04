@@ -57,6 +57,19 @@ python -m pip install -r requirements.txt
 python -m pip install -e .
 ```
 
+
+## Runtime/model metadata record
+
+Before final archival release, generate the host-specific runtime record on the machine used for local Ollama inference:
+
+```bash
+python scripts/export_runtime_record.py \
+  --output RUNTIME_REPRODUCIBILITY_RECORD.md \
+  --json-output runtime_reproducibility_record.json
+```
+
+This records the exact Ollama version, model tags, local `ollama show --verbose` records, package versions, CUDA/PyTorch status, GPU/VRAM information, deterministic decoding controls, context-window setting, and model metadata such as digest or quantization fields when exposed by the installed Ollama version. Keep the generated Markdown file with the release artifacts.
+
 Local Ollama models used in the reported experiments:
 
 ```bash
