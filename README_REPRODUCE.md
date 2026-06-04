@@ -68,7 +68,7 @@ python scripts/export_runtime_record.py \
   --json-output runtime_reproducibility_record.json
 ```
 
-This records the exact Ollama version, model tags, local `ollama show --verbose` records, package versions, CUDA/PyTorch status, GPU/VRAM information, deterministic decoding controls, context-window setting, and model metadata such as digest or quantization fields when exposed by the installed Ollama version. Keep the generated Markdown file with the release artifacts.
+This records the available runtime metadata for the reproduction host: package versions, CUDA/PyTorch status, GPU/VRAM information, deterministic decoding controls, context-window setting, requested model tags, and local `ollama show --verbose` records when Ollama is available. Exact Ollama version, model digest, and quantization fields are recorded only when exposed by the installed Ollama version and local model store; otherwise the generated record preserves the unavailable-command diagnostics. Keep the generated Markdown file with the release artifacts.
 
 Local Ollama models used in the reported experiments:
 
@@ -76,6 +76,8 @@ Local Ollama models used in the reported experiments:
 ollama pull qwen2.5:14b
 ollama pull qwen3:14b
 ollama pull gemma3:12b
+ollama pull llama3.1:8b
+ollama pull mistral-small3.1:24b
 ollama list
 ```
 
