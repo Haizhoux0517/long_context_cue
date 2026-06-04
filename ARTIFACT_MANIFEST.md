@@ -12,6 +12,7 @@ A reviewer should be able to start from this file, locate the corresponding resu
 |---|---|
 | `Released` | Expected to exist in the repository snapshot. |
 | `Generated` | Produced from released scripts or public datasets before rerunning inference. |
+| `Released summary/config` | Lightweight summaries, configs, and scripts are released, but the artifact is an auxiliary audit rather than a core full-output archive. |
 | `External` | Must be obtained from the original provider subject to its license or terms. |
 | `Historical` | Development artifact not used for the current paper's final claims. |
 
@@ -19,7 +20,7 @@ A reviewer should be able to start from this file, locate the corresponding resu
 
 ## 2. Canonical paper-release directories
 
-Only these release directories are canonical for the current paper:
+These release directories are canonical for the current paper or for reviewer-facing audits explicitly referenced in the manuscript:
 
 | Paper component | Canonical repository directory | Status |
 |---|---|---:|
@@ -27,7 +28,15 @@ Only these release directories are canonical for the current paper:
 | 2WikiMultiHopQA-ONCU-500 validation | `experiment_backups/twowiki_500_validation_20260527/` | Released |
 | HotpotQA-500 robustness and valid-group audit | `experiment_backups/hotpotqa_500_robustness_20260525/` | Released |
 | BABILong-200 external validation | `experiment_backups/babilong_200_external_20260526/` | Released |
-
+| Model-family extension | `experiment_backups/model_family_extension_20260601/`; `model_family_extension_for_paper.tar.gz` | Released |
+| Matched dense/hybrid ONCU sensitivity | `experiment_backups/retriever_family_oncu_sensitivity_20260602/` | Released |
+| Retrieval-only retriever-family audit | `experiment_backups/retriever_family_ablation_20260527/` | Released |
+| Reader-facing retriever-family validation | `experiment_backups/reader_facing_retriever_family_20260530/`; `reader_facing_summary_for_paper.tar.gz` | Released summary/config |
+| Five-model cross-encoder reranking audit | `configs/rerank_sensitivity/`; `experiment_backups/rerank_sensitivity_20260602/five_model_ce_rerank_summary/` | Released summary/config |
+| Controlled length-position scaling | `experiment_backups/controlled_scaling_20260527/summary/` | Released summary/config |
+| RULER-lite external validation | `experiment_backups/ruler_lite_external_20260530_final/` | Released summary/config |
+| Failure taxonomy and human validation | `experiment_backups/failure_taxonomy_human_validation_20260530/` | Released |
+| Alternative-metric comparison | `experiment_backups/metric_comparison_20260530/` | Released |
 | Statistical modeling support | `experiment_backups/statistical_modeling_20260530/` | Released |
 
 Older directories such as `experiment_backups/core_2x2_qwen25_qwen3_20260524/`, `experiment_backups/sci200_partial_qwen25_20260525/`, and `experiment_backups/sci200_qwen_family_20260525/`, if present, are historical intermediate backups and are not the source for final paper tables.
@@ -49,7 +58,7 @@ Older directories such as `experiment_backups/core_2x2_qwen25_qwen3_20260524/`, 
 | Failure diagnosis | `longcue/evaluation/failure_diagnosis.py` | Released | Rule-based diagnostic failure categories. |
 | Retrieval condition | `longcue/methods/retrieve_then_read.py` | Released | Deterministic lexical retrieve-then-read condition. |
 | Ollama wrapper | `longcue/models/ollama.py` | Released | Local Ollama model calls. |
-| Runtime/model environment record | `scripts/export_runtime_record.py`; `RUNTIME_REPRODUCIBILITY_RECORD.md` | Released | Captures Ollama version, model tags/digests and quantization metadata exposed by Ollama, package versions, GPU/VRAM information, context length, deterministic decoding controls, and runtime logging policy. |
+| Runtime/model environment record | `scripts/export_runtime_record.py`; `RUNTIME_REPRODUCIBILITY_RECORD.md`; `runtime_reproducibility_record.json` | Released | Captures available runtime metadata, package versions, GPU/VRAM information, context length, deterministic decoding controls, requested model tags, and unavailable-command diagnostics. Ollama version, digest, and quantization fields are recorded only when exposed by the local host. |
 
 | Release checker | `scripts/check_release_artifacts.py` | Released | Verifies files declared by this manifest. |
 
@@ -68,6 +77,8 @@ Older directories such as `experiment_backups/core_2x2_qwen25_qwen3_20260524/`, 
 | 2Wiki adapter | `longcue/data/twowiki_adapter.py` | Released | Converts multi-hop evidence paths into ONCU-compatible oracle evidence IDs. |
 | BABILong builder | `scripts/build_babilong_cue.py` | Released | Builds BABILong external-validation examples. |
 | BABILong adapter | `longcue/data/babilong_adapter.py` | Released | Converts BABILong and marks it not ONCU-compatible. |
+| RULER-lite builder | `scripts/build_ruler_lite.py` | Released | Builds deterministic RULER-lite external-validation examples. |
+| RULER adapter | `longcue/data/ruler_adapter.py` | Released | Converts RULER-style samples for answer-only validation. |
 | HotpotQA source dataset | Original HotpotQA provider | External | Required only for regeneration. |
 | 2WikiMultiHopQA source dataset | Original 2WikiMultiHopQA provider | External | Required only for regeneration. |
 | BABILong source dataset | Original BABILong provider | External | Required only for regeneration. |
@@ -81,8 +92,10 @@ Older directories such as `experiment_backups/core_2x2_qwen25_qwen3_20260524/`, 
 | `data/processed/controlled_oncu_200_safe16k.jsonl` | Final controlled 200-sample matrix | Released |
 | `data/processed/hotpotqa_cue_200.jsonl` | Final HotpotQA-ONCU-200 matrix and top-k ablations | Released |
 | `data/processed/hotpotqa_cue_500.jsonl` | HotpotQA-500 robustness | Released |
-| `data/processed/twowiki_cue_500.jsonl` | 2WikiMultiHopQA-ONCU-500 validation | Released or Generated |
+| `data/processed/twowiki_cue_500.jsonl` | 2WikiMultiHopQA-ONCU-500 validation | Released |
 | `data/processed/babilong_cue_200_external.jsonl` | BABILong-200 external validation | Released |
+| `data/processed/controlled_scaling_3200.jsonl` | Controlled length-position scaling | Generated |
+| `data/processed/ruler_lite_240.jsonl` | RULER-lite external validation | Generated |
 
 The 2Wiki file is byte-level reproducible with seed 42. The expected SHA256 checksum is:
 
@@ -102,7 +115,12 @@ The 2Wiki file is byte-level reproducible with seed 42. The expected SHA256 chec
 | 2WikiMultiHopQA-500 validation | `configs/twowiki_*_500_core.yaml` | Released |
 | HotpotQA-500 robustness | `configs/hotpotqa_*_500_core_robust.yaml` | Released |
 | HotpotQA top-k ablation | `configs/hotpotqa_qwen25_14b_200_topk5_ablation.yaml`, `configs/hotpotqa_qwen25_14b_200_topk8_ablation.yaml`, `configs/hotpotqa_qwen3_14b_200_topk5_ablation.yaml`, `configs/hotpotqa_qwen3_14b_200_topk8_ablation.yaml` | Released |
+| Model-family extension | `configs/model_family_extension/*.yaml` | Released |
+| Retrieval-only and reader-facing retriever-family audits | `configs/ablations/retriever_family_*.yaml`, `configs/ablations/reader_facing_retfam_*.yaml` | Released |
+| Matched dense/hybrid ONCU sensitivity | `configs/retriever_family_oncu_sensitivity/*.yaml` | Released |
+| Cross-encoder reranking audit | `configs/rerank_sensitivity/ce_reader_facing/*.yaml`; `RUN_CE_RERANK_CONFIG_LIST.sh` | Released summary/config |
 | BABILong-200 external validation | `configs/babilong_*_200_external.yaml` | Released |
+| RULER-lite external validation | `scripts/run_ruler_lite_external.py` CLI arguments; generated input from `scripts/build_ruler_lite.py` | Released summary/config |
 | LongBench exploratory configs | `configs/longbench_*_300_external.yaml` | Released | Exploratory only; not used for current paper claims. |
 
 ---
@@ -125,6 +143,15 @@ The 2Wiki file is byte-level reproducible with seed 42. The expected SHA256 chec
 | HotpotQA-500 ONCU CIs | `experiment_backups/hotpotqa_500_robustness_20260525/ci/hotpotqa500_oncu_bootstrap_ci.csv` | Released |
 | BABILong-200 external validation table | `experiment_backups/babilong_200_external_20260526/final_tables/babilong200_external_ci_compact.csv` | Released |
 | BABILong-200 external validation CIs | `experiment_backups/babilong_200_external_20260526/ci/babilong200_metric_bootstrap_ci.csv` | Released |
+| Model-family extension results | `experiment_backups/model_family_extension_20260601/*/results/per_sample_metrics.csv`, `experiment_backups/model_family_extension_20260601/*/results/cue_metrics.csv`, `experiment_backups/model_family_extension_20260601/*/results/aggregate_metrics.csv` | Released |
+| Matched dense/hybrid ONCU sensitivity | `experiment_backups/retriever_family_oncu_sensitivity_20260602/*/results/per_sample_metrics.csv`, `experiment_backups/retriever_family_oncu_sensitivity_20260602/*/results/cue_metrics.csv`, `experiment_backups/retriever_family_oncu_sensitivity_20260602/*/results/aggregate_metrics.csv` | Released |
+| Retrieval-only retriever-family audit | `experiment_backups/retriever_family_ablation_20260527/*/retrieval_only_per_sample.csv`, `experiment_backups/retriever_family_ablation_20260527/*/retrieval_only_summary.csv` | Released |
+| Reader-facing retriever-family validation | `experiment_backups/reader_facing_retriever_family_20260530/reader_facing_joined_summary.csv`, `experiment_backups/reader_facing_retriever_family_20260530/reader_facing_retfam_results_table.tex`, `reader_facing_summary_for_paper.tar.gz` | Released summary/config |
+| Five-model cross-encoder reranking audit | `configs/rerank_sensitivity/ce_reader_facing/*.yaml`, `RUN_CE_RERANK_CONFIG_LIST.sh`, `scripts/summarize_ce_rerank_five_model.py`, `experiment_backups/rerank_sensitivity_20260602/five_model_ce_rerank_summary/` | Released summary/config |
+| Controlled length-position scaling | `experiment_backups/controlled_scaling_20260527/summary/controlled_scaling_oncu_by_length_position.csv`, `experiment_backups/controlled_scaling_20260527/summary/controlled_scaling_regression.csv`, `experiment_backups/controlled_scaling_20260527/summary/controlled_scaling_summary_manifest.json` | Released summary/config |
+| RULER-lite external validation | `experiment_backups/ruler_lite_external_20260530_final/ruler_lite_condition_summary.csv`, `experiment_backups/ruler_lite_external_20260530_final/ruler_lite_model_summary.csv` | Released summary/config |
+| Failure taxonomy and human validation | `experiment_backups/failure_taxonomy_human_validation_20260530/failure_taxonomy_final_summary.csv`, `experiment_backups/failure_taxonomy_human_validation_20260530/failure_taxonomy_human_validation_table.tex`, `experiment_backups/failure_taxonomy_human_validation_20260530/failure_taxonomy_final_manifest.json` | Released |
+| Alternative-metric comparison | `experiment_backups/metric_comparison_20260530/metric_comparison_condition_summary.csv`, `experiment_backups/metric_comparison_20260530/metric_comparison_case_studies.csv`, `experiment_backups/metric_comparison_20260530/metric_comparison_manifest.json` | Released |
 
 ---
 
@@ -140,6 +167,13 @@ The 2Wiki file is byte-level reproducible with seed 42. The expected SHA256 chec
 | BABILong-200 bootstrap CIs | `scripts/bootstrap_babilong200_external_ci.py` | Released |
 | Failure breakdown | `scripts/summarize_sci200_failure_breakdown.py` | Released |
 | Controlled scaling summaries | `scripts/summarize_controlled_scaling.py` | Released |
+| RULER-lite external validation | `scripts/build_ruler_lite.py`, `scripts/run_ruler_lite_external.py`, `scripts/summarize_ruler_lite_external.py` | Released |
+| Retriever-family ONCU sensitivity | `scripts/prepare_retriever_family_oncu_sensitivity.py` | Released |
+| Reader-facing retriever validation | `scripts/summarize_reader_facing_retriever_results.py` | Released |
+| Cross-encoder reranking audit | `scripts/prepare_ce_rerank_sensitivity.py`, `scripts/summarize_ce_rerank_five_model.py` | Released summary/config |
+| Failure-taxonomy human validation | `scripts/export_failure_taxonomy_audit.py`, `scripts/summarize_failure_taxonomy_audit.py` | Released |
+| Alternative-metric comparison | `scripts/metric_comparison_summary.py` | Released |
+| Runtime record export | `scripts/export_runtime_record.py` | Released |
 | Release artifact audit | `scripts/check_release_artifacts.py` | Released |
 
 ---
@@ -165,7 +199,7 @@ missing required: 0
 result: PASS
 ```
 
-## Retriever-family ablation scaffold
+## Retriever-family ablation audit
 
 - `scripts/run_retriever_family_ablation.py`
   - Runs retrieval-only and optional reader-facing ablations across lexical,
@@ -178,10 +212,12 @@ result: PASS
   - 2WikiMultiHopQA-ONCU-500 retriever-family ablation for Qwen2.5-14B.
 
 
-## Controlled scaling extension scaffold
+## Controlled scaling extension audit
 
-The controlled scaling extension is released as a scaffold until the long-running
-model outputs are materialized. It adds:
+The controlled scaling extension is an auxiliary diagnostic audit. The generated
+3,200-sample input is recreated by the builder before rerunning, while the
+paper-facing summary artifacts are released under
+`experiment_backups/controlled_scaling_20260527/summary/`.
 
 - `scripts/build_controlled_scaling_cue.py`
   - Generates 4K/8K/16K/32K controlled examples with ten position deciles.
@@ -189,9 +225,6 @@ model outputs are materialized. It adds:
   - Summarizes completed scaling runs into ONCU, failure-heatmap, and regression CSVs.
 - `configs/scaling/controlled_scaling_*_3200.yaml`
   - Fixed three-model configs for the 3200-sample scaling input.
-
-Once completed runs are copied to `experiment_backups/controlled_scaling_20260527/`,
-this manifest should be updated to mark the frozen scaling results as released.
 
 
 ## Statistical modeling support artifacts
