@@ -7,7 +7,7 @@ This document describes how to audit and reproduce the experiments reported in:
 The release is organized around four layers:
 
 1. fixed YAML configurations;
-2. processed JSONL evaluation inputs;
+2. materialized or generated processed JSONL evaluation inputs;
 3. deterministic local inference settings;
 4. frozen result artifacts and table-level summaries.
 
@@ -63,8 +63,12 @@ Local Ollama models used in the reported experiments:
 ollama pull qwen2.5:14b
 ollama pull qwen3:14b
 ollama pull gemma3:12b
+ollama pull llama3.1:8b
+ollama pull mistral-small3.1:24b
 ollama list
 ```
+
+Record the local `ollama --version`, `ollama list`, `ollama show <model>`, hardware, and wall-clock runtime before rerunning inference. The release fixes model tags and decoding/configuration settings, but exact Ollama backend versions, model digests or quantization metadata, and hardware/runtime characteristics are local-run metadata rather than immutable paper artifacts.
 
 Core inference settings recorded in the fixed configs:
 
@@ -82,7 +86,7 @@ protocol.version = diagnostic_v1_fixed
 
 ## 3. Processed input files
 
-The paper release uses five processed JSONL inputs:
+The paper release materializes five processed JSONL inputs:
 
 ```text
 data/processed/controlled_oncu_200_safe16k.jsonl
@@ -120,6 +124,22 @@ sha256(data/processed/twowiki_cue_500.jsonl) =
 ```
 
 Original public datasets, including HotpotQA, 2WikiMultiHopQA, and BABILong, should be obtained from their official sources subject to their licenses and terms of use.
+
+Two auxiliary inputs are generated from released scripts rather than shipped as materialized JSONL in the current package:
+
+```bash
+python scripts/build_controlled_scaling_cue.py \
+  --output data/processed/controlled_scaling_3200.jsonl \
+  --num-per-cell 5 \
+  --seed 42
+
+python scripts/build_ruler_lite.py \
+  --output data/processed/ruler_lite_240.jsonl \
+  --samples-per-cell 20 \
+  --seed 42
+```
+
+The corresponding controlled-scaling and RULER-lite frozen artifacts are summary-level release artifacts, not full raw-response archives.
 
 ---
 
@@ -255,7 +275,79 @@ experiment_backups/babilong_200_external_20260526/
 
 ---
 
-## 8. Regenerating confidence intervals and summaries
+## 8. Model-family extension
+
+The model-family extension adds `llama3.1:8b` and `mistral-small3.1:24b` to the Controlled-ONCU, HotpotQA-ONCU, and 2WikiMultiHopQA-ONCU protocols.
+
+Configs:
+
+```text
+configs/model_family_extension/controlled_safe16k_200_llama31_8b_core.yaml
+configs/model_family_extension/controlled_safe16k_200_mistral_small31_24b_core.yaml
+configs/model_family_extension/hotpotqa_200_llama31_8b_core.yaml
+configs/model_family_extension/hotpotqa_200_mistral_small31_24b_core.yaml
+configs/model_family_extension/twowiki_500_llama31_8b_core.yaml
+configs/model_family_extension/twowiki_500_mistral_small31_24b_core.yaml
+```
+
+Frozen artifacts:
+
+```text
+experiment_backups/model_family_extension_20260601/
+model_family_extension_for_paper.tar.gz
+```
+
+The directory contains resolved configs, protocol manifests, logs, per-sample metrics, aggregate metrics, CUE/ONCU metrics, and table summaries for the completed extension runs.
+
+## 9. RULER-lite external validation
+
+RULER-lite is not treated as an ONCU benchmark. It is an answer-only external validation because the current adapter does not provide the full no-evidence and oracle-evidence reference protocol required for ONCU.
+
+Build and run:
+
+```bash
+python scripts/build_ruler_lite.py \
+  --output data/processed/ruler_lite_240.jsonl \
+  --samples-per-cell 20 \
+  --seed 42
+
+python scripts/run_ruler_lite_external.py \
+  --input data/processed/ruler_lite_240.jsonl \
+  --output-dir outputs/ruler_lite_external_20260530 \
+  --models qwen2.5:14b qwen3:14b gemma3:12b \
+  --conditions full_context retrieved_context \
+  --top-k 3 \
+  --resume
+
+python scripts/summarize_ruler_lite_external.py \
+  --run-dir outputs/ruler_lite_external_20260530 \
+  --output-dir experiment_backups/ruler_lite_external_20260530
+```
+
+Frozen artifacts used by the manuscript:
+
+```text
+experiment_backups/ruler_lite_external_20260530_final/
+```
+
+## 10. Failure taxonomy and human validation
+
+The failure-taxonomy human validation artifacts include the blind audit sample, annotation codebook, anonymous annotator files, adjudicated final labels, agreement summaries, confusion matrices, and LaTeX tables.
+
+Frozen artifacts:
+
+```text
+experiment_backups/failure_taxonomy_human_validation_20260530/
+```
+
+Regenerate summaries from the released annotation files:
+
+```bash
+python scripts/summarize_failure_taxonomy_audit.py \
+  --output-dir experiment_backups/failure_taxonomy_human_validation_20260530
+```
+
+## 11. Regenerating confidence intervals and summaries
 
 Final 200-sample bootstrap CIs:
 
@@ -289,11 +381,36 @@ python scripts/summarize_sci200_failure_breakdown.py
 
 ---
 
-## 9. Notes for reviewers
+## 12. Notes for reviewers
 
 The released summaries are intended to allow table-level auditing without rerunning all local LLM inference. Full reruns require local Ollama model availability, GPU/CPU resources, and the original public source datasets. Structured-output parse failures are retained and scored as incorrect in the released metrics.
 
-## Retriever-family ablation for reviewer audit
+## 13. Retriever-family ablations and ONCU sensitivity
+
+### Matched dense/hybrid ONCU sensitivity
+
+This sensitivity run varies only the retrieved-evidence family inside the matched four-condition protocol. It is not a claim that dense@16 or hybrid@16 is the strongest RAG system; it checks whether the paper's retrieval-conditioned ONCU pattern depends on lexical@3.
+
+Generate or audit configs:
+
+```bash
+python scripts/prepare_retriever_family_oncu_sensitivity.py
+```
+
+Run one generated config:
+
+```bash
+python longcue/run_experiment.py \
+  --config configs/retriever_family_oncu_sensitivity/hotpotqa200_qwen25_dense_k16.yaml
+```
+
+Frozen artifacts:
+
+```text
+experiment_backups/retriever_family_oncu_sensitivity_20260602/
+```
+
+### Retrieval-only and reader-facing retriever-family audits
 
 This ablation is designed to answer whether the retrieved-evidence bottleneck is
 specific to the default deterministic lexical retriever. It should be treated as a
@@ -337,9 +454,25 @@ Reader-facing outputs include answer F1, evidence F1, parse errors, and
 ONCU-Relaxed-F1 computed against the frozen no-evidence and oracle reference
 rows from the corresponding release artifacts.
 
+Summarize reader-facing outputs:
+
+```bash
+python scripts/summarize_reader_facing_retriever_results.py \
+  --run-dirs outputs/reader_facing_retfam_* \
+  --output-dir experiment_backups/reader_facing_retriever_family_20260530
+```
+
+Frozen summary artifacts:
+
+```text
+experiment_backups/retriever_family_ablation_20260527/
+experiment_backups/reader_facing_retriever_family_20260530/
+reader_facing_summary_for_paper.tar.gz
+```
+
 ---
 
-## 10. Controlled context-length and position scaling extension
+## 14. Controlled context-length and position scaling extension
 
 This extension audits ONCU as a function of context length and fine-grained
 evidence location. It is motivated by position-sensitive long-context failures
@@ -378,7 +511,7 @@ python -m longcue.run_experiment \
   --config configs/scaling/controlled_scaling_qwen25_14b_3200.yaml
 ```
 
-After one or more runs complete, summarize the scaling outputs:
+The current release includes summary-level controlled-scaling artifacts. To reproduce them after rerunning local inference, summarize the scaling outputs:
 
 ```bash
 python scripts/summarize_controlled_scaling.py \
