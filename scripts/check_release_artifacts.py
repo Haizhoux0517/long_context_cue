@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Check release artifacts for the ONCU diagnostic paper repository.
 
-Default mode checks released code, configs, scripts, and frozen result summaries.
-Use --strict-data to require the processed JSONL inputs referenced by the paper.
+Default mode checks released code, configs, scripts, frozen result summaries,
+and auxiliary summary/config artifacts referenced by the paper.
+Use --strict-data to require the released processed JSONL inputs. Generated
+auxiliary inputs are rebuilt from released builders before rerunning those audits.
 Use --strict-clean to fail on stale root-level duplicate/revision documents that
 can confuse reviewers.
 """
@@ -104,6 +106,9 @@ def main() -> int:
             Artifact("README.md"),
             Artifact("README_REPRODUCE.md"),
             Artifact("ARTIFACT_MANIFEST.md"),
+            Artifact("DATA_LICENSES.md"),
+            Artifact("RUNTIME_REPRODUCIBILITY_RECORD.md"),
+            Artifact("runtime_reproducibility_record.json"),
             Artifact("requirements.txt"),
             Artifact("pyproject.toml"),
         ],
@@ -116,6 +121,7 @@ def main() -> int:
             Artifact("longcue/evaluation/failure_diagnosis.py"),
             Artifact("longcue/methods/retrieve_then_read.py"),
             Artifact("longcue/methods/retrievers.py"),
+            Artifact("longcue/methods/ce_reranker.py"),
             Artifact("longcue/models/ollama.py"),
         ],
         "dataset builders and adapters": [
@@ -124,18 +130,30 @@ def main() -> int:
             Artifact("scripts/build_hotpotqa_cue.py"),
             Artifact("scripts/build_2wiki_cue.py"),
             Artifact("scripts/build_babilong_cue.py"),
+            Artifact("scripts/build_ruler_lite.py"),
             Artifact("longcue/data/controlled_generator.py"),
             Artifact("longcue/data/hotpotqa_adapter.py"),
             Artifact("longcue/data/twowiki_adapter.py"),
             Artifact("longcue/data/babilong_adapter.py"),
+            Artifact("longcue/data/ruler_adapter.py"),
         ],
         "validation and summary scripts": [
+            Artifact("scripts/export_runtime_record.py"),
             Artifact("scripts/validate_diagnostic_protocol.py"),
             Artifact("scripts/recompute_oncu.py"),
             Artifact("scripts/recompute_twowiki500_tables.py"),
             Artifact("scripts/run_retriever_family_ablation.py"),
+            Artifact("scripts/prepare_retriever_family_oncu_sensitivity.py"),
+            Artifact("scripts/summarize_reader_facing_retriever_results.py"),
+            Artifact("scripts/prepare_ce_rerank_sensitivity.py"),
+            Artifact("scripts/summarize_ce_rerank_five_model.py"),
+            Artifact("scripts/run_ruler_lite_external.py"),
+            Artifact("scripts/summarize_ruler_lite_external.py"),
             Artifact("scripts/summarize_controlled_scaling.py"),
             Artifact("scripts/statistical_modeling.py"),
+            Artifact("scripts/metric_comparison_summary.py"),
+            Artifact("scripts/export_failure_taxonomy_audit.py"),
+            Artifact("scripts/summarize_failure_taxonomy_audit.py"),
             Artifact("scripts/bootstrap_sci200_final_ci.py"),
             Artifact("scripts/bootstrap_hotpotqa500_robustness_ci.py"),
             Artifact("scripts/bootstrap_babilong200_external_ci.py"),
@@ -172,6 +190,24 @@ def main() -> int:
         "retriever-family ablation configs": [
             Artifact("configs/ablations/retriever_family_hotpotqa_qwen25.yaml"),
             Artifact("configs/ablations/retriever_family_twowiki_qwen25.yaml"),
+        ],
+        "model-family extension configs": [
+            Artifact("configs/model_family_extension/*.yaml", "glob"),
+        ],
+        "retriever-family ONCU sensitivity configs": [
+            Artifact("configs/retriever_family_oncu_sensitivity/*.yaml", "glob"),
+        ],
+        "reader-facing retriever configs": [
+            Artifact("configs/ablations/reader_facing_retfam_*.yaml", "glob"),
+        ],
+        "cross-encoder reranking summary/config artifacts": [
+            Artifact("RUN_CE_RERANK_CONFIG_LIST.sh"),
+            Artifact("configs/rerank_sensitivity/ce_reader_facing/*.yaml", "glob"),
+            Artifact("configs/rerank_sensitivity/config_lists/*.txt", "glob"),
+            Artifact("experiment_backups/rerank_sensitivity_20260602/five_model_ce_rerank_summary/five_model_ce_rerank_all_rows.csv"),
+            Artifact("experiment_backups/rerank_sensitivity_20260602/five_model_ce_rerank_summary/five_model_ce_rerank_best_answer_rows.csv"),
+            Artifact("experiment_backups/rerank_sensitivity_20260602/five_model_ce_rerank_summary/five_model_ce_rerank_best_answer_table.tex"),
+            Artifact("experiment_backups/rerank_sensitivity_20260602/five_model_ce_rerank_summary/five_model_ce_rerank_best_oncu_rows.csv"),
         ],
         "LongBench external validation configs": [
             Artifact("configs/longbench_qwen25_14b_300_external.yaml"),
@@ -228,10 +264,51 @@ def main() -> int:
             Artifact("experiment_backups/statistical_modeling_20260530/statistical_regression_table.tex"),
             Artifact("experiment_backups/statistical_modeling_20260530/statistical_modeling_manifest.json"),
         ],
+        "model-family extension frozen results": [
+            Artifact("model_family_extension_for_paper.tar.gz"),
+            Artifact("experiment_backups/model_family_extension_20260601", "dir"),
+            Artifact("experiment_backups/model_family_extension_20260601/*/protocol_manifest.json", "glob"),
+            Artifact("experiment_backups/model_family_extension_20260601/*/resolved_config.json", "glob"),
+            Artifact("experiment_backups/model_family_extension_20260601/*/results/per_sample_metrics.csv", "glob"),
+            Artifact("experiment_backups/model_family_extension_20260601/*/results/cue_metrics.csv", "glob"),
+            Artifact("experiment_backups/model_family_extension_20260601/*/results/aggregate_metrics.csv", "glob"),
+        ],
+        "matched retriever-family ONCU sensitivity frozen results": [
+            Artifact("experiment_backups/retriever_family_oncu_sensitivity_20260602", "dir"),
+            Artifact("experiment_backups/retriever_family_oncu_sensitivity_20260602/*/protocol_manifest.json", "glob"),
+            Artifact("experiment_backups/retriever_family_oncu_sensitivity_20260602/*/resolved_config.json", "glob"),
+            Artifact("experiment_backups/retriever_family_oncu_sensitivity_20260602/*/results/per_sample_metrics.csv", "glob"),
+            Artifact("experiment_backups/retriever_family_oncu_sensitivity_20260602/*/results/cue_metrics.csv", "glob"),
+            Artifact("experiment_backups/retriever_family_oncu_sensitivity_20260602/*/results/aggregate_metrics.csv", "glob"),
+        ],
+        "retriever-only and reader-facing audit summaries": [
+            Artifact("reader_facing_summary_for_paper.tar.gz"),
+            Artifact("experiment_backups/retriever_family_ablation_20260527/*/retrieval_only_per_sample.csv", "glob"),
+            Artifact("experiment_backups/retriever_family_ablation_20260527/*/retrieval_only_summary.csv", "glob"),
+            Artifact("experiment_backups/reader_facing_retriever_family_20260530/reader_facing_condition_summary.csv"),
+            Artifact("experiment_backups/reader_facing_retriever_family_20260530/reader_facing_joined_summary.csv"),
+            Artifact("experiment_backups/reader_facing_retriever_family_20260530/reader_facing_winners.csv"),
+            Artifact("experiment_backups/reader_facing_retriever_family_20260530/reader_facing_retfam_results_table.tex"),
+        ],
+        "controlled scaling and RULER-lite auxiliary summaries": [
+            Artifact("experiment_backups/controlled_scaling_20260527/summary/controlled_scaling_oncu_by_length_position.csv"),
+            Artifact("experiment_backups/controlled_scaling_20260527/summary/controlled_scaling_regression.csv"),
+            Artifact("experiment_backups/controlled_scaling_20260527/summary/controlled_scaling_summary_manifest.json"),
+            Artifact("experiment_backups/ruler_lite_external_20260530_final/ruler_lite_condition_summary.csv"),
+            Artifact("experiment_backups/ruler_lite_external_20260530_final/ruler_lite_model_summary.csv"),
+        ],
+        "failure taxonomy and metric-comparison audits": [
+            Artifact("experiment_backups/failure_taxonomy_human_validation_20260530/failure_taxonomy_final_summary.csv"),
+            Artifact("experiment_backups/failure_taxonomy_human_validation_20260530/failure_taxonomy_human_validation_table.tex"),
+            Artifact("experiment_backups/failure_taxonomy_human_validation_20260530/failure_taxonomy_final_manifest.json"),
+            Artifact("experiment_backups/metric_comparison_20260530/metric_comparison_condition_summary.csv"),
+            Artifact("experiment_backups/metric_comparison_20260530/metric_comparison_case_studies.csv"),
+            Artifact("experiment_backups/metric_comparison_20260530/metric_comparison_manifest.json"),
+        ],
     }
 
     if args.strict_data:
-        groups["generated processed inputs"] = [
+        groups["released processed inputs"] = [
             Artifact("data/processed/controlled_oncu_200_safe16k.jsonl"),
             Artifact("data/processed/hotpotqa_cue_200.jsonl"),
             Artifact("data/processed/hotpotqa_cue_500.jsonl"),
@@ -329,7 +406,8 @@ def main() -> int:
         print(f"  missing required: {total_missing}")
         print("  result:", "PASS" if total_missing == 0 else "FAIL")
         if not args.strict_data:
-            print("\nNote: generated data/processed/*.jsonl inputs were not required. Use --strict-data to require them.")
+            print("\nNote: released data/processed/*.jsonl inputs were not required. Use --strict-data to require them.")
+            print("Generated auxiliary inputs, such as controlled_scaling_3200.jsonl and ruler_lite_240.jsonl, are rebuilt by released builder scripts before rerunning those audits.")
         if not args.strict_clean:
             print("Note: root-level duplicate/revision documents are warnings only. Use --strict-clean to fail on them.")
 
