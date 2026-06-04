@@ -16,7 +16,7 @@ For full reproduction commands, use [`README_REPRODUCE.md`](README_REPRODUCE.md)
 longcue/                         Core Python package
 scripts/                         Dataset builders, validators, bootstrap, and summary scripts
 configs/                         Fixed YAML configs for reported runs
-data/processed/                  Processed JSONL inputs used by the paper experiments
+data/processed/                  Released processed JSONL inputs for core runs
 experiment_backups/              Frozen result summaries, protocol manifests, CIs, and final tables
 README_REPRODUCE.md              Full reproduction guide
 ARTIFACT_MANIFEST.md             Paper-table-to-repository artifact map
@@ -56,7 +56,7 @@ missing required: 0
 result: PASS
 ```
 
-The `--strict-data` mode checks that the materialized JSONL inputs referenced by the reported paper experiments are present. If the 2Wiki JSONL is not tracked in a lightweight branch, regenerate it first or add it from the released artifact bundle.
+The `--strict-data` mode checks that the released materialized JSONL inputs for the core and external-validation runs are present. Generated auxiliary inputs such as controlled scaling and RULER-lite are recreated by their builder scripts before rerunning those audits; their frozen summary artifacts are checked separately.
 
 ---
 
@@ -125,13 +125,23 @@ experiment_backups/babilong_200_external_20260526/
 
 ## Notes on historical artifacts
 
-Only these release directories are used for the current paper claims:
+The following release directories are used for the current paper claims or reviewer-facing audits:
 
 ```text
 experiment_backups/sci200_final_3model_20260525/
 experiment_backups/twowiki_500_validation_20260527/
 experiment_backups/hotpotqa_500_robustness_20260525/
 experiment_backups/babilong_200_external_20260526/
+experiment_backups/model_family_extension_20260601/
+experiment_backups/retriever_family_oncu_sensitivity_20260602/
+experiment_backups/retriever_family_ablation_20260527/
+experiment_backups/reader_facing_retriever_family_20260530/
+experiment_backups/rerank_sensitivity_20260602/
+experiment_backups/controlled_scaling_20260527/
+experiment_backups/ruler_lite_external_20260530_final/
+experiment_backups/failure_taxonomy_human_validation_20260530/
+experiment_backups/metric_comparison_20260530/
+experiment_backups/statistical_modeling_20260530/
 ```
 
 Older backup folders, if present, are historical intermediate backups and are not used for the submitted paper tables.
@@ -144,13 +154,15 @@ See `configs/ablations/retriever_family_hotpotqa_qwen25.yaml`,
 `configs/ablations/retriever_family_twowiki_qwen25.yaml`, and
 `scripts/run_retriever_family_ablation.py`.
 
-### Controlled context-length and position scaling scaffold
+### Controlled context-length and position scaling extension
 
-The repository also includes a controlled scaling scaffold for auditing ONCU as a
+The repository includes a controlled scaling extension for auditing ONCU as a
 function of context length and fine-grained evidence position. This extension
 uses ten evidence-position deciles (`pos_00` ... `pos_09`) across 4K, 8K, 16K,
 and 32K contexts, while retaining the controlled distractor and reasoning-type
-factors.
+factors. The generated 3,200-sample input is recreated by
+`scripts/build_controlled_scaling_cue.py`; the frozen summary artifacts used by
+the paper are stored under `experiment_backups/controlled_scaling_20260527/`.
 
 Key files:
 
@@ -162,7 +174,7 @@ configs/scaling/controlled_scaling_qwen3_14b_3200.yaml
 configs/scaling/controlled_scaling_gemma3_12b_3200.yaml
 ```
 
-The scaling scaffold is a diagnostic extension. It is intended to test whether
+The scaling extension is a diagnostic audit. It is intended to test whether
 full-context ONCU changes systematically with input length and evidence location,
 rather than replacing the fixed 200-sample core matrix.
 
