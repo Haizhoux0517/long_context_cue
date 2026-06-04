@@ -1,0 +1,37 @@
+dataset_name: hotpotqa_oncu_500
+dataset_path: /workspace/long_context_cue/data/processed/hotpotqa_cue_500.jsonl
+output_dir: /workspace/long_context_cue/outputs/rerank_sensitivity_20260602/ce_reader_facing/hotpotqa500_gemma3_hybrid_ce64_k16
+reference_metrics_path: ''
+model:
+  provider: ollama
+  model_name: gemma3:12b
+  num_ctx: 32768
+  timeout: 900
+generation:
+  max_tokens: 1024
+  temperature: 0.0
+retriever_family:
+  retrievers:
+  - hybrid_ce64
+  top_k:
+  - 16
+  reader_retrievers:
+  - hybrid_ce64
+  reader_top_k:
+  - 16
+  chunk_size: 220
+  overlap: 40
+  dense_model_name: sentence-transformers/all-MiniLM-L6-v2
+  rrf_k: 60
+  ce_rerank_model_name: cross-encoder/ms-marco-MiniLM-L6-v2
+  ce_rerank_batch_size: 32
+  ce_rerank_device: auto
+logging:
+  save_full_prompts: false
+protocol:
+  purpose: ce_rerank_sensitivity
+  retrieved_condition_variant: hybrid_ce64@16
+  first_stage_family: hybrid
+  first_stage_candidate_k: 64
+  final_top_k: 16
+  reranker: cross-encoder/ms-marco-MiniLM-L6-v2

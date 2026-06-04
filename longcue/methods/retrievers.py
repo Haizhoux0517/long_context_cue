@@ -9,6 +9,8 @@ from typing import Any, Iterable
 from longcue.data.schema import BenchmarkSample
 from longcue.utils.token_utils import chunk_words
 
+from .ce_reranker import cross_encoder_ranking
+
 PASSAGE_ID_RE = re.compile(r"\[passage_id:\s*([^\]\s]+)\]", re.IGNORECASE)
 WORD_RE = re.compile(r"\w+")
 
@@ -49,6 +51,10 @@ def retrieve_chunks(
     rrf_k: int = 60,
     iterative_seed_k: int = 2,
     iterative_expansion_words: int = 96,
+    ce_rerank_model_name: str = "cross-encoder/ms-marco-MiniLM-L6-v2",
+    ce_rerank_batch_size: int = 32,
+    ce_rerank_first_stage_k: int = 64,
+    ce_rerank_device: str | None = None,
 ) -> list[RetrievedChunk]:
     """Retrieve chunks under a named retriever family.
 
@@ -80,6 +86,22 @@ def retrieve_chunks(
         fused = reciprocal_rank_fusion([lexical, dense], rrf_k=rrf_k)
         return _materialize("hybrid", chunks, fused[:top_k])
 
+    if retriever.startswith("hybrid_ce"):
+        lexical = [idx for idx, _ in lexical_ranking(sample.question, chunks)]
+        dense = [idx for idx, _ in dense_ranking(sample.question, chunks, model_name=dense_model_name)]
+        fused = reciprocal_rank_fusion([lexical, dense], rrf_k=rrf_k)
+        candidate_k = _candidate_k_from_ce_label(retriever, default=ce_rerank_first_stage_k)
+        candidate_indices = [idx for idx, _ in fused[:candidate_k]]
+        reranked = cross_encoder_ranking(
+            sample.question,
+            chunks,
+            candidate_indices,
+            model_name=ce_rerank_model_name,
+            batch_size=ce_rerank_batch_size,
+            device=ce_rerank_device,
+        )
+        return _materialize(retriever, chunks, reranked[:top_k])
+
     if retriever in {"iterative", "multi_hop_iterative", "multihop_iterative"}:
         first_pass = lexical_ranking(sample.question, chunks)
         seed_chunks = [chunks[idx] for idx, _ in first_pass[: max(1, iterative_seed_k)]]
@@ -96,6 +118,17 @@ def retrieve_chunks(
         f"Unsupported retriever '{retriever}'. "
         "Use lexical, dense, hybrid, iterative, or oracle."
     )
+
+
+
+def _candidate_k_from_ce_label(label: str, *, default: int) -> int:
+    """Parse labels such as hybrid_ce32, hybrid_ce64, or hybrid_ce128."""
+    import re
+
+    match = re.search(r"hybrid_ce(\d+)", str(label).lower().strip())
+    if match:
+        return max(1, int(match.group(1)))
+    return max(1, int(default))
 
 
 def lexical_ranking(query: str, chunks: list[str]) -> list[tuple[int, float]]:

@@ -1,0 +1,208 @@
+{
+  "generated_at_utc": "2026-06-04T17:34:39Z",
+  "platform": {
+    "platform": "Linux-6.8.0-49-generic-x86_64-with-glibc2.35",
+    "python_executable": "/usr/bin/python",
+    "cwd": "/workspace/long_context_cue"
+  },
+  "package_versions": {
+    "python": "3.11.10 (main, Sep  7 2024, 18:35:41) [GCC 11.4.0]",
+    "torch": "2.4.1+cu124",
+    "transformers": "not installed",
+    "sentence-transformers": "not installed",
+    "pandas": "not installed",
+    "numpy": "1.26.3",
+    "scipy": "not installed",
+    "scikit-learn": "not installed",
+    "pyyaml": "6.0.2",
+    "tqdm": "not installed"
+  },
+  "torch_cuda": {
+    "torch_importable": true,
+    "cuda_available": true,
+    "devices": [
+      {
+        "index": 0,
+        "name": "NVIDIA A40",
+        "total_memory_bytes": 47708110848,
+        "total_memory_gb": 44.43,
+        "major": 8,
+        "minor": 6
+      }
+    ]
+  },
+  "nvidia_smi": {
+    "available": true,
+    "cmd": [
+      "nvidia-smi",
+      "--query-gpu=name,memory.total,driver_version,cuda_version",
+      "--format=csv,noheader"
+    ],
+    "returncode": 2,
+    "stdout": "Field \"cuda_version\" is not a valid field to query.",
+    "stderr": ""
+  },
+  "nvidia_smi_full": {
+    "available": true,
+    "cmd": [
+      "nvidia-smi"
+    ],
+    "returncode": 0,
+    "stdout": "Thu Jun  4 17:34:41 2026       \n+-----------------------------------------------------------------------------------------+\n| NVIDIA-SMI 570.211.01             Driver Version: 570.211.01     CUDA Version: 12.8     |\n|-----------------------------------------+------------------------+----------------------+\n| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |\n| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |\n|                                         |                        |               MIG M. |\n|=========================================+========================+======================|\n|   0  NVIDIA A40                     On  |   00000000:52:00.0 Off |                    0 |\n|  0%   33C    P8             33W /  300W |       3MiB /  46068MiB |      0%      Default |\n|                                         |                        |                  N/A |\n+-----------------------------------------+------------------------+----------------------+\n                                                                                         \n+-----------------------------------------------------------------------------------------+\n| Processes:                                                                              |\n|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |\n|        ID   ID                                                               Usage      |\n|=========================================================================================|\n|  No running processes found                                                             |\n+-----------------------------------------------------------------------------------------+",
+    "stderr": ""
+  },
+  "ollama_version": {
+    "available": false,
+    "cmd": [
+      "ollama",
+      "--version"
+    ],
+    "returncode": null,
+    "stdout": "",
+    "stderr": "ollama not found"
+  },
+  "ollama_list": {
+    "available": false,
+    "cmd": [
+      "ollama",
+      "list"
+    ],
+    "returncode": null,
+    "stdout": "",
+    "stderr": "ollama not found"
+  },
+  "ollama_models": {
+    "qwen2.5:14b": {
+      "show_verbose": {
+        "available": false,
+        "cmd": [
+          "ollama",
+          "show",
+          "qwen2.5:14b",
+          "--verbose"
+        ],
+        "returncode": null,
+        "stdout": "",
+        "stderr": "ollama not found"
+      },
+      "show": {
+        "available": false,
+        "cmd": [
+          "ollama",
+          "show",
+          "qwen2.5:14b"
+        ],
+        "returncode": null,
+        "stdout": "",
+        "stderr": "ollama not found"
+      }
+    },
+    "qwen3:14b": {
+      "show_verbose": {
+        "available": false,
+        "cmd": [
+          "ollama",
+          "show",
+          "qwen3:14b",
+          "--verbose"
+        ],
+        "returncode": null,
+        "stdout": "",
+        "stderr": "ollama not found"
+      },
+      "show": {
+        "available": false,
+        "cmd": [
+          "ollama",
+          "show",
+          "qwen3:14b"
+        ],
+        "returncode": null,
+        "stdout": "",
+        "stderr": "ollama not found"
+      }
+    },
+    "gemma3:12b": {
+      "show_verbose": {
+        "available": false,
+        "cmd": [
+          "ollama",
+          "show",
+          "gemma3:12b",
+          "--verbose"
+        ],
+        "returncode": null,
+        "stdout": "",
+        "stderr": "ollama not found"
+      },
+      "show": {
+        "available": false,
+        "cmd": [
+          "ollama",
+          "show",
+          "gemma3:12b"
+        ],
+        "returncode": null,
+        "stdout": "",
+        "stderr": "ollama not found"
+      }
+    },
+    "llama3.1:8b": {
+      "show_verbose": {
+        "available": false,
+        "cmd": [
+          "ollama",
+          "show",
+          "llama3.1:8b",
+          "--verbose"
+        ],
+        "returncode": null,
+        "stdout": "",
+        "stderr": "ollama not found"
+      },
+      "show": {
+        "available": false,
+        "cmd": [
+          "ollama",
+          "show",
+          "llama3.1:8b"
+        ],
+        "returncode": null,
+        "stdout": "",
+        "stderr": "ollama not found"
+      }
+    },
+    "mistral-small3.1:24b": {
+      "show_verbose": {
+        "available": false,
+        "cmd": [
+          "ollama",
+          "show",
+          "mistral-small3.1:24b",
+          "--verbose"
+        ],
+        "returncode": null,
+        "stdout": "",
+        "stderr": "ollama not found"
+      },
+      "show": {
+        "available": false,
+        "cmd": [
+          "ollama",
+          "show",
+          "mistral-small3.1:24b"
+        ],
+        "returncode": null,
+        "stdout": "",
+        "stderr": "ollama not found"
+      }
+    }
+  },
+  "deterministic_inference_controls": {
+    "temperature": 0,
+    "max_generation_tokens": 1024,
+    "context_window_tokens": 32768,
+    "qwen3_thinking_disabled": true,
+    "recommended_ollama_num_parallel": 1
+  }
+}

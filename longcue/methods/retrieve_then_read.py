@@ -33,6 +33,12 @@ def run(
         rrf_k=int(settings.get("rrf_k", 60)),
         iterative_seed_k=int(settings.get("iterative_seed_k", 2)),
         iterative_expansion_words=int(settings.get("iterative_expansion_words", 96)),
+        ce_rerank_model_name=str(
+            settings.get("ce_rerank_model_name", "cross-encoder/ms-marco-MiniLM-L6-v2")
+        ),
+        ce_rerank_batch_size=int(settings.get("ce_rerank_batch_size", 32)),
+        ce_rerank_first_stage_k=int(settings.get("ce_rerank_first_stage_k", 64)),
+        ce_rerank_device=settings.get("ce_rerank_device", None),
     )
     retrieved = [chunk.text for chunk in retrieved_chunks]
     context = "\n\n".join(retrieved)

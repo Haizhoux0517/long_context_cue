@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import re
 import sys
 from collections import defaultdict
 from pathlib import Path
@@ -38,6 +39,7 @@ from longcue.methods.retrievers import (
     retrieval_diagnostics,
     _query_expansion_text,
 )
+from longcue.methods.ce_reranker import cross_encoder_ranking
 from longcue.models.base import BaseModelClient
 from longcue.prompts.templates import direct_answer_prompt
 from longcue.run_experiment import _make_client
@@ -94,6 +96,11 @@ def run_ablation(config_path: Path, *, run_reader: bool = False, limit: int | No
             rrf_k=int(settings.get("rrf_k", 60)),
             iterative_seed_k=int(settings.get("iterative_seed_k", 2)),
             iterative_expansion_words=int(settings.get("iterative_expansion_words", 96)),
+            ce_rerank_model_name=str(
+                settings.get("ce_rerank_model_name", "cross-encoder/ms-marco-MiniLM-L6-v2")
+            ),
+            ce_rerank_batch_size=int(settings.get("ce_rerank_batch_size", 32)),
+            ce_rerank_device=settings.get("ce_rerank_device", None),
         )
         for retriever in retrievers:
             for top_k in top_ks:
@@ -177,6 +184,9 @@ def _precompute_rankings_for_sample(
     rrf_k: int,
     iterative_seed_k: int,
     iterative_expansion_words: int,
+    ce_rerank_model_name: str = "cross-encoder/ms-marco-MiniLM-L6-v2",
+    ce_rerank_batch_size: int = 32,
+    ce_rerank_device: str | None = None,
 ) -> dict[str, Any]:
     """Precompute all expensive rankings once per sample.
 
@@ -188,11 +198,14 @@ def _precompute_rankings_for_sample(
     chunks = make_chunks(sample.long_context, chunk_size=chunk_size, overlap=overlap)
     rankings: dict[str, list[tuple[int, float]]] = {}
 
-    needs_lexical = bool(normalized.intersection({"lexical", "hybrid", "iterative", "multi_hop_iterative", "multihop_iterative"}))
-    needs_dense = bool(normalized.intersection({"dense", "hybrid"}))
+    ce_retrievers = sorted(name for name in normalized if _is_hybrid_ce_retriever(name))
+    needs_ce = bool(ce_retrievers)
+    needs_lexical = bool(normalized.intersection({"lexical", "hybrid", "iterative", "multi_hop_iterative", "multihop_iterative"})) or needs_ce
+    needs_dense = bool(normalized.intersection({"dense", "hybrid"})) or needs_ce
 
     lexical_ranked: list[tuple[int, float]] | None = None
     dense_ranked: list[tuple[int, float]] | None = None
+    hybrid_ranked: list[tuple[int, float]] | None = None
 
     if chunks and needs_lexical:
         lexical_ranked = lexical_ranking(sample.question, chunks)
@@ -203,11 +216,27 @@ def _precompute_rankings_for_sample(
         rankings["lexical"] = lexical_ranked
     if "dense" in normalized and dense_ranked is not None:
         rankings["dense"] = dense_ranked
-    if "hybrid" in normalized and lexical_ranked is not None and dense_ranked is not None:
-        rankings["hybrid"] = reciprocal_rank_fusion(
+    if ("hybrid" in normalized or needs_ce) and lexical_ranked is not None and dense_ranked is not None:
+        hybrid_ranked = reciprocal_rank_fusion(
             [[idx for idx, _ in lexical_ranked], [idx for idx, _ in dense_ranked]],
             rrf_k=rrf_k,
         )
+        if "hybrid" in normalized:
+            rankings["hybrid"] = hybrid_ranked
+
+    if needs_ce and hybrid_ranked is not None:
+        for ce_name in ce_retrievers:
+            candidate_k = _candidate_k_from_hybrid_ce_label(ce_name)
+            candidate_indices = [idx for idx, _ in hybrid_ranked[:candidate_k]]
+            rankings[ce_name] = cross_encoder_ranking(
+                sample.question,
+                chunks,
+                candidate_indices,
+                model_name=ce_rerank_model_name,
+                batch_size=ce_rerank_batch_size,
+                device=ce_rerank_device,
+            )
+
     if normalized.intersection({"iterative", "multi_hop_iterative", "multihop_iterative"}) and lexical_ranked is not None:
         seed_chunks = [chunks[idx] for idx, _ in lexical_ranked[: max(1, iterative_seed_k)]]
         expansion = _query_expansion_text(seed_chunks, max_words=iterative_expansion_words)
@@ -222,6 +251,18 @@ def _precompute_rankings_for_sample(
         rankings["multihop_iterative"] = iterative_ranked
 
     return {"chunks": chunks, "rankings": rankings}
+
+
+
+def _is_hybrid_ce_retriever(name: str) -> bool:
+    return re.fullmatch(r"hybrid_ce\d+", str(name).lower().strip()) is not None
+
+
+def _candidate_k_from_hybrid_ce_label(name: str) -> int:
+    match = re.fullmatch(r"hybrid_ce(\d+)", str(name).lower().strip())
+    if not match:
+        raise ValueError(f"Invalid CE rerank retriever label: {name!r}. Use labels like hybrid_ce64.")
+    return max(1, int(match.group(1)))
 
 
 def _chunks_for_retriever_topk(
@@ -285,6 +326,11 @@ def _run_reader_conditions(
             rrf_k=int(settings.get("rrf_k", 60)),
             iterative_seed_k=int(settings.get("iterative_seed_k", 2)),
             iterative_expansion_words=int(settings.get("iterative_expansion_words", 96)),
+            ce_rerank_model_name=str(
+                settings.get("ce_rerank_model_name", "cross-encoder/ms-marco-MiniLM-L6-v2")
+            ),
+            ce_rerank_batch_size=int(settings.get("ce_rerank_batch_size", 32)),
+            ce_rerank_device=settings.get("ce_rerank_device", None),
         )
         for retriever in retrievers:
             for top_k in top_ks:
@@ -389,20 +435,74 @@ def _metric_row(
 
 
 def _compute_reader_oncu(reader_rows: list[dict[str, Any]], reference_metrics_path: Path) -> list[dict[str, Any]]:
+    """Compute ONCU for reader-facing retriever-family rows.
+
+    This function joins current retrieved-condition rows against existing
+    no-evidence and oracle-evidence reference rows by sample_id.
+
+    It intentionally computes ONCU at the sample level for reranked retrieval
+    sensitivity runs. The main paper may still aggregate ONCU by metadata group,
+    but this reader-facing sensitivity path needs a robust join for arbitrary
+    retriever labels such as hybrid_ce64.
+    """
     reference_rows = _read_csv(reference_metrics_path)
-    reference_rows = [
-        row for row in reference_rows if row.get("method") in {"no_evidence", "oracle"}
-    ]
-    combined = reference_rows + reader_rows
-    rows = compute_cue_rows(combined, score_field="answer_f1_relaxed")
-    for row in rows:
-        method = str(row.get("long_method", ""))
-        if method.startswith("retfam_"):
-            parts = method.replace("retfam_", "").rsplit("_k", 1)
-            row["retriever"] = parts[0]
-            row["top_k"] = parts[1] if len(parts) > 1 else ""
-        row["score_field"] = "answer_f1_relaxed"
-    return [row for row in rows if str(row.get("long_method", "")).startswith("retfam_")]
+
+    score_field = "answer_f1_relaxed"
+    ref_by_sample: dict[str, dict[str, dict[str, Any]]] = defaultdict(dict)
+
+    for row in reference_rows:
+        method = str(row.get("method", ""))
+        if method not in {"no_evidence", "oracle"}:
+            continue
+        sample_id = str(row.get("sample_id", ""))
+        if not sample_id:
+            continue
+        ref_by_sample[sample_id][method] = row
+
+    out: list[dict[str, Any]] = []
+    for row in reader_rows:
+        sample_id = str(row.get("sample_id", ""))
+        refs = ref_by_sample.get(sample_id, {})
+        no_row = refs.get("no_evidence")
+        oracle_row = refs.get("oracle")
+
+        if no_row is None or oracle_row is None:
+            continue
+
+        try:
+            s_no = float(no_row.get(score_field, no_row.get("answer_f1", 0.0)))
+            s_oracle = float(oracle_row.get(score_field, oracle_row.get("answer_f1", 0.0)))
+            s_context = float(row.get(score_field, row.get("answer_f1", 0.0)))
+        except (TypeError, ValueError):
+            continue
+
+        denom = s_oracle - s_no
+        cue_valid = denom > 0.0
+        cue_raw = ""
+        cue_clipped = ""
+
+        if cue_valid:
+            raw = (s_context - s_no) / denom
+            clipped = min(1.0, max(0.0, raw))
+            cue_raw = raw
+            cue_clipped = clipped
+
+        enriched = dict(row)
+        enriched.update(
+            {
+                "score_field": score_field,
+                "s_no": s_no,
+                "s_oracle": s_oracle,
+                "s_context": s_context,
+                "cue_denominator": denom,
+                "cue_valid": cue_valid,
+                "cue_raw": cue_raw,
+                "cue_clipped": cue_clipped,
+            }
+        )
+        out.append(enriched)
+
+    return out
 
 
 def _summarize_retrieval(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
